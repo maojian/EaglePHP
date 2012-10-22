@@ -1,0 +1,13 @@
+
+<div class="navTab-panel tabsPageContent">
+<div class="page">
+	<div class="pageFormContent" layoutH="62">
+		<table class="list" width="70%">
+			<tr class="row" style="background:#CAE5E8;"><th colspan="3" class="space" style="color: blue;">Security information</th></tr>
+			{{section name=loop loop=$list}}
+			<tr class="row"><td width="20%"><b>{{$list[loop][0]}}&nbsp;</b></td><td>{{$list[loop][1]}}</td></tr>
+			{{/section}}
+		</table>
+	</div>
+</div>
+</div>

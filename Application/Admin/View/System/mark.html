@@ -1,0 +1,77 @@
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__ACTION__}}action/add" enctype="multipart/form-data" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<input type="hidden" name="img" value="{{$info.img}}"/>
+			<dl class="nowrap">
+				<dt style="width:40%;">上传的图片是否使用图片水印功能：</dt>
+				<dd>{{html_radios name="upload" options=$upload_arr checked=$info.upload}}</dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">选择水印的文件类型：</dt>
+				<dd>{{html_radios name="type" options=$type_arr checked=$info.type}}</dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">水印图片宽度控制（设置为0为不限）：</dt>
+				<dd><input name="width" class="" type="text" size="20" value="{{$info.width}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">水印图片高度控制（设置为0为不限）：</dt>
+				<dd><input name="height" class="" type="text" size="20" value="{{$info.height}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">水印图片文件名（如果不存在，则使用文字水印）：</dt>
+				<dd><img src="{{$smarty.const.__ACTION__}}target/showImg/rand/{{''|time}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">上传新图片：</dt>
+				<dd><input name="file" type="file" /></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">水印图片文字：( 请查看data\_mark\simhei.ttf字体库是否存在)：</dt>
+				<dd><input name="text" class="" type="text" size="20" value="{{$info.text}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">水印图片文字字体大小：</dt>
+				<dd><input name="fontsize" class="" type="text" size="20" value="{{$info.fontsize}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">水印图片文字颜色（默认#FF0000为红色）：</dt>
+				<dd><input name="color" class="" type="text" size="20" value="{{$info.color}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">设置 JPEG 类型的图片附件添加水印后质量参数，范围为 0～100 的整数，数值越大结果图片效果越好，但尺寸也越大。</dt>
+				<dd><input name="trans" class="" type="text" size="20" value="{{$info.trans}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">设置 GIF 类型水印图片与原始图片的融合度,水印透明度（0—100，值越小越透明）：</dt>
+				<dd><input name="diaphaneity" class="" type="text" size="20" value="{{$info.diaphaneity}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt style="width:40%;">水印位置：</dt>
+				<dd>
+					<select name="position" class="combox required">
+						{{html_options options=$position_arr selected=$info.position}}
+					</select>
+				</dd>
+			</dl>
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">修改</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="reset">重置</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

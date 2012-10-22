@@ -1,0 +1,99 @@
+
+{{include file="Include/head.html" case="actived"}}
+
+<script type="text/javascript"> 
+$(function() {
+$('#kanfa .kimageBar ul').cycle({
+        fx:      'scrollHorz',
+        timeout:  0,
+        prev:    '.pre',
+        next:    '.next'
+});
+ 
+$('#announcement ul').cycle({
+	fx:'scrollUp',
+	timeout:10000
+});
+ 
+$('#hotRankSlide').cycle({ 
+	fx:     'none', 
+	timeout: 5000, 
+	delay: 1000,
+	pagerEvent: 'mouseover',
+	pager:  '#hotRankNavi',
+	activePagerClass: 'actived',
+	pauseOnPagerHover: true,
+	allowPagerClickBubble: true,
+	cleartypeNoBg: true,
+	pagerAnchorBuilder: function(idx, slide) { 
+		// return selector string for existing anchor 
+		return '#hotRankNavi li:eq(' + idx + ') a'; 
+	} 
+});
+ 
+});
+</script>
+
+
+<div id="index">
+
+
+<div class="subContent">
+
+<div id="indexSearch" class="module">
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
+<input type="submit" class="button" value="搜索" />
+</form>
+</div>
+</div>
+
+<style>
+table,tr,th,td{border-collapse:collapse; border:solid 1px #c3cfda;}
+table{width:100%;}
+th{font-size:24px; text-align:left; background:#cff1fc; padding:9px;}
+td{background:#f9f9fa; padding:9px;text-align: center;}
+td.td1{width:15%;}
+td.td2{width:10%;}
+</style>
+
+<div class="mainContent">
+<div class="column">
+<div class="columnBody">
+<h2><span class="date">基于EaglePHP的项目案例展示</span> <span></span></h2>
+
+<blockquote style="text-align:left;margin:5px 0px 10px;padding-bottom:10px;padding-left:40px;padding-right:20px;padding-top:3px;line-height: 25px;color:#595959;background:  url('{{$smarty.const.__APP_RESOURCE__}}imgs/icon_quote_s.gif') #f9f9f9 no-repeat;"> 
+<p>这里列出了部分基于EaglePHP框架开发的项目案例，感谢各位网友的支持和提供！</p> 
+<p>我们长期向各位征集展示各类基于EaglePHP框架的程序<b>（展示截图，无需程序源码）</b>，希望大家踊跃参与。<a href="{{$smarty.const.__ROOT__}}message" target="_blank">提交您的案例 &gt;&gt;</a></p> 
+</blockquote> 
+
+<table>
+{{section name=loop loop=$list}}
+{{if $smarty.section.loop.index %2 eq 0}}
+<tr>
+{{/if}}
+<td>
+  <a {{if $list[loop].url}}href="{{$list[loop].url}}"{{/if}} target="_blank"><img src="{{$smarty.const.__UPLOAD__}}{{$list[loop].img}}"/></a><br/>
+  <div style="margin-top: 8px;"><a {{if $list[loop].url}}href="{{$list[loop].url}}"{{/if}} target="_blank">{{$list[loop].title}}</a></div>
+</td>
+{{if ($smarty.section.loop.index+1) %2 eq 0 or $smarty.section.loop.last}}
+</tr>
+{{/if}}
+
+{{/section}}
+</table>
+<br/><br/>
+声明：以上案例为网友们开发制作，版权属于该应用案例的所有者，本站仅提供截图及简单介绍展示。
+<div class="clear"></div>
+</div>
+
+<div class="columnFooter"></div>
+</div>
+
+<div class="module"><!-- blogbus_index_left_middle --></div>
+<p class="link2blog">{{$page}}</p>
+</div>
+
+{{include file="Include/subContent.html"}}
+
+{{include file="Include/foot.html"}}

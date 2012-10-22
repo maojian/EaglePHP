@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /Application/
+Disallow: /Common/
+Disallow: /Config/
+Disallow: /Data/
+Disallow: /Library/

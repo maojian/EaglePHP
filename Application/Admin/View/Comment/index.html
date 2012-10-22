@@ -1,0 +1,81 @@
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="news_id" value="{{$smarty.post.news_id}}" />
+	<input type="hidden" name="name" value="{{$smarty.post.name}}" />
+	<input type="hidden" name="content" value="{{$smarty.post.content}}" />
+</form>
+
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					新闻编号：<input type="text" name="news_id" value="{{$smarty.post.news_id}}" />
+				</td>
+				<td>
+					姓名：<input type="text" name="name" value="{{$smarty.post.name}}" />
+				</td>
+				<td>
+					内容：<input type="text" name="content" value="{{$smarty.post.content}}" />
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="delete" href="{{$smarty.const.__URL__}}delete" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="114">
+		<thead>
+			<tr>
+				<th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th>编号</th>
+				<th>新闻编号</th>
+				<th>新闻标题</th>
+				<th>用户名</th>
+				<th>邮箱</th>
+				<th>内容</th>
+				<th>IP</th>
+				<th>评论时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list}}
+			<tr target="id" rel="{{$list[loop].id}}">
+				<td><input name="ids" value="{{$list[loop].id}}" type="checkbox"></td>
+				<td width="3%">{{$list[loop].id}}</td>
+				<td width="6%">{{$list[loop].news_id}}</td>
+				<td width="10%" title="{{$list[loop].news_title}}">{{$list[loop].news_title}}</td>
+				<td width="10%">{{$list[loop].name}}</td>
+				<td width="10%">{{$list[loop].email}}</td>
+				<td class="box" width="25%">{{$list[loop].content}}</td>
+				<td width="10%">{{$list[loop].ip}}</td>
+				<td width="13%">{{$list[loop].create_time}}</td>
+				<td>
+					<a target="ajaxTodo" href="{{$smarty.const.__URL__}}delete/ids/{{$list[loop].id}}" class="btnDel" title="确定要删除吗?">删除</a>
+					<a target="dialog" width="600" height="500" href="{{$smarty.const.__URL__}}update/id/{{$list[loop].id}}" class="btnEdit">编辑</a>
+				</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	{{include file="Include/page.html"}}
+</div>

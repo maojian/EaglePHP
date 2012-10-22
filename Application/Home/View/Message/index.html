@@ -1,0 +1,144 @@
+
+{{include file="Include/head.html"}}
+
+<script type="text/javascript"> 
+$(function() {
+$('#kanfa .kimageBar ul').cycle({
+        fx:      'scrollHorz',
+        timeout:  0,
+        prev:    '.pre',
+        next:    '.next'
+});
+ 
+$('#announcement ul').cycle({
+	fx:'scrollUp',
+	timeout:10000
+});
+ 
+$('#hotRankSlide').cycle({ 
+	fx:     'none', 
+	timeout: 5000, 
+	delay: 1000,
+	pagerEvent: 'mouseover',
+	pager:  '#hotRankNavi',
+	activePagerClass: 'actived',
+	pauseOnPagerHover: true,
+	allowPagerClickBubble: true,
+	cleartypeNoBg: true,
+	pagerAnchorBuilder: function(idx, slide) { 
+		// return selector string for existing anchor 
+		return '#hotRankNavi li:eq(' + idx + ') a'; 
+	} 
+});
+ 
+});
+</script>
+
+
+<div id="index">
+
+
+<div class="subContent">
+
+<div id="indexSearch" class="module">
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
+<input type="submit" class="button" value="搜索" />
+</form>
+</div>
+</div>
+
+<div class="mainContent">
+<div class="column">
+<div id="today1" class="columnBody">
+<h2><span class="date">留言反馈</span> <span></span></h2>
+<ul class="index_list">
+	{{section name=loop loop=$list}}
+	<li class="index_list_item">
+	<img alt="" src="{{$list[loop].img}}" style="width:48px;">
+	<div class="desc" style="width: 580px;float: right;">
+	<h4 class="channel"><a>{{$list[loop].name}}：</a></h4>
+	<p>{{$list[loop].content}}</p>
+	<p class="more"><a>反馈时间 {{$list[loop].create_time}}&nbsp;&nbsp;IP： {{$list[loop].ip}}</a></p>
+	</div>
+	</li>
+	{{/section}}
+</ul>
+<div class="clear"></div>
+</div>
+
+<div class="columnFooter"></div>
+</div>
+
+<div class="module"><!-- blogbus_index_left_middle --></div>
+
+<p class="link2blog">{{$page}}</p>
+
+<div id="commentForm">
+<div class="clear"></div>
+<h3 style="border-bottom: #cecece 1px solid"></h3>
+<form target="ifr_login" method="post" name="cform" action="" onsubmit="return check_cmt(this);">
+<fieldset style="margin:0;padding:0;border:none;display:block;" id="fs_nologin">
+<div><label for="cname">姓　名</label><input class="textField" id="cname" name="name" type="text"></div>
+<div><label for="cemail">E-Mail</label><input class="textField" id="cemail" name="email" type="text"></div>
+<div><div style="float: left;"><label for="cname">验证码</label><input class="textField" id="yzm" name="yzm" type="text" style="width: 120px">&nbsp;&nbsp;</div><div style="float: left;"><img src="{{$smarty.const.__ROOT__}}message/verifyCode/" id="verifyCode" onclick="this.src+='?' + Math.random();" style="cursor: pointer;"/></div></div>
+</fieldset>
+<div><textarea id="content" rows="8" tabindex="3"></textarea></div>
+<div class="submit">
+<table>
+<tbody><tr>
+<td><input class="button" name="addsub" value="提交" id="submit_comment" type="button" onclick="feedback();"></td>
+</tr>
+</tbody></table>
+</div>
+</form>
+</div>
+
+
+</div>
+
+<script type="text/javascript">
+function feedback(){
+	var name = $("#cname").val();
+	var email = $("#cemail").val();
+	var yzm = $("#yzm").val();
+	var content = $("#content").val();
+	
+	if(name == ""){
+		alert("请输入姓名");
+		return false;
+	}else if(email == ""){
+		alert("请输入Email");
+		return false;
+	}else if(email.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) == -1){
+		alert("Email输入错误");
+		return false;
+	}else if(yzm == ""){
+		alert("请输入验证码");
+		return false;
+	}else if(content == ""){
+		alert("请输入留言");
+		return false;
+	}
+
+	$.post("{{$smarty.const.__URL__}}feedback",
+       { name: name, email: email, content: content, yzm: yzm },
+       function(data){
+          var obj = {};
+          eval("obj="+data);
+          if(obj.statusCode == 200){
+				alert(obj.message);
+				window.location = "{{$smarty.const.__URL__}}";
+          }else{
+				alert(obj.message);
+          }
+          
+       } 
+	); 
+}
+</script>
+
+
+{{include file="Include/subContent.html"}}
+
+{{include file="Include/foot.html"}}

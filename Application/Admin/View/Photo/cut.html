@@ -1,0 +1,118 @@
+
+<!-- <script src="{{$smarty.const.__SHARE__}}js/common.js"></script> -->
+<script src="{{$smarty.const.__SHARE__}}plug/jcrop/js/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="{{$smarty.const.__SHARE__}}plug/jcrop/css/jquery.Jcrop.css" type="text/css" />
+
+<div class="pageContent">
+	<form  id="coords" method="post" action="{{$smarty.const.__URL__}}cut" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+				
+				<input type="hidden" name="id" value="{{$info.id}}">
+				<table align="center">
+					<tr>
+						<td class="Uimg">
+							<img src="{{$smarty.const.__UPLOAD__}}{{$info.middle}}" class="bimg" id="cropbox" />
+							<!-- <img src="{{$smarty.const.__SHARE__}}img/loading.gif" alt="图片加载中" class="loading" /> -->
+						</td>
+						<td>
+							<div style="width:100px;height:100px;overflow:hidden;">
+								<img src="{{$smarty.const.__UPLOAD__}}{{$info.middle}}" id="preview" alt="Preview" />
+							</div>
+						</td>
+					</tr>
+				</table>
+				
+				<div class="divider"></div>
+				<dl>
+					<dt>X：</dt>
+					<dd><input name="x" id="x" class="required" type="text" size="4" readonly=true/></dd>
+				</dl>
+				<dl>
+					<dt>Y：</dt>
+					<dd><input name="y" id="y" class="required" type="text" size="4" readonly=true/></dd>
+				</dl>
+				<dl>
+					<dt>宽：</dt>
+					<dd><input name="w" id="w" class="required" type="text" size="4" readonly=true/></dd>
+				</dl>
+				<dl>
+					<dt>高：</dt>
+					<dd><input name="h" id="h" class="required" type="text" size="4" readonly=true/></dd>
+				</dl>
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+<script language="Javascript">
+	
+	 var jcrop_api, boundx, boundy;
+	$(function(){
+		$('#cropbox').Jcrop({
+			//aspectRatio: 1,
+			setSelect: [60,70,200,200],
+			onChange: updatePreview,
+        	onSelect: updatePreview,
+			onRelease:  clearCoords
+		},function(){
+		        // Use the API to get the real image size
+		        var bounds = this.getBounds();
+		        boundx = bounds[0];
+		        boundy = bounds[1];
+		        // Store the API in the jcrop_api variable
+		        jcrop_api = this;
+	     });
+	});
+	
+	
+	function updatePreview(c)
+    {
+	    if (parseInt(c.w) > 0)
+	    {
+	      var rx = 100 / c.w;
+	      var ry = 100 / c.h;
+	
+	      $('#preview').css({
+	        width: Math.round(rx * boundx) + 'px',
+	        height: Math.round(ry * boundy) + 'px',
+	        marginLeft: '-' + Math.round(rx * c.x) + 'px',
+	        marginTop: '-' + Math.round(ry * c.y) + 'px'
+	      });
+	    }
+		
+		showCoords(c);
+  	}
+
+
+	function showCoords(c)
+    {
+      $('#x').val(c.x);
+      $('#y').val(c.y);
+      $('#w').val(c.w);
+      $('#h').val(c.h);
+    }
+
+    function clearCoords()
+    {
+      $('#coords input').val('');
+      $('#h').css({color:'red'});
+      window.setTimeout(function(){
+	        $('#h').css({color:'inherit'});
+	  },500);
+    }
+	
+</script>
+
+<!--
+<script type="text/javascript">loadImg('.Uimg',280,'#cropbox',"{{$smarty.const.__SHARE__}}img/loading.gif","full");</script>
+-->
+
+

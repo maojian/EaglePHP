@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>访问日志报告</title>
+    </head>
+    
+    <body style="background-color:#EEEEEE">
+        <!-- saved from url=(0013)about:internet -->
+        <!-- amcharts script-->
+        <!-- swf object (version 2.2) is used to detect if flash is installed and include swf in the page -->
+        <script type="text/javascript" src="{{$smarty.const.__SHARE__}}plug/amcharts/flash/swfobject.js"></script>
+        
+	    <!-- following scripts required for JavaScript version. The order is important! -->
+	    <script type="text/javascript" src="{{$smarty.const.__SHARE__}}plug/amcharts/javascript/amcharts.js"></script>
+	    <script type="text/javascript" src="{{$smarty.const.__SHARE__}}plug/amcharts/javascript/amfallback.js"></script>
+	    <script type="text/javascript" src="{{$smarty.const.__SHARE__}}plug/amcharts/javascript/raphael.js"></script>
+        
+        <!-- chart is placed in this div. if you have more than one chart on a page, give unique id for each div -->
+        <div id="chartdiv2" style="width:600px; height:400px; background-color:#FFFFFF;margin-left:40%;margin-top:20%">flash报表正在加载中...</div>
+        
+        <script type="text/javascript">
+        
+            var params = 
+            {
+                bgcolor:"#FFFFFF",
+				wmode:"opaque"
+            };
+            
+            var flashVars = 
+            {
+                path: "{{$smarty.const.__SHARE__}}plug/amcharts/flash/",
+                settings_file: "{{$smarty.const.__ACTION__}}flag/set",
+                data_file: "{{$smarty.const.__ACTION__}}flag/data"
+            };
+
+            //window.onload = function()
+           // {              
+			
+                // change 8 to 80 to test javascript version
+                if (swfobject.hasFlashPlayerVersion("8"))
+                {
+                    swfobject.embedSWF("{{$smarty.const.__SHARE__}}plug/amcharts/flash/amline.swf", "chartdiv2", "700", "500", "8.0.0", "{{$smarty.const.__SHARE__}}plug/amcharts/flash/expressInstall.swf", flashVars, params);
+                }
+                else
+                {
+                    // Note, as this example loads external data, JavaScript version might only work on server
+                    var amFallback = new AmCharts.AmFallback();
+                    amFallback.pathToImages = "{{$smarty.const.__SHARE__}}plug/amcharts/javascript/images/"
+                    amFallback.settingsFile = flashVars.settings_file;
+                    amFallback.dataFile = flashVars.data_file;				
+                    amFallback.type = "line";
+                    amFallback.write("chartdiv2");
+                }
+            //}
+        
+        </script>
+    </body>
+</html>
+

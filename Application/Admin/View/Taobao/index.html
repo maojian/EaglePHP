@@ -1,0 +1,68 @@
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="cid" value="{{$smarty.post.cid}}">
+	<input type="hidden" name="keyword" value="{{$smarty.post.keyword}}" />
+</form>
+
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					淘宝搜索：<input type="text" name="keyword" value="{{$smarty.post.keyword}}" />
+				</td>
+				<td>
+					<select class="combox" name="cid">
+						<option value="">--类型--</option>
+						{{html_options options=$cats selected=$smarty.post.cid}}
+					</select>
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	</form>
+</div>
+
+<div class="pageContent">
+
+	<table class="table" width="100%" layoutH="86">
+		<thead>
+			<tr>     
+				<th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th>商品信息</th>
+				<th>店铺</th>
+				<th>价格</th>
+				<th>比率</th>
+				<th>佣金</th>
+				<th>推广信息</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list}}
+			<tr target="num_iid" rel="{{$list[loop]->num_iid}}">
+				<td><input name="ids" value="{{$list[loop]->num_iid}}" type="checkbox"></td>
+				<td class="box" width="45%"><img src="{{$list[loop]->pic_url}}_100x100.jpg" style="width: 50px;float: left;"/>{{$list[loop]->title}}<br/><a href="{{$list[loop]->click_url}}" style="color: #0088cc;" target="_blank">推广链接</a></td>
+				<td>{{$list[loop]->nick}}</td>
+				<td>{{$list[loop]->price}}</td>
+				<td>{{$list[loop]->commission_rate/100|round:2}}%</td>
+				<td>{{$list[loop]->commission}}元</td>
+				<td class="box">此商品近期推广量{{$list[loop]->commission_num}}件<br/>此商品近期推广佣金{{$list[loop]->commission_volume}}元</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	{{include file="Include/page.html"}}
+</div>

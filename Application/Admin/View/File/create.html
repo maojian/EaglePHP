@@ -1,0 +1,28 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__ACTION__}}type/{{$smarty.request.type}}" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<input type="hidden" name="file" value="{{$smarty.request.file}}" />
+			<dl class="nowrap">
+				<dt>{{if $smarty.request.type eq 'file'}}文件名称：{{else}}新目录：{{/if}}</dt>
+				<dd><input class="required" type="text" name="file_name" size="60"/></dd>
+			</dl>
+			
+			{{if $smarty.request.type eq 'file'}}
+			<dl class="nowrap">
+				<dt>文件内容：</dt>
+				<dd><textarea class="required" name="content" rows="30" cols="80"></textarea></dd>
+			</dl>
+			{{/if}}
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">编辑</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

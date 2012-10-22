@@ -1,0 +1,31 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}move" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<input type="hidden" name="file" value="{{$smarty.request.file}}" />
+			<dl class="nowrap">
+				<dt>被移动文件：</dt>
+				<dd><input name="move_name" size="30" value="{{$move_name}}" readonly="readonly"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt>当前位置：</dt>
+				<dd><input name="cur_dir" size="30" readonly="readonly" value="{{$cur_dir}}"/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt>新位置：</dt>
+				<dd><input class="required"  name="new_dir" size="30" value=""/></dd>
+			</dl>
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">确定</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

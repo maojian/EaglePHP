@@ -1,0 +1,81 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}update" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<input type="hidden" name="id" value="{{$module_info.id}}" />			
+			<dl class="nowrap">
+				<dt>名称：</dt>
+				<dd><input name="name" class="required" type="text" size="30" value="{{$module_info.name}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>路径：</dt>
+				<dd><input name="url" class="" type="text" size="30" value="{{$module_info.url}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>序号：</dt>
+				<dd><input name="number" class="" type="text" size="30" value="{{$module_info.number}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>描述：</dt>
+				<dd><textarea name="info"  rows="5" cols="40">{{$module_info.info}}</textarea></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>父节点：</dt>
+				<dd>
+					<input type="hidden" name="orgLookup.id" value="{{$module_info.parent|default:0}}"/>
+					<input type="text" class="textInput required" name="dwz_orgLookup.orgName" value="{{$module_info.parent_name|default:'主菜单'}}" readonly="readonly"/>
+					<a class="btnLook" href="{{$smarty.const.__URL__}}lookup" lookupGroup="" lookupName="orgLookup" maxable="false" resizable="false" title="查找父菜单"><hi:text key="查找带回"/></a>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>级别：</dt>
+				<dd>
+					<select name="level" class="required">
+						{{html_options options=$levels selected=$module_info.level}}
+					</select>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>弹出方式：</dt>
+				<dd>
+					<select name="target" class="required" onchange="targetChange(this.value);">
+						{{html_options options=$targets selected=$module_info.target}}
+					</select>
+				</dd>
+			</dl>
+			<dl class="nowrap" id="width_box" style="display:none">
+				<dt>宽度：</dt>
+				<dd><input id="width" name="width" class="" type="text" size="3" value="{{$module_info.width}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap" id="height_box" style="display:none">
+				<dt>高度：</dt>
+				<dd><input id="height" name="height" class="" type="text" size="3" value="{{$module_info.height}}" alt=""/></dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">编辑</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+
+<script type="text/javascript">
+	function targetChange(value){
+		if(value == "dialog"){
+			$("#width_box").css("display", "block");
+			$("#height_box").css("display", "block");
+			$("#width").focus();
+		}else{
+			$("#width_box").css("display", "none");
+			$("#height_box").css("display", "none");
+		}
+	}
+	
+	targetChange("{{$module_info.target}}");
+</script>
+

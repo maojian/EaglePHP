@@ -1,0 +1,62 @@
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}lookup">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="id" value="{{$smarty.post.id}}">
+	<input type="hidden" name="name" value="{{$smarty.post.name}}" />
+	<input type="hidden" name="url" value="{{$smarty.post.url}}" />
+</form>
+
+<div class="pageHeader">
+	<form onsubmit="return dwzSearch(this, 'dialog');" action="{{$smarty.const.__URL__}}lookup" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					模块编号：<input type="text" name="id" value="{{$smarty.post.id}}" />
+				</td>
+				<td>
+					名称：<input type="text" name="name" value="{{$smarty.post.name}}" />
+				</td>
+				<td>
+					路径：<input type="text" name="url" value="{{$smarty.post.url}}" />
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+							<!--<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="">刷新</button></div></div></li>-->
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<table class="table" layoutH="118" targettype="dialog" width="100%">
+		<thead>
+			<tr>
+				<th orderField="id" class="{{$page.orderDirection}}">模块编号</th>
+				<th>名称</th>
+				<th>路径</th>
+				<th>查找带回</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$modules}}
+			<tr>
+				<td>{{$modules[loop].id}}</td>
+				<td>{{$modules[loop].name}}</td>
+				<td>{{$modules[loop].url}}</td>
+				<td>
+					<a class="btnSelect" href="javascript:$.bringBack({id:'{{$modules[loop].id}}', orgName:'{{$modules[loop].name}}'})" title="查找带回">选择</a>
+				</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	{{include file="Include/page.html" targetType="dialog"}}
+</div>

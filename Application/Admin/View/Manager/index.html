@@ -1,0 +1,87 @@
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="role" value="{{$smarty.post.role}}">
+	<input type="hidden" name="username" value="{{$smarty.post.username}}" />
+	<input type="hidden" name="register_time" value="{{$smarty.post.register_time}}" />
+</form>
+
+<div class="pageHeader">
+	<form rel="pagerForm" onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					用户名：<input type="text" name="username" value="{{$smarty.post.username}}" />
+				</td>
+				<td>
+					<select class="combox" name="role_id">
+						<option value="">--角色--</option>
+						{{html_options options=$roles selected=$smarty.post.role_id}}
+					</select>
+				</td>
+				<td>
+					注册日期：<input type="text" class="date" readonly="true" name="register_time" value="{{$smarty.post.register_time}}"/>
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="{{$smarty.const.__URL__}}add" target="dialog" width="520" height="500"><span>添加</span></a></li>
+			<li><a class="edit" href="{{$smarty.const.__URL__}}update/uid/{uid}" target="dialog" width="520" height="500"><span>修改</span></a></li>
+			<li><a class="delete" href="{{$smarty.const.__URL__}}delete" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
+			<li class="line">line</li>
+			<li><a class="icon" href="{{$smarty.const.__URL__}}export/role_id/{{$smarty.post.role_id}}/username/{{$smarty.post.username}}/register_time/{{$smarty.post.register_time}}"><span>导出EXCEL</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="114">
+		<thead>
+			<tr>
+				<th width="24"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th width="5%" orderField="uid" class="{{$page.orderDirection}}">编号</th>
+				<th>姓名</th>
+				<th>角色</th>
+				<th>登录IP</th>
+				<th>登录时间</th>
+				<th>注册时间</th>
+				<th>状态</th>
+				<th>登录数</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$users}}
+			<tr target="uid" rel="{{$users[loop].uid}}">
+				<td width="3%"><input name="ids" value="{{$users[loop].uid}}" type="checkbox"></td>
+				<td>{{$users[loop].uid}}</td>
+				<td>{{$users[loop].username}}</td>
+				<td>{{$users[loop].role_id}}</td>
+				<td>{{$users[loop].login_ip}}</td>
+				<td>{{$users[loop].login_time}}</td>
+				<td>{{$users[loop].register_time}}</td>
+				<td>{{$users[loop].state}}</td>
+				<td>{{$users[loop].login_num}}</td>
+				<td>
+					<a target="ajaxTodo" href="{{$smarty.const.__URL__}}delete/ids/{{$users[loop].uid}}" class="btnDel"  title="确定要删除吗?">删除</a>
+					<a target="dialog" href="{{$smarty.const.__URL__}}update/uid/{{$users[loop].uid}}" class="btnEdit" width="520" height="500" title="编辑">编辑</a>
+				</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	{{include file="Include/page.html"}}
+</div>

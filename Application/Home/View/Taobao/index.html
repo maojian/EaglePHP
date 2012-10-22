@@ -1,0 +1,50 @@
+{{include file="Include/head.html" taobao="actived"}}
+
+    <div id="recommendedList">
+    <div class="column">
+      <div class="columnBody">
+        <h2><strong>精选商品</strong><div id="share">
+          <form method="post" action="{{$smarty.const.__ROOT__}}taobao">
+          <select class="selectfield" name="cid" onchange="this.form.submit()"><option value="">--商品分类--</option>{{html_options options=$cats selected=$smarty.request.cid}}</select>
+          <div class="shareInput">
+            <input type="text" class="textfield" name="keyword" value="{{$smarty.request.keyword|default:'搜索你感兴趣的商品'}}" onfocus="if (this.value == '搜索你感兴趣的商品') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的商品';"  />
+          	<input name="" class="button" type="submit" value="搜索" />
+          </div>
+          <div class="clear"></div>
+          </form>
+        </div></h2>
+        <div class="innerContent">
+          <div class="mainContent" id="container" >
+           {{section name=loop loop=$list}}
+            <div class="box photo col3">
+              <a href="{{$list[loop]->click_url}}" target="_blank"><img src="{{$list[loop]->pic_url}}" alt="" /></a>
+              
+              <div style="font-size: 14px;padding-top: 8px;">{{$list[loop]->title}}&nbsp;&nbsp;<font color="red" style="float: right;">￥：{{$list[loop]->price}}</font></div>
+            </div>
+           {{/section}}
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <p style="text-align: center;font-size: 14px;">{{$page}}</p>
+      <div class="clear"></div>
+      <div class="columnFooter"></div>
+    </div>
+  </div>
+
+<link href="{{$smarty.const.__SHARE__}}plug/masonry/style.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="{{$smarty.const.__SHARE__}}plug/masonry/jquery.masonry.min.js"></script>  
+<script>
+  $(function(){
+
+    var $container = $('#container');
+    $container.imagesLoaded( function(){
+      $container.masonry({
+        itemSelector : '.box'
+      });
+    });
+  
+  });
+</script>
+
+{{include file="Include/foot.html"}}

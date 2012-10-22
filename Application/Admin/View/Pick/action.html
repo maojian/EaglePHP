@@ -1,0 +1,33 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}{{$smarty.const.ACTION_NAME}}" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);">
+		<input type="hidden" name="id" value="{{$info.id}}">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>标题：</dt>
+				<dd><input name="title" class="required" type="text" size="30" value="{{$info.title}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>网址：</dt>
+				<dd><input name="url" class="required" type="text" size="30" value="{{$info.url}}" alt=""/>&nbsp;&nbsp;使用不带http及任何附加目录的网址 如：www.eaglephp.com </dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>编码：</dt>
+				<dd>{{html_radios name=lang options=$lang_arr selected=$info.lang}}&nbsp;&nbsp;原网站的编码</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>规则：</dt>
+				<dd><textarea name="rule" cols="50" rows="6">{{$info.rule|default:'{@body}'}}</textarea>&nbsp;&nbsp;仅针对文章内容，格式：前面HTML{@body}后面HMTL</dd>
+			</dl>
+
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">{{if $smarty.const.ACTION_NAME eq "add"}}添加{{else}}修改{{/if}}</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

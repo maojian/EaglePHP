@@ -1,0 +1,22 @@
+
+<div class="pageContent">
+	<form method="post" class="pageForm required-validate" onsubmit="return iframeCallback(this, dialogAjaxDone);" enctype="multipart/form-data">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>JS文件：</dt>
+				<dd><textarea class="required" name="js" rows="5" cols="44">{{$js}}</textarea></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>HTML表单：</dt>
+				<dd>
+					<textarea class="required" name="html" rows="17" cols="44">{{$html}}</textarea>
+				</dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,18 @@
+{{include file="Include/head.html"}}
+
+	<div id="book.swf" class="book">
+	    <h1 class="title">{{$title}}</h1>
+	    <ul class="chunklist chunklist_book">
+	    	{{section name=loop loop=$indexs}}
+	        <li>
+	            <a href="{{$indexs[loop].link}}">{{$indexs[loop].name}}</a>
+				{{if $indexs[loop].comment}}
+					- {{$indexs[loop].comment[0]}}
+				{{/if}}
+	        </li>
+			{{/section}}
+	    </ul>
+	</div>
+
+{{include file="Include/foot.html"}}
+

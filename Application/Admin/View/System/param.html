@@ -1,0 +1,26 @@
+
+<div class="pageContent">
+	<div class="tabs" currentIndex="0" eventType="click">
+		<div class="tabsHeader">
+			<div class="tabsHeaderContent">
+				<ul>
+					{{foreach key=k item=v from=$list}}
+					<li><a href="{{$smarty.const.__ACTION__}}groupid/{{$k}}" class="j-ajax"><span>{{$v}}</span></a></li>
+					{{/foreach}}
+					<li><a href="{{$smarty.const.__ACTION__}}action/add" target="dialog" width="700" height="400"><span>添加新变量</span></a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="tabsContent" style="height:500px;position:relative;">
+			{{foreach key=k item=v from=$list}}
+			<div></div>
+			{{/foreach}}
+			<div></div>
+		</div>
+		<div class="tabsFooter">
+			<div class="tabsFooterContent"></div>
+		</div>
+	</div>	
+</div>
+
+

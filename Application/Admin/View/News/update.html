@@ -1,0 +1,106 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}update" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<input type="hidden" name="id" value="{{$news_info.id}}">
+			<dl>
+				<dt>标题：</dt>
+				<dd><input name="title" id="title" class="required" type="text" size="30" value="{{$news_info.title}}" alt=""/></dd>
+			</dl>
+			<dl>
+				<dt>类型：</dt>
+				<dd>
+					<select name="type"  class="combox required">
+						<option value="">--类型--</option>
+						{{html_options options=$types selected=$news_info.type}}
+					</select>
+				</dd>
+			</dl>
+			<dl>
+				<dt>排序值：</dt>
+				<dd><input name="rank" type="text" size="30" value="{{$news_info.rank}}" alt=""/></dd>
+			</dl>
+			<dl>
+				<dt>创建者：</dt>
+				<dd><input name="create_username" type="text" size="20" value="{{$news_info.create_username}}" alt="" readonly="readonly"/></dd>
+			</dl>
+			
+			<dl>
+				<dt>作者：</dt>
+				<dd><input name="auth" type="text" size="30" value="{{$news_info.auth}}"/></dd>
+			</dl>
+			
+			<dl>
+				<dt>来源：</dt>
+				<dd><input name="source" type="text" size="20" value="{{$news_info.source}}"/></dd>
+			</dl>
+			
+			<dl>
+				<dt>点击数：</dt>
+				<dd><input name="clicknum" type="text" size="30" value="{{$news_info.clicknum}}"/></dd>
+			</dl>
+			
+			<div class="divider"></div>
+			
+			<dl class="nowrap">
+				<dt>关键字：</dt>
+				<dd><input name="keywords" type="text" size="60" value="{{$news_info.keywords}}" alt=""/>&nbsp;&nbsp;多个关键字用英文逗号分隔</dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt>文章摘要：</dt>
+				<dd><textarea class="" name="description" rows="5" cols="80">{{$news_info.description}}</textarea></dd>
+				{{if $news_info.img neq null}}&nbsp;&nbsp;<img src="{{$news_info.img}}"/>{{/if}}
+			</dl>
+			
+			<div class="divider"></div>
+			
+			<dl class="nowrap">
+				<dt>附加选项：</dt>
+				<dd style="width:30%">
+					<input type="checkbox" name="remote" {{if 'cfg_rm_remote'|getCfgVar eq 1}}checked{{/if}} value="1"/>下载远程图片和资源&nbsp;&nbsp;
+					<input type="checkbox" name="autolitpic" {{if 'cfg_arc_autopic'|getCfgVar eq 1}}checked{{/if}} value="1"/>提取第一张图片为缩略图 
+				</dd>
+			</dl>
+			
+			<div class="divider"></div>
+			<dl class="nowrap">
+				<dt>内容：</dt>
+				<dd>
+					<div class="unit">
+					<textarea 
+							class = "editor" 
+							name = "content" 
+							rows = "25" 
+							cols = "100" 
+							tools = "full"
+							upImgUrl = "!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={{$uploadUrl}}&params={'PHPSESSID':'{{$PHPSESSID}}'}&ext=图片文件(*.jpg;*.jpeg;*.gif;*.png)"
+						>{{$news_info.content}}</textarea>
+					</div>
+					<span>内容分页请用<font color="red">#page#</font>分隔。</span>
+				</dd>
+			</dl>
+			<div class="divider"></div>
+			<dl class="nowrap">
+				<dt>插入投票：</dt>
+				<dd>
+					<input type="hidden" name="orgLookup.id" value=""/>
+					<input type="text" class="textInput" name="dwz_orgLookup.orgName" size="60" value="" readonly="readonly"/>
+					<a class="btnLook" href="{{$smarty.const.__ROOT__}}vote/lookup" lookupGroup="" lookupName="orgLookup" maxable="false" resizable="false" title="插入投票"><hi:text key="查找带回"/></a>
+				</dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">修改</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	$("#title").focus();
+</script>

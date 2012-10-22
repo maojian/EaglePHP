@@ -1,0 +1,42 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}add" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<p>
+				<label>账号：</label>
+				<input name="username" class="required" type="text" size="30" value="" alt=""/>
+			</p>
+			<p>
+				<label>密码：</label>
+				<input name="password" class="required alphanumeric" type="password" size="30" value="" alt=""/>
+			</p>
+			<p>
+				<label>角色：</label>
+				<select name="role_id" class="combox required">
+					<option value="">--角色--</option>
+					{{html_options options=$roles selected=$smarty.post.role}}
+				</select>
+			</p>
+			<p>
+				<label>状态：</label>
+				<select name="state" class="combox">
+					{{html_options options=$status selected=$smarty.post.status}}
+				</select>
+			</p>
+			<p>
+				<label>频道：</label>
+				<select name="channel_ids[]" multiple="multiple" style="width: 200px;height: 250px" size="10">
+					{{$channelBox}}
+				</select>&nbsp;<span>(按 Ctrl 可以进行多选)</span>
+			</p>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">添加</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

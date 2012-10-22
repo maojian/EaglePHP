@@ -1,0 +1,28 @@
+
+<script type="text/javascript">
+	function confirmMsg(msg, target){
+		alertMsg.confirm(msg, {
+			okCall: function(){
+				$.post("{{$smarty.const.__URL__}}"+target, {}, DWZ.ajaxDone, "json");
+			}
+		});
+	}
+</script>
+
+<h2 class="contentTitle">系统设置面板</h2>
+<table>
+  <tr>
+    <td>
+    	<div style="margin-left: 10%">
+        	<a class="button" href="javascript:;" onclick="confirmMsg('您确定要更新吗？','updateTableMappend')"><span>更新表映射【ORM】</span></a>
+        </div>
+    </td>
+    <td>
+    	<div style="margin-left: 10%">
+        	<a class="button" href="javascript:;" onclick="confirmMsg('您确定要清空吗？','clearCache')"><span>清空缓存数据</span></a>
+        </div>
+    </td>
+  </tr>
+</table>
+
+				

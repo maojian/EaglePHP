@@ -1,0 +1,36 @@
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__ACTION__}}go/{{$smarty.get.go}}/table/{{$smarty.get.table}}/?url_param={{$url_param}}" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		{{if $smarty.get.go eq "update"}}
+		<input type="hidden" name="eg_base64_where" value="{{$smarty.get.eg_base64_where}}">
+		{{/if}}
+		<div class="pageFormContent" layoutH="56">
+			{{section name=loop loop=$list}}
+			<dl class="nowrap">
+				<dt><b>{{$list[loop].name}}</b></dt>
+				<dd>
+					{{if $list[loop].auto neq null}}
+					<font color="blue">{{$list[loop].value}}&nbsp;&nbsp;{{$list[loop].auto}}</font>
+					{{elseif $list[loop].type eq "datetime"}}
+					<input name="{{$list[loop].name}}" type="text" format="yyyy-MM-dd HH:mm:ss" class="date{{if $list[loop].null eq "no"}} required{{/if}}" readonly="true" size="30" value="{{$list[loop].value}}"/><a class="inputDateButton" href="javascript:;">选择</a>
+					{{elseif $list[loop].type eq "date"}}
+					<input name="{{$list[loop].name}}" type="text" format="yyyy-MM-dd" class="date{{if $list[loop].null eq "no"}} required{{/if}}" readonly="true" size="30" value="{{$list[loop].value}}"/><a class="inputDateButton" href="javascript:;">选择</a>
+					{{elseif $list[loop].length < 50 && $list[loop].type!="text"}}
+					<input name="{{$list[loop].name}}" {{if $list[loop].null eq "no"}}class="required"{{/if}} type="text" size="60" value="{{$list[loop].value}}"/>
+					{{else}}
+					<textarea name="{{$list[loop].name}}" {{if $list[loop].null eq "no"}}class="required"{{/if}} rows="5" cols="57">{{$list[loop].value}}</textarea>
+					{{/if}}
+					&nbsp;&nbsp;{{$list[loop].comment}}【{{$list[loop].type}}{{if $list[loop].length neq null}},{{$list[loop].length}}{{/if}}】
+				</dd>
+			</dl>
+			{{/section}}
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">{{if $smarty.get.go eq "add"}}添加{{else}}修改{{/if}}</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

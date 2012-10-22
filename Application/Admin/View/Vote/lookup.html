@@ -1,0 +1,41 @@
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}lookup">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="id" value="{{$smarty.post.id}}">
+	<input type="hidden" name="name" value="{{$smarty.post.name}}" />
+	<input type="hidden" name="url" value="{{$smarty.post.url}}" />
+</form>
+
+<div class="pageContent">
+	<table class="table" layoutH="55" targettype="dialog" width="100%">
+		<thead>
+			<tr>
+				<th>投票ID</th>
+				<th>投票名称</th>
+				<th>开始时间</th>
+				<th>结束时间</th>
+				<th>投票总数</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list}}
+			<tr>
+				<td>{{$list[loop].id}}</td>
+				<td>{{$list[loop].name}}</td>
+				<td>{{$list[loop].start_time|date_format:'%Y-%m-%d'}}</td>
+				<td>{{$list[loop].end_time|date_format:'%Y-%m-%d'}}</td>
+				<td>{{$list[loop].total_count}}</td>
+				<td><font color="{{if $list[loop].is_enable}}red{{else}}green{{/if}}">{{$list[loop].state}}</font></td>
+				<td>
+					<a class="btnSelect" href="javascript:$.bringBack({id:'{{$list[loop].id}}', orgName:'{{$list[loop].name}}'})" title="查找带回">选择</a>
+				</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	{{include file="Include/page.html" targetType="dialog"}}
+</div>

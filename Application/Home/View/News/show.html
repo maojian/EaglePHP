@@ -1,0 +1,278 @@
+{{include file="Include/head.html"}}
+
+<style type="text/css">
+div.small {font-size: 12px;}
+div.normal {font-size: 14px;}
+div.big {font-size: 16px;}
+</style>
+
+<script>  
+function changeFontSize(value) {
+  var htmlContent;
+  if(value == "12") {
+    htmlContent = " 选择字号：<span>小</span> <a href=\"javascript:changeFontSize('14');\">中</a> <a href=\"javascript:changeFontSize('16');\">大</a> ";
+  }
+  if(value == "14") {
+    htmlContent = " 选择字号：<a href=\"javascript:changeFontSize('12');\">小</a> <span>中</span> <a href=\"javascript:changeFontSize('16');\">大</a> ";
+  }
+  if(value == "16") {
+    htmlContent = " 选择字号：<a href=\"javascript:changeFontSize('12');\">小</a> <a href=\"javascript:changeFontSize('14');\">中</a> <span>大</span> ";
+  }
+  $('div.fontSwitcher').html(htmlContent);
+  $('.postBody p').css("font-size", value+"px");
+}
+
+</script>
+
+<script type="text/javascript"> 
+$(function() {
+$('#kanfa .kimageBar ul').cycle({
+        fx:      'scrollHorz',
+        timeout:  0,
+        prev:    '.pre',
+        next:    '.next'
+});
+ 
+$('#announcement ul').cycle({
+	fx:'scrollUp',
+	timeout:10000
+});
+ 
+$('#hotRankSlide').cycle({ 
+	fx:     'none', 
+	timeout: 5000, 
+	delay: 1000,
+	pagerEvent: 'mouseover',
+	pager:  '#hotRankNavi',
+	activePagerClass: 'actived',
+	pauseOnPagerHover: true,
+	allowPagerClickBubble: true,
+	cleartypeNoBg: true,
+	pagerAnchorBuilder: function(idx, slide) { 
+		// return selector string for existing anchor 
+		return '#hotRankNavi li:eq(' + idx + ') a'; 
+	} 
+});
+ 
+});
+</script>
+<div id="index">
+
+<div class="mainContent">
+<div class="pageNavi">
+<ul>
+	<li><a href="{{$smarty.const.__ROOT__}}">首页</a></li>
+	{{foreach key=k item=v from=$type_arr}}
+	<li><a href="{{$smarty.const.__URL__}}index/type/{{$k}}">{{$v}}</a></li>
+	{{/foreach}}
+	<li class="last">正文</li>
+</ul>
+
+<div class="fontSwitcher">选择字号：
+<a href="javascript:changeFontSize('12');">小</a> <span>中</span> 
+<a href="javascript:changeFontSize('16');">大</a></div>
+</div>
+
+<div class="column" id="detailWrapper">
+<div id="detail" class="columnBody">
+
+<div class="postHeader">
+<h2>{{$info.title}}</h2>
+<div class="menubar">
+  <div class="info" style="text-align: center;">
+    {{if $info.auth neq null}}作者：<font color="#008cbf">{{$info.auth}}</font>{{/if}}
+    {{if $info.source neq null}}&nbsp;&nbsp;来源：<font color="#008cbf">{{$info.source}}</font>{{/if}}
+    &nbsp;&nbsp;浏览：<font color="#008cbf" id="clicknum"></font>
+    &nbsp;&nbsp;评论：<font color="#008cbf" id="comments"></font>
+    &nbsp;&nbsp;时间：<font color="#008cbf">{{$info.create_time}}</font>
+  </div>
+  <div class="clear"></div>
+</div>
+
+</div>
+
+<div class="postBody">
+{{$info.content}}
+
+{{if $totalPage>1}}
+<div style="text-align: center;">{{$page}}</div>
+<br/>
+{{/if}}
+<div class="clear"></div>
+
+{{if $key_arr}}
+<div class="tag"><strong>标签：</strong> 
+{{section name=loop loop=$key_arr}}
+<a href="{{$smarty.const.__URL__}}index/content/{{$key_arr[loop]}}">{{$key_arr[loop]}}</a>
+{{/section}}
+</div>
+{{/if}}
+
+<div class="clear"></div>
+<!-- Baidu Button BEGIN -->
+    <div id="bdshare" class="bdshare_t bds_tools_32 get-codes-bdshare">
+        <a class="bds_qzone"></a>
+        <a class="bds_tsina"></a>
+        <a class="bds_tqq"></a>
+        <a class="bds_renren"></a>
+        <span class="bds_more">更多</span>
+		<a class="shareCount"></a>
+    </div>
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=639971" ></script>
+<script type="text/javascript" id="bdshell_js"></script>
+<script type="text/javascript">
+	document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?t=" + new Date().getHours();
+</script>
+<!-- Baidu Button END -->
+
+<div class="clear"></div>
+  
+</div>
+
+<div class="postFooter">
+<div class="related">
+<h3>相关阅读</h3>
+<ul>
+	{{section name=loop loop=$relation_list}}
+	<li><span class="tags"><a href="{{$smarty.const.__URL__}}index/type/{{$type_info.id}}">[{{$type_info.title}}]</a></span>
+	<a href="{{$relation_list[loop].link}}" title="{{$relation_list[loop].title}}">{{$relation_list[loop].short_title}}</a></li>
+	{{/section}}
+</ul>
+<div class="clear"></div>
+</div>
+</div>
+
+</div>
+<div class="columnFooter"></div>
+</div>
+
+<div id="comments" class="commentList">
+<h2><strong>评论</strong></h2>
+<ol id="comment_list">
+<li>
+<div class="info">
+<h4><span class="time"></span></h4><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/loading.gif"/>&nbsp;&nbsp;正在加载评论...</div>
+<div class="clear"></div>
+</li>
+</ol>
+
+<!-- 
+<span class="pager">
+<span class="total">共4页</span> 
+<span class="pages"> 
+<span>1</span> 
+<a class="page" href="javascript:loadCmt(5127341, 200601960, 2);">2</a> 
+<a class="page" href="javascript:loadCmt(5127341, 200601960, 3);">3</a> 
+<a class="page" href="javascript:loadCmt(5127341, 200601960, 4);">4</a>
+</span> 
+<a class="next" href="javascript:loadCmt(5127341, 200601960, 2);">下一页</a> 
+<a class="last" href="javascript:loadCmt(5127341, 200601960, 4);">最后一页</a>
+</span>
+ -->
+</div>
+
+<div id="commentForm">
+<h2>发表评论</h2>
+<a name="cmt_form"></a>
+<form target="ifr_login" method="post" name="cform" action="" onsubmit="return check_cmt(this);">
+<fieldset style="margin:0;padding:0;border:none;display:block;" id="fs_nologin">
+<div><label for="cname">姓　名</label><input class="textField" id="cname" name="name" type="text"></div>
+<div><label for="cemail">E-Mail</label><input class="textField" id="cemail" name="email" type="text"></div>
+<div><div style="float: left;"><label for="cname">验证码</label><input class="textField" id="yzm" name="yzm" type="text" style="width: 120px">&nbsp;&nbsp;</div><div style="float: left;"><img src="{{$smarty.const.__ROOT__}}message/verifyCode/" id="verifyCode" onclick="this.src+='?' + Math.random();" style="cursor: pointer;"/></div></div>
+</fieldset>
+
+<div><textarea id="content" rows="8" tabindex="3"></textarea></div>
+<div class="submit">
+<table>
+<tbody><tr>
+<td><input class="button" name="addsub" value="提交" id="submit_comment" type="button" onclick="comment();"></td>
+</tr>
+</tbody></table>
+</div>
+</form>
+</div>
+
+
+</div>
+
+<div class="subContent"><!-- 频道搜索 -->
+<div id="search" class="module">
+<h3>频道搜索</h3>
+<form id="form1" name="form1" method="post" action="{{$smarty.const.__ROOT__}}news">
+<input type="text" name="content" class="textfield" value="文章搜索..." onfocus="if (this.value=='文章搜索...') this.value=''" /> 
+<input class="button" type="submit" value="提交" />
+<div class="tag"><strong>搜索热点：</strong>
+<a href="{{$smarty.const.__ROOT__}}news/index/content/PHP/">PHP</a>
+<a href="{{$smarty.const.__ROOT__}}news/index/content/MSQL/">MSQL</a> 
+<a href="{{$smarty.const.__ROOT__}}news/index/content/Linux/">Linux</a> 
+<a href="{{$smarty.const.__ROOT__}}news/index/content/Apache/">Apache</a></div>
+</form>
+</div>
+</div>
+
+{{include file="Include/subContent.html"}}
+
+</div>
+<script type="text/javascript">
+var news_id = "{{$smarty.get.id}}";
+function getData(){
+	var data = $.ajax({url: "{{$smarty.const.__URL__}}getData/id/"+news_id, async: false}).responseText;
+	var obj = {};
+    eval("obj="+data);
+	$("#comment_list").html(obj.data.comment_list);
+	$("#clicknum").html(obj.data.clicknum);	
+	$("#comments").html(obj.data.comments);	
+}
+setTimeout(getData, 100);
+
+function comment(){
+	var name = $("#cname").val();
+	var email = $("#cemail").val();
+	var yzm = $("#yzm").val();
+	var content = $("#content").val();
+	
+	if(name == ""){
+		alert("请输入姓名");
+		return false;
+	}else if(email == ""){
+		alert("请输入Email");
+		return false;
+	}else if(email.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) == -1){
+		alert("Email输入错误");
+		return false;
+	}else if(yzm == ""){
+		alert("请输入验证码");
+		return false;
+	}else if(content == ""){
+		alert("请输入评论内容");
+		return false;
+	}
+
+	$.post("{{$smarty.const.__URL__}}comment",
+       { name: name, email: email, content: content, news_id: news_id, yzm: yzm },
+       function(data){
+          var obj = {};
+          eval("obj="+data);
+          if(obj.statusCode == 200){
+              	if(document.getElementById('no_comment')){
+              		$("#comment_list").html(obj.message);
+                }else{
+                	$("#comment_list").append(obj.message);
+                }
+				
+				$("#cname").val('');
+				$("#cemail").val('');
+				$("#yzm").val('');
+				$("#content").val('');
+          }else{
+				alert(obj.message);
+          }
+          
+       } 
+	); 
+}
+
+</script>
+
+{{include file="Include/foot.html"}}
+

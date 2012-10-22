@@ -1,0 +1,31 @@
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}add" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>金额：</dt>
+				<dd><input name="money" class="required" type="text" size="20" value="" alt=""/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt>日期：</dt>
+				<dd><input name="usetime" type="text" class="date" readonly="true"/></dd>
+			</dl>
+			
+			<dl>
+				<dt>备注：</dt>
+				<dd>
+					<textarea class="required" name="remark" rows="15" cols="44"></textarea>
+				</dd>
+			</dl>
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">添加</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

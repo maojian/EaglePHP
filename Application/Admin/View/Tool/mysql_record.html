@@ -1,0 +1,44 @@
+<form id="pagerForm" method="post" action="{{$smarty.const.__ACTION__}}">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="go" value="record" />
+	<input type="hidden" name="table" value="{{$table}}" />
+	<input type="hidden" name="url_param" value="{{$url_param}}" />
+</form>
+
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="{{$smarty.const.__ACTION__}}go/add/table/{{$smarty.request.table}}/?url_param={{$url_param}}" title="管理表" target="navTab" rel="Tool_Mysql_Add"><span>添加</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="200">
+		<thead>
+			<tr>
+				{{section name=loop loop=$field_arr}}
+				<th>{{$field_arr[loop].name}}</th>
+				{{/section}}
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+		    {{section name=loop loop=$list}}
+    		    <tr>
+    			{{foreach from=$list[loop] item=v key=k}}
+    				{{if $k neq "eg_base64_where"}}
+    				<td>{{$v}}</td>
+    				{{/if}}
+    		    {{/foreach}}
+    		    	<td>
+    					<a href="{{$smarty.const.__ACTION__}}go/update/table/{{$smarty.request.table}}/eg_base64_where/{{$list[loop].eg_base64_where}}/?url_param={{$url_param}}" title="管理{{$list[loop].table}}表" target="navTab" rel="Tool_Mysql_Update" style="text-decoration: underline;color: blue;">编辑</a> | 
+    					<a href="{{$smarty.const.__ACTION__}}go/delete/table/{{$smarty.request.table}}/eg_base64_where/{{$list[loop].eg_base64_where}}/?url_param={{$url_param}}" title="确定删除这条数据吗？" target="ajaxTodo" style="text-decoration: underline;color: blue;">删除</a>
+    				</td>
+    			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	
+	{{include file="Include/page.html"}}
+</div>

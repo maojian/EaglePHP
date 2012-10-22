@@ -1,0 +1,35 @@
+@charset "utf-8";
+#header .globalNavi a { position:relative; }
+
+#header .globalNavi li a:hover, #header .globalNavi li.actived { background:none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, src=/home/imgs/global-navi-bg_1.png); cursor:pointer; }
+#slideshow .info { background:none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, src=/home/imgs/slideshow-info-bg.png); }
+#headlines .info { background:none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, src=/home/imgs/headlines-info-bg.png); }
+#headlines .info a { position:relative; }
+#headlines .news li img { margin-bottom:3px; }
+
+#wrapper .clear { height:1px; overflow:hidden; margin-bottom:-1px; }
+#share .textfield { _background-attachment:fixed; }
+#search .tag, #share form, .module { zoom:1; }
+/*#incoming .featured, #incoming .featuredList { margin-bottom:-13px; }*/
+#share .button { padding-left:1px; _background-attachment:fixed; }
+#recommendedList #share .textfield { _background-attachment:fixed; }
+#top10 li { margin-bottom:-2px; }
+#style .featuredBody ul { zoom:1; }
+#horizon h4 { zoom:1; }
+#horizon h4 .more { top:-3px; right:12px; }
+
+#review .artical, #review .related { zoom:1; }
+.columnBody, .columnBody .loop, .columnBody .content { zoom:1; }
+#recommendedList .subContent .topBlogger ul { zoom:1; } 
+/*#recommendedList .mainContent .pro li img {  }*/
+#recommendedList .mainContent .elite li img { margin-bottom:6px; }
+
+#comments li { zoom:1; }
+
+#artical li .time { _right:14px; _top:0; }
+
+#recommendedList .mainContent .over { background:none; filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, src=/home/imgs/recommended-hover-bg.png); }
+
+#travelShow #focus640x320 .item { _display:none; }
+#travelShow #focus640x320 .item .title { _background:none; _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, src="/home/imgs/travelshow_bg.png"); _z-index:19; }
+#travelShow #focus640x320 .item .title a { _position:relative; _z-index:199; }

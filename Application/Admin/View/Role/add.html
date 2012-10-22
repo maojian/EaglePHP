@@ -1,0 +1,40 @@
+<div id="resultBox"></div>
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}add" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<dl>
+				<dt>名称：</dt>
+				<dd><input name="name" class="required" type="text" size="30" value="" alt=""/></dd>
+			</dl>
+			<dl style="width:100%">
+				<dt>授权：</dt>
+				<dd>
+					<div style="overflow:auto; width:300px; height:400px; border:solid 1px #CCC; line-height:21px; background:#FFF;">
+					<ul class="tree treeFolder treeCheck expand"  oncheck="">
+						{{$trees}}
+					</ul>
+					</div>
+				</dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">添加</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	function kkk(){
+		var json = arguments[0], result="";
+		//alert(json.checked);
+		$(json.items).each(function(i){
+			result += "<p>name:"+this.name + " value:"+this.value+" text: "+this.text+"</p>";
+		});
+		$("#resultBox").html(result);
+	}
+</script>

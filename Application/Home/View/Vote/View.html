@@ -1,0 +1,162 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{{$title}} - {{'cfg_webname'|getCfgVar}}</title>
+<style type="text/css">
+<!--
+td {
+	font-size: 9pt;
+	line-height: 1.5;
+}
+
+body {
+	font-size: 9pt;
+	line-height: 1.5;
+}
+
+a:link {
+	font-size: 9pt;
+	color: #000000;
+	text-decoration: underline
+}
+
+a:visited {
+	font-size: 9pt;
+	color: #000000;
+	text-decoration: underline
+}
+
+a:hover {
+	font-size: 9pt;
+	color: red
+}
+
+.m1 {
+	border-left: 1px solid #DFDFDB;
+	border-top: 1px solid #DFDFDB;
+	border-bottom: 1px solid #808080
+}
+
+.m2 {
+	border-left: 1px solid #DFDFDB;
+	border-bottom: 1px solid #808080;
+	border-top: 1px solid #DFDFDB;
+	border-right: 1px solid #DFDFDB;
+}
+
+.m3 {
+	border-left: 1px solid #DFDFDB;
+	border-top: 1px solid #DFDFDB;
+	border-right: 1px solid #DFDFDB;
+}
+
+.article {
+	FONT-SIZE: 10pt;
+	LINE-HEIGHT: 160% ；table-layout : fixed;
+	word-break: break-all
+}
+
+.bn {
+	color: #FFFFFF;
+	font-size: 0.1pt;
+	line-height: 50%
+}
+
+.contents {
+	font-size: 1pt;
+	color: #F7F6F8
+}
+
+.nb {
+	border: 1px solid #000000;
+	height: 18px
+}
+
+.coolbg {
+	border-right: 2px solid #ACACAC;
+	border-bottom: 2px solid #ACACAC;
+	background-color: #E6E6E6
+}
+
+.style2 {
+	color: #CC0000;
+	font-size: 11pt;
+}
+-->
+</style>
+</head>
+<body>
+<table width="650" border="0" align="center" cellspacing="2">
+	<tr>
+		<td><img
+			src="{{$smarty.const.__APP_RESOURCE__}}imgs/vote/vote.gif"
+			width="320" height="46"></td>
+	</tr>
+	<tr>
+		<td bgcolor="#CCCC99" height="6"></td>
+	</tr>
+	<tr>
+		<td height="28"><span class="style2">&nbsp;投票名称：{{$info.name}}</span></td>
+	</tr>
+	<tr>
+		<td bgcolor="#F0F2EA">&nbsp;参与这次投票的总人数：{{$info.total_count}}</td>
+	</tr>
+	<tr>
+		<td bgcolor="#F0F2EA">&nbsp;投票开始时间：{{$info.start_time|date_format:'%Y-%m-%d'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;投票结束时间：{{$info.end_time|date_format:'%Y-%m-%d'}}</td>
+	</tr>
+	<tr>
+		<td bgcolor="#DFEAE4">&nbsp;投票结果：</td>
+	</tr>
+	<tr>
+		<td>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td height="3"></td>
+			</tr>
+			<tr>
+				<td height="100" align="center" valign="top">
+				<table width='98%' border='0' cellspacing='1' cellpadding='1'>
+					<tr height='8'>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					{{section name=loop loop=$data}}
+					<tr height='30'>
+						<td style='border-bottom: 1px solid' width='35%'>{{$data[loop].name}}</td>
+						<td style='border-bottom: 1px solid' width='12%'>票数：{{$data[loop].count}}</td>
+						<td style='border-bottom: 1px solid' width='53%'><img
+							src="{{$smarty.const.__APP_RESOURCE__}}imgs/vote/bar{{$smarty.section.loop.index}}.gif"
+							width={{$data[loop].percentage}} height=12 border=0>&nbsp;{{$data[loop].percentage}}%</td>
+					</tr>
+					{{/section}}
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+
+				</td>
+			</tr>
+			<tr>
+				<td height="3"></td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor="#CCCC99" height="6"></td>
+	</tr>
+</table>
+</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+</tr>
+</table>
+</body>
+</html>

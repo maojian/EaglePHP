@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{$title}} - {{'cfg_webname'|getCfgVar}}</title>
+<meta content="keywords" content="{{if $keywords neq ''}}{{$keywords}}{{else}}{{'cfg_keywords'|getCfgVar}}{{/if}}"/>
+<meta name="description" content="{{if $description neq ''}}{{$description}}{{else}}{{'cfg_description'|getCfgVar}}{{/if}}" />
+<link href="{{$smarty.const.__APP_RESOURCE__}}css/base.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="{{$smarty.const.__APP_RESOURCE__}}css/index.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/reflection.js"></script>
+<script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/jquery.cycle.all.min.js"></script>
+<script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/jquery.jamestudio.menu.js"></script>
+</head>
+
+<body>
+<div id="wrapper">
+<div id="header">
+<h1 class="logo"><a href="{{$smarty.const.__ROOT__}}" title="{{'cfg_webname'|getCfgVar}}">{{'cfg_webname'|getCfgVar}}</a></h1>
+<h2 class="description"></h2>
+<div class="utilityMenu">
+<a href="{{$smarty.const.__ROOT__}}message">留言反馈</a>|
+<a href="{{$smarty.const.__ROOT__}}note">往期微博</a>|
+<a href="{{$smarty.const.__PUB__}}admin" target="_blank">登录后台</a>|
+<a href="http://code.google.com/p/eaglephp/downloads/list" target="_blank">下载源码</a>
+</div>
+
+<div class="globalNavi">
+<ul id="menu">
+	<li class="{{$index}}"><a href="{{$smarty.const.__ROOT__}}">首页</a></li>
+	{{$type_tree}}
+	<li class="{{$case}}"><a href="{{$smarty.const.__ROOT__}}case">案例</a></li>
+	<li class="{{$video}}"><a href="{{$smarty.const.__ROOT__}}video">视频</a></li>
+	<li class="{{$album}}"><a href="{{$smarty.const.__ROOT__}}album">相册</a></li>
+	<li class="{{$music}}"><a href="{{$smarty.const.__ROOT__}}music">音乐</a></li>
+	<li class="{{$taobao}}"><a href="{{$smarty.const.__ROOT__}}taobao">收藏</a></li>
+</ul>
+</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#menu").menu({hlClass:"hover"});
+});
+</script>
+

@@ -1,0 +1,53 @@
+
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}done" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					<select class="combox" name="date">
+						<option value="">--日期--</option>
+						{{html_options options=$dateArr selected=$smarty.post.date}}
+					</select>
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	</form>
+</div>
+
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="{{$smarty.const.__ACTION__}}/date/{{$smarty.post.date}}" target="selectedTodo"  rel="ids" postType="string" title="确实要还原这些表吗?"><span>批量还原数据</span></a></li>
+			<li><a class="delete" href="{{$smarty.const.__URL__}}index/type/delBak/date/{{$smarty.post.date}}" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些备份文件吗?，一旦删除将不可恢复数据。"><span>批量删除备份文件</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="77">
+		<thead>
+			<tr>
+				<th width="8%"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th>表名</th>
+				<th>文件大小</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list}}
+			<tr target="id" rel="{{$list[loop].id}}">
+				<td><input name="ids" value="{{$list[loop].id}}" type="checkbox"></td>
+				<td>{{$list[loop].name}}</td>
+				<td>{{$list[loop].size}}</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+</div>

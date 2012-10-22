@@ -1,0 +1,143 @@
+body{
+	font-family:Georgia;
+	font-size:12px;
+	background:#34495a url(loginbodybg.gif) repeat-x;
+	text-align:center;
+}
+ul,li{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+.content{
+	width:743px;
+	height:439px;
+	background:url(loginmainbg.gif) no-repeat;
+	margin:0 auto;
+	margin-top:74px;
+	_margin-top:60px;
+	position:relative;
+	text-align:left;
+}
+*+html .content{
+	margin-top:60px;
+}
+.content h1{
+	width:233px;
+	height:128px;
+	/*background:url(loginlogo.png) no-repeat;*/
+	/*text-indent:-999999px;*/
+	position:absolute;
+	top:100px;
+	left:130px;
+}
+
+.content .button {
+position:absolute; 
+top:195px; 
+left:240px; 
+}
+
+.content .authorize {
+background:url(btn-authorize.gif);
+width:108px; height:25px;
+line-height:25px;
+text-indent:26px;
+text-align:center;
+
+}
+
+
+.content .noauthorize {
+background:url(btn-noauthorize.gif);
+width:108px; height:25px;
+line-height:25px;
+text-align:center;
+
+}
+
+.content  a { font-weight:bold; color:#4c4c4c; text-decoration:none; }
+.content  a:hover { color:#ff9900; text-decoration:none; }
+
+.content .button img { border:none;}
+
+.content .body{
+	position:absolute;
+	top:110px;
+	right:50px;
+	width:300px;
+}
+
+.content .body ul li{
+	margin:5px 0
+}
+
+.content .inputstyle{
+	border:none;
+	width:156px;
+	height:22px;
+	background:url(logininput.png) no-repeat;
+	padding:5px 3px 0 3px;
+	color:#999;
+
+}
+.content .inputstylefocus{
+	border:none;
+	width:156px;
+	height:22px;
+	background:url(logininput.png) no-repeat 0 -27px;
+	padding:5px 3px 0 3px;
+	color:#000;
+
+}
+.content .inputstyleyz{
+	border:none;
+	width:106px;
+	height:22px;
+	background:url(logininput.png) no-repeat -54px;
+	padding:5px 3px 0 3px;
+	color:#999;
+
+}
+.content .inputstyleyzfocus{
+	border:none;
+	width:106px;
+	height:22px;
+	background:url(logininput.png) no-repeat 0 -81px;
+	padding:5px 3px 0 3px;
+	color:#000;
+
+}
+.content .loginbtn{
+	border:none;
+	width:119px;
+	height:38px;
+	background:url(logininput.png) no-repeat 0 -111px;
+
+}
+.content .loginbtnfocus{
+	border:none;
+	width:119px;
+	height:38px;
+	background:url(logininput.png) no-repeat 0 -150px;
+
+}
+.message{
+	position:absolute;
+	right:30px;
+	bottom:120px;
+	width:290px;
+	height:37px;
+	background:url(loginmsgbg.png) no-repeat;
+	padding:15px 3px 0 45px;
+	display:none;
+	
+}
+.verifycodeimg{
+	height:18px;
+	width:60px;
+	position:absolute;
+	left:95px;
+	top:5px;
+	1border:1px double #ccc;
+}

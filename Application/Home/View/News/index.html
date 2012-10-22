@@ -1,0 +1,55 @@
+
+{{include file="Include/head.html"}}
+
+<script type="text/javascript"> 
+$(function() {
+$('#kanfa .kimageBar ul').cycle({
+        fx:      'scrollHorz',
+        timeout:  0,
+        prev:    '.pre',
+        next:    '.next'
+});
+ 
+$('#announcement ul').cycle({
+	fx:'scrollUp',
+	timeout:10000
+});
+ 
+$('#hotRankSlide').cycle({ 
+	fx:     'none', 
+	timeout: 5000, 
+	delay: 1000,
+	pagerEvent: 'mouseover',
+	pager:  '#hotRankNavi',
+	activePagerClass: 'actived',
+	pauseOnPagerHover: true,
+	allowPagerClickBubble: true,
+	cleartypeNoBg: true,
+	pagerAnchorBuilder: function(idx, slide) { 
+		// return selector string for existing anchor 
+		return '#hotRankNavi li:eq(' + idx + ') a'; 
+	} 
+});
+ 
+});
+</script>
+
+
+<div id="index">
+
+<div class="subContent">
+<div id="indexSearch" class="module">
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
+<input type="submit" class="button" value="搜索" />
+</form>
+</div>
+</div>
+
+<div class="mainContent">
+{{include file="Include/mainContent.html"}}
+</div>
+
+{{include file="Include/subContent.html"}}
+
+{{include file="Include/foot.html"}}

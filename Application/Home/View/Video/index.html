@@ -1,0 +1,93 @@
+
+{{include file="Include/head.html" video="actived"}}
+
+<script type="text/javascript"> 
+$(function() {
+$('#kanfa .kimageBar ul').cycle({
+        fx:      'scrollHorz',
+        timeout:  0,
+        prev:    '.pre',
+        next:    '.next'
+});
+ 
+$('#announcement ul').cycle({
+	fx:'scrollUp',
+	timeout:10000
+});
+ 
+$('#hotRankSlide').cycle({ 
+	fx:     'none', 
+	timeout: 5000, 
+	delay: 1000,
+	pagerEvent: 'mouseover',
+	pager:  '#hotRankNavi',
+	activePagerClass: 'actived',
+	pauseOnPagerHover: true,
+	allowPagerClickBubble: true,
+	cleartypeNoBg: true,
+	pagerAnchorBuilder: function(idx, slide) { 
+		// return selector string for existing anchor 
+		return '#hotRankNavi li:eq(' + idx + ') a'; 
+	} 
+});
+ 
+});
+</script>
+
+
+<div id="index">
+
+
+<div class="subContent">
+
+<div id="indexSearch" class="module">
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
+<input type="submit" class="button" value="搜索" />
+</form>
+</div>
+</div>
+
+<style>
+table,tr,th,td{border-collapse:collapse; border:solid 1px #c3cfda;}
+table{width:100%;}
+th{font-size:24px; text-align:left; background:#cff1fc; padding:9px;}
+td{background:#f9f9fa; padding:9px;text-align: center;}
+td.td1{width:15%;}
+td.td2{width:10%;}
+</style>
+
+<div class="mainContent">
+<div class="column">
+<div class="columnBody">
+<h2><span class="date">精选视频</span> <span></span></h2>
+
+<table>
+{{section name=loop loop=$list}}
+{{if $smarty.section.loop.index %2 eq 0}}
+<tr>
+{{/if}}
+<td>
+  <a href="{{$smarty.const.__URL__}}show/id/{{$list[loop].id}}" target="_blank"><img src="{{$smarty.const.__UPLOAD__}}{{$list[loop].img}}"/></a><br/>
+  <div style="margin-top: 8px;"><a href="{{$smarty.const.__URL__}}show/id/{{$list[loop].id}}" target="_blank">{{$list[loop].title}}</a></div>
+</td>
+{{if ($smarty.section.loop.index+1) %2 eq 0 or $smarty.section.loop.last}}
+</tr>
+{{/if}}
+
+{{/section}}
+</table>
+
+<div class="clear"></div>
+</div>
+
+<div class="columnFooter"></div>
+</div>
+
+<div class="module"><!-- blogbus_index_left_middle --></div>
+<p class="link2blog">{{$page}}</p>
+</div>
+
+{{include file="Include/subContent.html"}}
+
+{{include file="Include/foot.html"}}

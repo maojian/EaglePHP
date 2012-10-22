@@ -1,0 +1,28 @@
+<div class="pageContent">
+	
+	<table class="table" width="100%" layoutH="56">
+		<thead>
+			<tr>
+				<th orderField="money" class="{{$page.orderDirection}}">金额</th>
+				<th>备注</th>
+				<th>日期</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list}}
+			<tr>
+				<td width="10%">{{$list[loop].money}}</td>
+				<td>{{$list[loop].remark}}</td>
+				<td>{{$list[loop].usetime}}</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	
+	<div class="formBar">
+		<ul>
+			<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+		</ul>
+	</div>
+		
+</div>

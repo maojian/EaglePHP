@@ -1,0 +1,68 @@
+<div class="pageContent">
+	<h1 style="color: blue">Structure：</h1>
+	<table class="table" width="100%" layoutH="300">
+		<thead>
+			<tr>
+				<th>Field</th>
+				<th>Type</th>
+				<th>Collation</th>
+				<th>Null</th>
+				<th>Key</th>
+				<th>Default</th>
+				<th>Extra</th>
+				<th>Privileges</th>
+				<th>Comment</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list1}}
+			<tr>
+				<td>{{$list1[loop].Field}}</td>
+				<td>{{$list1[loop].Type}}</td>
+				<td>{{$list1[loop].Collation}}</td>
+				<td>{{$list1[loop].Null}}</td>
+				<td>{{$list1[loop].Key}}</td>
+				<td>{{$list1[loop].Default}}</td>
+				<td>{{$list1[loop].Extra}}</td>
+				<td>{{$list1[loop].Privileges}}</td>
+				<td>{{$list1[loop].Comment}}</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+    <br/>
+    <h1 style="color: blue">Indexs：</h1>
+    <table class="table" width="100%" layoutH="350">
+		<thead>
+			<tr>
+				<th>Keyname</th>
+				<th>Type</th>
+				<th>Unique</th>
+				<th>Packed</th>
+				<th>Seq_in_index</th>
+				<th>Field</th>
+				<th>Cardinality</th>
+				<th>Collation</th>
+				<th>Null</th>
+				<th>Comment</th>
+			</tr>
+		</thead> 	 	 	 	 	 	 	 	 	
+		<tbody>
+			{{section name=loop loop=$list2}}
+			<tr>
+				<td>{{$list2[loop].Key_name}}</td>
+				<td>{{$list2[loop].Index_type}}</td>
+				<td>{{$list2[loop].Non_unique}}</td>
+				<td>{{$list2[loop].Packed}}</td>
+				<td>{{$list2[loop].Seq_in_index}}</td>
+				<td>{{$list2[loop].Column_name}}</td>
+				<td>{{$list2[loop].Cardinality}}</td>
+				<td>{{$list2[loop].Collation}}</td>
+				<td>{{$list2[loop].Null}}</td>
+				<td>{{$list2[loop].Comment}}</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	
+</div>

@@ -1,0 +1,79 @@
+
+{{include file="Include/head.html"}}
+
+<script type="text/javascript"> 
+$(function() {
+$('#kanfa .kimageBar ul').cycle({
+        fx:      'scrollHorz',
+        timeout:  0,
+        prev:    '.pre',
+        next:    '.next'
+});
+ 
+$('#announcement ul').cycle({
+	fx:'scrollUp',
+	timeout:10000
+});
+ 
+$('#hotRankSlide').cycle({ 
+	fx:     'none', 
+	timeout: 5000, 
+	delay: 1000,
+	pagerEvent: 'mouseover',
+	pager:  '#hotRankNavi',
+	activePagerClass: 'actived',
+	pauseOnPagerHover: true,
+	allowPagerClickBubble: true,
+	cleartypeNoBg: true,
+	pagerAnchorBuilder: function(idx, slide) { 
+		// return selector string for existing anchor 
+		return '#hotRankNavi li:eq(' + idx + ') a'; 
+	} 
+});
+ 
+});
+</script>
+
+
+<div id="index">
+
+
+<div class="subContent">
+
+<div id="indexSearch" class="module">
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
+<input type="submit" class="button" value="搜索" />
+</form>
+</div>
+</div>
+
+<div class="mainContent">
+
+<div class="column">
+<div id="today1" class="columnBody">
+<h2><span class="date">往期微博</span> <span></span></h2>
+<ul class="index_list">
+	{{section name=loop loop=$list}}
+	<li class="index_list_item">
+	<div class="desc" style="width: 625px;">
+	<h4 class="channel"><a>第 {{$list[loop].id}} 期 </a></h4>
+	<p style="background-color: #F0F8FF;">{{$list[loop].content}}</p>
+	<p class="more"><a>发布时间 {{$list[loop].create_time}}</a></p>
+	</div>
+	</li>
+	{{/section}}
+</ul>
+<div class="clear"></div>
+</div>
+
+<div class="columnFooter"></div>
+</div>
+
+<div class="module"><!-- blogbus_index_left_middle --></div>
+<p class="link2blog">{{$page}}</p>
+</div>
+
+{{include file="Include/subContent.html"}}
+
+{{include file="Include/foot.html"}}

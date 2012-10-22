@@ -1,0 +1,20 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}add" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+				<div class="unit" style="text-align:center;margin-top:50px;">
+				<h2>{{'cfg_admin_sysname'|getCfgVar}} {{'cfg_sys_version'|getCfgVar}}</h2>
+				<br/><br/>
+				<h2>Email：{{'cfg_adminemail'|getCfgVar}}</h2>
+				<br/><br/>
+				<h2><a href="{{'cfg_indexurl'|getCfgVar}}" target="_blank">{{'cfg_indexurl'|getCfgVar}}</a></h2>
+				</div>
+			</p>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">关闭</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

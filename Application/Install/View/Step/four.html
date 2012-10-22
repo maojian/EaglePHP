@@ -1,0 +1,17 @@
+{{include file="Include/head.html"}}
+        <div class="mainWidth" style="padding:20px 0;margin:0px auto; width:800px;">
+        <div id="notice" style="height:300px;overflow:auto;border:1px solid #ccc;padding:4px;">
+		{{if $tables}}
+			{{section name=loop loop=$tables}}
+				create_table {{$tables[loop]}} ... succeed<br/>
+			{{/section}}
+			安装成功。<br/>
+			<br>安全起见，请删除本安装文件：{{$file}}<br/>
+			<br><font color="blue">请记住后台初始账号：admin 密码为：123456，登陆后可自行修改.</font><br/>
+			<br /><input type="button" value="进入后台" class="submit" onclick="document.location='{{$smarty.const.__PUB__}}admin'" /><br/>
+		{{else}}
+			<font color="red">安装过程中出现错误......</font>
+		{{/if}}
+        </div>		
+    </div>
+{{include file="Include/foot.html"}}

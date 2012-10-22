@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US" dir="ltr">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{{'cfg_admin_sysname'|getCfgVar}}</title>
+<link href="{{$smarty.const.__APP_RESOURCE__}}images/png.css" rel="stylesheet" type="text/css" />
+<link href="{{$smarty.const.__APP_RESOURCE__}}images/login.css" rel="stylesheet" type="text/css" />
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/jquery.cookie.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+var cookie_username = $.cookie("username");
+var cookie_password = $.cookie("password");
+var cookie_save_name = $.cookie("save_name");
+
+$(function(){
+	$("#username").val(cookie_username);
+	$("#password").val(cookie_password);
+	
+	if(cookie_password){
+		$('#verify').focus();
+	}else if(cookie_username){
+		$('#password').focus();
+	}else{
+		$('#username').focus();
+	}
+	
+	if(cookie_save_name == "true"){
+		$("#save_login_name").attr("checked", true);
+	}
+});
+
+/**
+ * 登录
+ */
+function login(){
+	var username = $("#username").val();
+	var password = $("#password").val();
+	var verify = $("#verify").val();
+
+	$("#msg").css("display", "block");
+	$("#msg").html("正在登录中，请稍等...");
+	$.post("{{$smarty.const.__PUB__}}api/index.php/manager/login", {username: username, password: password, verify: verify},
+		  function(responseText){
+				try{
+			  		eval("var obj="+responseText);
+					if(obj.statusCode == 200){
+						if(!cookie_username || !cookie_password){
+							var save_name = $("#save_login_name").attr("checked");
+							if(save_name == true){
+								$.cookie("username", username, { path: '/', expires: 30 });			
+							}else{
+								$.cookie("username", "", { path: '/', expires: 0 });
+							}
+							$.cookie("save_name", save_name, { path: '/', expires: 30 });
+							//$.cookie("password", password, { path: '/', expires: 30 });	
+						}
+						window.location = "{{$smarty.const.__ROOT__}}";
+					}else{
+						$("#msg").html(obj.message);
+						$("#verifyCodeImg").click();
+						$("#verify").val("");
+					}
+				}catch(e){
+					$("#msg").html("很抱歉,出现异常,请联系管理员."+e);
+				}
+		  }
+	);
+}
+
+$(function(){
+	$("#verify,#password,#username").keyup(function(event){
+		var keyCode = event.which;
+		if(keyCode == 13){
+			login(0);
+		}
+ 	});
+});
+</script>
+</head>
+<body>
+<div class="content">
+<h1 class="png"><img src="{{$smarty.const.__SHARE__}}plug/dwz/themes/default/images/logo.png"/></h1>
+
+<div class="message" id="msg">验证码输入错误!&nbsp;</div>
+<div class="body">
+<form name="form1" method="post" class="formstyle">
+<ul>
+	<li><input id="username" type="text" name="username" class="inputstyle" maxlength="50" autocomplete="off" value="admin" onfocus="if(this.value=='请输入用户名') this.value='';this.className='inputstylefocus';return true;" onblur="if(this.value=='') this.value='请输入用户名';this.className='inputstyle';return true;"></li>
+	<li><input id="password" type="password" name="passwd" class="inputstyle" maxlength="20" value="+_-_-_+" onfocus="if(this.value=='+_-_-_+') this.value='';this.className='inputstylefocus';return true;" onblur="if(this.value=='') this.value='+_-_-_+';this.className='inputstyle';return true;"></li>
+	<li style="position: relative"><input class="inputstyle" autocomplete="off" size=8 name="verify" id="verify" value="请输入验证码" onfocus="if(this.value=='请输入验证码') this.value=''; this.className='inputstylefocus';return true;" onblur="if(this.value=='') this.value='请输入验证码'; this.className='inputstyle';return true;">&nbsp;
+	<img  src="{{$smarty.const.__URL__}}getVerifyCode/" id="verifyCodeImg" onclick="this.src+='?' + Math.random();" align="top" class="verifycodeimg" title="点击刷新"></li>
+	记住用户名：<input type="checkbox" id="save_login_name">
+	<li class="btn png"><input type="button" class="loginbtn" value=" "  onclick="login();" onmouseover="this.blur();return true;" onmousedown="this.className='loginbtnfocus';return true;"></li>
+</ul>
+</form>
+</div>
+<div class="foot"></div>
+</div>
+</body>
+</html>

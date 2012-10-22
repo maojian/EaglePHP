@@ -1,0 +1,91 @@
+
+<div class="subContent">
+
+<div id="hotRank" class="module">
+<h3>
+<div class="tabs">
+<ul id="hotRankNavi">
+	{{section name=loop loop=$hot_news.type_list}}
+	<li class="actived"><a href="{{$smarty.const.__ROOT__}}news/index/type/{{$hot_news.type_list[loop].id}}" target="_blank">{{$hot_news.type_list[loop].title}}</a></li>
+	{{/section}}
+</ul>
+</div>
+</h3>
+
+<div class="tabGroup">
+<div class="tabContent" id="hotRankSlide">
+{{section name=loop loop=$hot_news.news_list}}
+<ul>
+	<ol>
+	{{section name=loop2 loop=$hot_news.news_list[loop]}}
+		<li {{if $smarty.section.loop2.last}}class="last"{{/if}}><a href="{{$hot_news.news_list[loop][loop2].link}}" target="_blank" class="lv{{$smarty.section.loop2.rownum}}" title="{{$hot_news.news_list[loop][loop2].title}}">{{$hot_news.news_list[loop][loop2].title}}</a></li>
+	{{/section}}	
+	</ol>
+</ul>
+{{/section}}
+</div>
+</div>
+</div>
+
+<div id="kanfa" class="module">
+<h3><strong>案例</strong><span class="more"><a href="{{$smarty.const.__ROOT__}}case" target="_blank">更多</a></span></h3>
+<div class="pre"><a href="#">&laquo;</a></div>
+<div class="kimageBar">
+   <ul>
+   {{section name=loop loop=$case_list}}
+       <li><a {{if $case_list[loop].url}} href="{{$case_list[loop].url}}" {{/if}} title="ItemName" target="_blank"><img src="{{$smarty.const.__UPLOAD__}}{{$case_list[loop].img}}" width="192" height="128" alt="" /></a><h4><a {{if $case_list[loop].url}} href="{{$case_list[loop].url}}" {{/if}} target="_blank">{{$case_list[loop].title}}</a></h4></li>
+   {{/section}}
+   </ul>
+</div>
+<div class="next"><a href="#">&raquo;</a></div>
+</div>
+ 
+<div id="siteTag" class="module">
+<h3><strong>站内热门</strong><span class="more"><a href="{{$smarty.const.__ROOT__}}">更多</a></span></h3>
+<ul>
+    {{section name=loop loop=$keywords_arr}}
+	<li class="tag{{$smarty.section.loop.index}}"><a href="{{$smarty.const.__ROOT__}}news/index/content/{{$keywords_arr[loop]}}/" target="_blank">{{$keywords_arr[loop]}}</a></li>
+	{{/section}}
+</ul>
+</div>
+
+<!--精彩推荐-->
+<div id="spotlight" class="module">
+<h3 id="recommended"><strong>精彩推荐</strong></h3>
+{{if $recommend.recom_info}}
+<div class="featured">
+<a href="{{$recommend.recom_info.link}}" target="_blank">
+<img src="{{$recommend.recom_info.img}}" width="60" height="60"/>
+</a>
+<div class="info">
+<h5><a href="{{$recommend.recom_info.link}}" target="_blank">{{$recommend.recom_info.title}}</a></h5>
+{{$recommend.recom_info.description|utf8Substr:0:25}}
+</div>
+<div class="clear"></div>
+</div>
+{{/if}}
+<ol>
+	{{section name=loop loop=$recommend.news_list}}
+	<li><span class="tags">
+	<a href="{{$smarty.const.__ROOT__}}news/index/type/{{$recommend.news_list[loop].type_id}}" target="_blank">[{{$recommend.news_list[loop].type_name}}]</a></span> 
+	<a href="{{$recommend.news_list[loop].link}}" title="{{$recommend.news_list[loop].title}}" target="_blank">{{$recommend.news_list[loop].short_title}}</a></li>
+	{{/section}}
+</ol>
+</div>
+
+<div id="syndication" class="module">
+  <h3><strong>订阅</strong></h3>
+  <div class="subscribe"><a href="{{$smarty.const.__ROOT__}}rss/xml" target="_blank">订阅{{'cfg_webname'|getCfgVar}}RSS</a></div>
+  <ul>
+    <li><a href="http://fusion.google.com/add?feedurl=http://{{$smarty.server.HTTP_HOST}}{{$smarty.const.__ROOT__}}rss/xml" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/google.png" width="110" height="16" alt="" /></a></li>
+    <li><a href="http://mail.qq.com/cgi-bin/feed?u=http://{{$smarty.server.HTTP_HOST}}{{$smarty.const.__ROOT__}}rss/xml" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/qqmail.png" width="110" height="16" alt="" /></a></li>
+    <li><a href="http://www.xianguo.com/subscribe.php?url=http://{{$smarty.server.HTTP_HOST}}{{$smarty.const.__ROOT__}}rss/xml" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/xianguo.png" width="110" height="16" alt="" /></a></li>
+    <li><a href="http://www.zhuaxia.com/add_channel.php?url=http://{{$smarty.server.HTTP_HOST}}{{$smarty.const.__ROOT__}}rss/xml" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/zhuaxia.png" width="110" height="16" alt="" /></a></li>
+    <li class="clear"></li>
+  </ul>
+</div>
+<iframe width="100%" height="500" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=500&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1888707615&verifier=1c853142&dpc=1"></iframe>
+</div>
+<div class="clear"></div>
+
+<div style="padding-top: 12px;"></div>

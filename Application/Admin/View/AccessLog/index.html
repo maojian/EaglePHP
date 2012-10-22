@@ -1,0 +1,72 @@
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="create_time" value="{{$smarty.post.create_time}}" />
+	<input type="hidden" name="app_name" value="{{$smarty.post.app_name}}" />
+</form>
+
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					日期：
+					<input type="text" class="date" readonly="true" name="create_time" value="{{$smarty.post.create_time}}"/>
+				</td>
+				<td>
+					<select class="combox" name="app_name">
+						<option value="">--选择应用--</option>
+						{{html_options options=$apps selected=$smarty.post.app_name}}
+					 </select>
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="{{$smarty.const.__URL__}}import" target="ajaxTodo"><span>导入日志</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="114">
+		<thead>
+			<tr>
+				<th>访问时间</th>
+				<th>请求ip</th>
+				<th>控制器</th>
+				<th>操作</th>
+				<th>响应IP</th>
+				<th>运行时间(ms)</th>
+				<th>应用名称</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list}}
+			<tr>
+				<td>{{$list[loop].create_time}}</td>
+				<td>{{$list[loop].client_ip}}</td>
+				<td>{{$list[loop].controller_name}}</td>
+				<td>{{$list[loop].action_name}}</td>
+				<td>{{$list[loop].server_ip}}</td>
+				<td>{{$list[loop].run_time}}</td>
+				<td>{{$list[loop].app_name}}</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	{{include file="Include/page.html"}}
+</div>

@@ -1,0 +1,64 @@
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}report" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					开始日期：<input type="text" class="date" readonly="true" name="startDate" format="yyyy-MM" value="{{$smarty.post.startDate}}"/>
+				</td>
+				<td>
+					结束日期：<input type="text" class="date" readonly="true" name="endDate" format="yyyy-MM" value="{{$smarty.post.endDate}}"/>
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</form>
+</div>
+
+<div class="pageContent">
+	<table class="table" width="100%" layoutH="90">
+		<thead>
+			<tr>
+				<th>日期</th>
+				<th>进账</th>
+				<th>出账</th>
+				<th>消费</th>
+				<th>结存</th>
+				<th>备注</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list}}
+			<tr>
+				<td width="10%">{{$list[loop].date}}</td>
+				<td width="15%">{{$list[loop].incomeSum|default:0}}</td>
+				<td width="15%">{{$list[loop].accountSum|default:0}}</td>
+				<td width="15%">{{$list[loop].costSum|default:0}}</td>
+				<td width="15%">{{$list[loop].balanceSum|default:0}}</td>
+				<td><a href="{{$smarty.const.__ACTION__}}particularDate/{{$list[loop].date}}" target="dialog" width="600" height="600" class="btnInfo" title="查看明细">查看明细</a></td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	
+	<div class="panelBar">
+		<div class="pages">
+	        <span>
+		                      共 {{$list|@count}} 个月;&nbsp;&nbsp;&nbsp;&nbsp;
+				总计进账 <font color="red">{{$info.incomeTotal}}</font> 元;&nbsp;&nbsp;&nbsp;&nbsp;
+				总计出账  <font color="red">{{$info.accountTotal}}</font> 元;&nbsp;&nbsp;&nbsp;&nbsp;
+				总计消费  <font color="red">{{$info.costTotal}}</font> 元;&nbsp;&nbsp;&nbsp;&nbsp;
+				结存  <font color="red">{{$info.balanceTotal}}</font> 元;&nbsp;&nbsp;&nbsp;&nbsp;
+			</span>
+		</div>
+	</div>
+
+</div>

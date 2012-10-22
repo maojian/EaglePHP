@@ -1,0 +1,29 @@
+<form method="post" action="{{$smarty.const.__ACTION__}}/action/save" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<div class="pageFormContent" layoutH="120">
+		
+		{{section name=loop loop=$list}}
+		<dl class="nowrap" style="width:800px;">
+			<dt style="width:200px;">{{$list[loop].info}}：</dt>
+			<dd>
+			{{if $list[loop].type eq "bstring"}}
+			<textarea name="{{$list[loop].varname}}" style="width:428px;height:50px;">{{$list[loop].value}}</textarea>
+			{{elseif $list[loop].type eq "bool"}}
+			{{html_radios name=$list[loop].varname options=$boolArr checked=$list[loop].value}}
+			{{else}}
+			<input name="{{$list[loop].varname}}" type="text" size="70" value="{{$list[loop].value}}"/>
+			{{/if}}
+			<span class="unit" style="color:blue">{{$list[loop].varname}}</span>
+			</dd>
+		</dl>
+		{{/section}}
+
+	</div>
+	<div class="formBar">
+		<ul>
+			<li><div class="buttonActive"><div class="buttonContent"><button type="submit">修改</button></div></div></li>
+			<li>
+				<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+			</li>
+		</ul>
+	</div>
+</form>

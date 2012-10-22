@@ -1,0 +1,78 @@
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" id="db_form" action="{{$smarty.const.__ACTION__}}" method="post">
+	<input type="hidden" >
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					主机：<input type="text" name="dbhost" value="{{$smarty.request.dbhost}}" size="15"/>:
+					    <input type="text" name="dbport" value="{{$smarty.request.dbport}}" size="4"/>
+				</td>
+				<td>
+					用户名：<input type="text" name="dbuser" value="{{$smarty.request.dbuser}}" size="10"/>
+				</td>
+				<td>
+					密码：<input type="password" name="dbpwd" value="{{$smarty.request.dbpwd}}" size="10"/>
+				</td>
+				<td>
+					<select name="dbcharset" class="combox">
+						<option value="">--字符集--</option>
+						{{html_options output=$charset_arr values=$charset_arr selected=$smarty.request.dbcharset}}
+					</select>
+				</td>
+				{{if $db_arr}}
+				<td>
+					<select name="dbname" class="combox">
+						<option value="">--数据库--</option>
+						{{html_options options=$db_arr selected=$smarty.request.dbname}}
+					</select>
+				</td>
+				{{/if}}
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">连接</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			{{if $smarty.request.dbname}}
+			<tr>
+			<td colspan="6">
+			{{$mysql_info}}， Current database: <u style="color:blue;"> {{$smarty.request.dbname}}</u>
+			</td>
+			</tr>
+			<tr>
+			    <td colspan="4">
+			    SQL：<textarea rows="3" cols="80" name="query">{{$smarty.request.query}}</textarea>
+			    </td>
+				<td colspan="2">
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button value="12" type="submit" name="queryBtn">执行</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			{{/if}}
+		</table>
+		
+	</div>
+	</form>
+</div>
+{{if $smarty.request.go eq "record"}}
+    <!-- 数据表记录显示 -->
+	{{include file="Tool/mysql_record.html"}}
+
+{{elseif $smarty.request.go eq "query"}}
+    <!-- 执行SQL信息显示 -->
+	{{include file="Tool/mysql_query.html"}}
+	
+{{elseif $smarty.request.dbname neq ""}}
+    <!-- 表信息显示 -->
+	{{include file="Tool/mysql_table.html"}}
+
+{{/if}}
+
+
+

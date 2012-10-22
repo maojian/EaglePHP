@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="Stylesheet" type="text/css" href="{{$smarty.const.__SHARE__}}plug/cooliris/style.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{$title}} - {{'cfg_webname'|getCfgVar}}</title>
+<meta content="keywords" content="{{if $keywords neq ''}}{{$keywords}}{{else}}{{'cfg_keywords'|getCfgVar}}{{/if}}"/>
+<meta name="description" content="{{if $description neq ''}}{{$description}}{{else}}{{'cfg_description'|getCfgVar}}{{/if}}" />
+</head>
+<body>
+	<div class="main">
+		<object id="o" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%">
+			<param name="movie" value="{{$smarty.const.__SHARE__}}plug/cooliris/cooliris.swf" />
+			<param name="wmode" value="transparent" />
+			<param name="allowFullScreen" value="true" />
+			<param name="allowScriptAccess" value="always" />
+			<param name="flashvars" value="feed={{$rssFeed}}" />
+			<embed type="application/x-shockwave-flash" src="{{$smarty.const.__SHARE__}}plug/cooliris/cooliris.swf" flashvars="feed={{$rssFeed}}" width="100%" height="100%" allowFullScreen="true" allowScriptAccess="always"></embed>
+		</object>
+		<div class="cover"></div>
+		<div class="cover2"></div>
+    </div>
+</body>
+<div style="display: none">
+<script src="http://s20.cnzz.com/stat.php?id=4001661&web_id=4001661&show=pic" language="JavaScript"></script>
+</div>
+</html>

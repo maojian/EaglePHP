@@ -1,0 +1,53 @@
+
+<form id="pagerForm" method="post" action="{{$smarty.const.__ACTION__}}">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="url_param" value="{{$url_param}}" />
+	<input type="hidden" name="query" value="{{$smarty.post.query}}" />
+</form>
+
+<div class="pageContent" style="position: relative;height: 400px">
+	{{section name=loop loop=$list}}
+	
+	<br/>
+	<h5 style="background:#CAE5E8;">Query#{{$smarty.section.loop.index}}：{{$list[loop].sql}}</h5>
+	<br/>
+	<h5 style="color: #5B686F">affected rows：{{$list[loop].affected_rows}}</h5>
+	<br/>
+	
+	{{if $list[loop].type eq 'query'}}
+	<table class="table" width="100%">
+		<thead>
+			<tr>
+				{{section name=loop2 loop=$list[loop].fields}}
+				<th>{{$list[loop].fields[loop2]}}</th>
+				{{/section}}
+				{{if $list[loop].table neq ""}}
+				<th>操作</th>
+				{{/if}}
+			</tr>
+		</thead>
+		<tbody>
+		    {{section name=loop3 loop=$list[loop].result}}
+    		    <tr>
+    			{{foreach from=$list[loop].result[loop3] item=v key=k}}
+    				{{if $k neq "eg_base64_where"}}
+    				<td>{{$v}}</td>
+    				{{/if}}
+    		    {{/foreach}}
+    		        {{if $list[loop].table neq ""}}
+    		    	<td>
+    					<a href="{{$smarty.const.__ACTION__}}go/update/table/{{$list[loop].table}}/eg_base64_where/{{if $k eq "eg_base64_where"}}{{$v}}{{/if}}/?url_param={{$url_param}}" title="管理{{$list[loop].table}}表" target="navTab" rel="Tool_Mysql_Update" style="text-decoration: underline;color: blue;">编辑</a> | 
+    					<a href="{{$smarty.const.__ACTION__}}go/delete/table/{{$list[loop].table}}/eg_base64_where/{{if $k eq "eg_base64_where"}}{{$v}}{{/if}}/?url_param={{$url_param}}" title="确定删除这条数据吗？" target="ajaxTodo" style="text-decoration: underline;color: blue;">删除</a>
+    				</td>
+    				{{/if}}
+    			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	{{/if}}
+	
+	{{/section}}
+</div>

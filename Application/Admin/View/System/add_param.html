@@ -1,0 +1,44 @@
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__ACTION__}}action/add" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>变量名称：</dt>
+				<dd><input name="varname" class="required" type="text" size="40" value=""/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt>变量值：</dt>
+				<dd><input name="value" class="" type="text" size="40" value=""/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt>变量类型：</dt>
+				<dd>{{html_radios name="type" options=$type checked='string'}}</dd>
+			</dl>
+			
+			<dlclass="nowrap">
+				<dt>参数说明：</dt>
+				<dd>
+					<textarea class="required" name="info" rows="4" cols="50"></textarea>
+				</dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt>所属组：</dt>
+				<dd>
+					<select name="groupid" class="combox required">
+						{{html_options options=$group}}
+					</select>
+				</dd>
+			</dl>
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">添加</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="reset">重置</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+</div>

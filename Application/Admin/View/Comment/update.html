@@ -1,0 +1,44 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}update" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<input type="hidden" name="id" value="{{$info.id}}">
+			<dl class="nowrap">
+				<dt>评论所属文章：</dt>
+				<dd>{{$info.news_title}}</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>评论发布时间：</dt>
+				<dd>{{$info.create_time}}</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>IP地址：</dt>
+				<dd>{{$info.ip}}</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>评论人邮箱：</dt>
+				<dd>{{$info.email}}</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>评论人：</dt>
+				<dd><input name="name" class="required" type="text" size="30" value="{{$info.name}}"/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>评论内容：</dt>
+				<dd><textarea name="content" rows="7" cols="40">{{$info.content}}</textarea></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>管理员回复：</dt>
+				<dd><textarea name="revert" rows="7" cols="40"></textarea></dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">编辑</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

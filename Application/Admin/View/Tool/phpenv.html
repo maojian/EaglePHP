@@ -1,0 +1,45 @@
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__ACTION__}}" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					PHP配置参数：<input type="text" name="param" value="{{$smarty.post.param}}" size="40"/>
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+				{{if $smarty.post.param neq null}}
+				<td>
+					<b>{{$smarty.post.param}}</b> : <font color="blue">{{$value}}</font>
+				</td>
+				{{/if}}
+			</tr>
+		</table>
+		
+	</div>
+	</form>
+</div>
+<div class="navTab-panel tabsPageContent">
+<div class="page">
+	<div class="pageFormContent" layoutH="62">
+		<table class="list" width="70%">
+			<tr class="row" style="background:#CAE5E8;"><th colspan="3" class="space" style="color: blue;">Server >></th></tr>
+			{{section name=loop loop=$list start=0 max=9}}
+			<tr class="row"><td width="20%"><b>{{$list[loop][0]}}&nbsp;</b></td><td>{{$list[loop][1]}}</td></tr>
+			{{/section}}
+		</table>
+		<br/>
+		<table class="list" width="70%">
+			<tr class="row" style="background:#CAE5E8;"><th colspan="3" class="space" style="color: blue;">PHP >></th></tr>
+			{{section name=loop loop=$list start=9}}
+			<tr class="row"><td width="20%"><b>{{$list[loop][0]}}&nbsp;</b></td><td>{{$list[loop][1]}}</td></tr>
+			{{/section}}
+		</table>	
+	</div>
+</div>
+</div>

@@ -1,0 +1,32 @@
+
+<div class="pageContent">
+	
+	<form method="post" action="{{$smarty.const.__URL__}}setPwd" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+		<div class="pageFormContent" layoutH="58">
+			<div class="unit">
+				<label>用户名：</label>
+				<b>{{$username}}</b>
+			</div>
+			<div class="unit">
+				<label>旧密码：</label>
+				<input type="password" name="old_password" size="30" class="required"/>
+			</div>
+			<div class="unit">
+				<label>新密码：</label>
+				<input type="password" name="new_password" size="30" class="required"/>
+			</div>
+			<div class="unit">
+				<label>确认密码：</label>
+				<input type="password" name="new_password2" size="30" class="required"/>
+			</div>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">提交</button></div></div></li>
+				<li><div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div></li>
+			</ul>
+		</div>
+	</form>
+	
+</div>
+

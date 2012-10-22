@@ -1,0 +1,43 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}{{$smarty.const.ACTION_NAME}}" class="pageForm required-validate" onsubmit="return iframeCallback(this, dialogAjaxDone);" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="{{$info.id}}">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>标题：</dt>
+				<dd><input name="title" class="required" type="text" size="30" value="{{$info.title}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>链接：</dt>
+				<dd><input name="url" type="text" size="30" value="{{$info.url}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+                <dt>图片：</dt>
+                <dd><input type="file" name="img" value="" /></dd>
+            </dl>
+            <dl class="nowrap">
+            	<dt>状态：</dt>
+            	<dd>{{html_radios name=state options=$state_arr checked=$info.state}}</dd>
+            </dl>
+            <dl class="nowrap">
+            	<dt>排序：</dt>
+            	<dd><input name="rank" type="text" size="30" value="{{$info.rank}}" alt=""/></dd>
+            </dl>
+            {{if $info.img neq ""}}
+            <div class="unit">
+            	<label></label>
+            	<img src="{{$smarty.const.__UPLOAD__}}{{$info.img}}">
+            </div>
+            {{/if}}
+
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">{{if $smarty.const.ACTION_NAME eq "add"}}添加{{else}}修改{{/if}}</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

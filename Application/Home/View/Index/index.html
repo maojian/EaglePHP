@@ -1,0 +1,130 @@
+
+{{include file="Include/head.html" index="actived"}}
+
+<script type="text/javascript"> 
+$(function() {
+	 
+	$('#focus670x160 #adv').cycle({ 
+	    fx:     'fade', 
+	    timeout: 5000, 
+		pagerEvent: 'mouseover',
+	    pager:  '#nav670x160' 
+	});
+	 
+	$('#focus350x250 .pics').cycle({ 
+	    fx:     'fade', 
+		speed:  'fast', 
+	    timeout: 0, 
+		pagerEvent: 'mouseover',
+	    pager:  '#nav350x250',
+		pagerAnchorBuilder: function(idx, slide) { 
+	        // return selector string for existing anchor 
+	        return '#nav350x250 li:eq(' + idx + ') a'; 
+	    } 
+	});
+	 
+	$('#view .pics').cycle({ 
+	    fx:     'scrollHorz', 
+		speed:  'slow', 
+	    timeout: 0, 
+	    pager:  '#navView',
+		pagerAnchorBuilder: function(idx, slide) { 
+	        // return selector string for existing anchor 
+	        return '#navView li:eq(' + idx + ') a'; 
+	    } 
+	});
+	 
+	$('#view .pics').cycle({ 
+	    fx:     'scrollHorz', 
+	    timeout: 0, 
+	    pager:  '#navView',
+		pagerAnchorBuilder: function(idx, slide) { 
+	        // return selector string for existing anchor 
+	        return '#navView li:eq(' + idx + ') a'; 
+	    } 
+	});
+	 
+	$('#kanfa .kimageBar ul').cycle({
+	        fx:      'scrollHorz',
+	        timeout:  0,
+	        prev:    '.pre',
+	        next:    '.next'
+	});
+	 
+	 
+	$('#announcement ul').cycle({
+		fx:'scrollUp',
+		timeout:10000
+	});
+	 
+	$('#hotRankSlide').cycle({ 
+		fx:     'none', 
+		timeout: 5000, 
+		delay: 1000,
+		pagerEvent: 'mouseover',
+		pager:  '#hotRankNavi',
+		activePagerClass: 'actived',
+		pauseOnPagerHover: true,
+		allowPagerClickBubble: true,
+		cleartypeNoBg: true,
+		pagerAnchorBuilder: function(idx, slide) { 
+			// return selector string for existing anchor 
+			return '#hotRankNavi li:eq(' + idx + ') a'; 
+		} 
+	});
+});
+</script>
+
+
+<div style="float: left; padding-bottom: 12px;"></div>
+<div id="index">
+<div class="mainContent">
+<div id="focus670x160">
+<div class="pics" >
+<ul id="adv">
+{{section name=loop loop=$adv_list}}
+<li><a href="{{$adv_list[loop].url}}" target="_blank"><img src="{{$smarty.const.__UPLOAD__}}{{$adv_list[loop].img}}" alt="{{$adv_list[loop].title}}"/></a></li>
+{{/section}}
+</ul>
+</div>
+<div id="nav670x160"></div>
+</div>
+
+<div id="announcement"><strong>最新公告：</strong>
+<ul>
+    {{section name=loop loop=$announ_list}}
+	{{if $smarty.section.loop.index % 2 eq 0}}<li>{{/if}}
+	<a href="{{$announ_list[loop].link}}" target="_blank" class="caution">{{$announ_list[loop].title|utf8Substr:0:25}}</a>
+	{{if ($smarty.section.loop.index+1) % 2 eq 0 or $smarty.section.loop.last}}</li>{{/if}}
+	{{/section}}
+</ul>
+</div>
+</div>
+
+
+<div class="subContent">
+<div class="module">
+<embed src="{{$video.url}}" quality="high" width="277" height="180" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" wmode="Transparent"></embed>
+</div>
+
+<div id="indexSearch" class="module">
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
+<input type="submit" class="button" value="搜索" />
+</form>
+</div>
+
+</div>
+
+<div class="clear"></div>
+<div class="mainContent">
+<div class="topic">
+<div class="topicTop"></div>
+<h4>今日微博：<a href="{{$smarty.const.__ROOT__}}note" target="_blank">{{$note.create_time|date_format:"%Y-%m-%d"}} 往期微博</a></h4>
+<p>{{$note.content}}</p>
+</div>
+{{include file="Include/mainContent.html"}}
+</div>
+{{include file="Include/subContent.html"}}
+
+{{include file="Include/foot.html"}}

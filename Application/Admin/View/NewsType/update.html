@@ -1,0 +1,41 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}update" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<input type="hidden" name="id" value="{{$info.id}}">
+			<dl class="nowrap">
+				<dt>名称：</dt>
+				<dd><input name="title" class="required" type="text" size="30" value="{{$info.title}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>排序：</dt>
+				<dd><input name="rank" class="required" type="text" size="30" value="{{$info.rank}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>状态：</dt>
+				<dd><select name="state" class="combox required">
+				{{html_options options=$state_arr selected=$info.state}}
+				</select></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>父类：</dt>
+				<dd><select name="parent" class="combox required">
+				<option value="0">主类</option>
+				{{html_options options=$type_arr selected=$info.parent}}
+				</select></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>备注：</dt>
+				<dd><textarea cols="50" rows="5" name="content">{{$info.content}}</textarea></dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">编辑</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

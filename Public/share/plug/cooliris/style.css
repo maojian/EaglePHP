@@ -1,0 +1,6 @@
+body{background:#121212; padding:0px; margin:0px; border:none;overflow:hidden}
+.main{height:90%; overflow:hidden;}
+.logo{height:10%;border:none}
+.cover,.cover2{background:#121212;float:left; width:100px; position:relative; height:30px; top:-30px;}
+.cover2{float:right;}
+

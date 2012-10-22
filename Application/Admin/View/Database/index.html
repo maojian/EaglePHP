@@ -1,0 +1,42 @@
+
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="{{$smarty.const.__ACTION__}}type/bak" target="selectedTodo"  rel="ids" postType="string" title="确实要备份这些表吗?"><span>批量备份数据</span></a></li>
+			<li><a class="edit" href="{{$smarty.const.__ACTION__}}type/optimizeAll" target="selectedTodo"  rel="ids" postType="string" title="确实要优化这些表吗?"><span>批量优化数据</span></a></li>
+			<li><a class="icon" href="{{$smarty.const.__ACTION__}}type/repairAll" target="selectedTodo"  rel="ids" postType="string" title="确实要修复这些表吗?"><span>批量修复数据</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="77">
+		<thead>
+			<tr>
+				<th><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th>表名</th>
+				<th>引擎 </th>
+				<th>记录数</th>
+				<th>数据大小</th>
+				<th>碎片</th>
+				<th>字符集</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$list}}
+			<tr target="id" rel="{{$list[loop].id}}">
+				<td><input name="ids" value="{{$list[loop].Name}}" type="checkbox"></td>
+				<td>{{$list[loop].Name}}</td>
+				<td>{{$list[loop].Engine}}</td>
+				<td>{{$list[loop].Rows}}</td>
+				<td>{{$list[loop].Data_length|getFileSize}}</td>
+				<td>{{$list[loop].Data_free}}</td>
+				<td>{{$list[loop].Collation}}</td>
+				<td>
+					<a target="ajaxTodo" href="{{$smarty.const.__ACTION__}}type/optimize/id/{{$list[loop].Name}}">优化</a>&nbsp;|&nbsp;
+					<a target="ajaxTodo" href="{{$smarty.const.__ACTION__}}type/repair/id/{{$list[loop].Name}}">修复</a>&nbsp;|&nbsp;
+					<a target="dialog" width="800" height="600" href="{{$smarty.const.__ACTION__}}type/show/id/{{$list[loop].Name}}">结构</a>
+				</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,68 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}{{$smarty.const.ACTION_NAME}}" class="pageForm required-validate" onsubmit="return iframeCallback(this, dialogAjaxDone);" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="{{$info.id}}">
+		<div class="pageFormContent" layoutH="56" id="voteBox">
+			<dl class="nowrap">
+				<dt>投票名称：</dt>
+				<dd><input name="name" class="required" type="text" size="30" value="{{$info.name}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>开始时间：</dt>
+				<dd><input type="text" class="date" readonly="true" name="start_time" value="{{$info.start_time|date_format:'%Y-%m-%d'}}"/><a href="javascript:;" class="inputDateButton">选择</a></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>结束时间：</dt>
+				<dd><input type="text" class="date" readonly="true" name="end_time" value="{{$info.end_time|date_format:'%Y-%m-%d'}}"/><a href="javascript:;" class="inputDateButton">选择</a></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>投票人数：</dt>
+				<dd><input name="total_count" class="required" type="text" size="30" value="{{$info.total_count|default:0}}" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>投票间隔：</dt>
+				<dd><input name="interval" class="required" type="text" size="10" value="{{$info.interval|default:0}}" alt=""/>(N天后可再次投票，0 表示此IP地址只能投一次)</dd>
+			</dl>
+			<dl class="nowrap">
+            	<dt>是否多选：</dt>
+            	<dd>{{html_radios name=is_more options=$more_arr checked=$info.is_more|default:0}}</dd>
+            </dl>
+            <dl class="nowrap">
+            	<dt>是否启用：</dt>
+            	<dd>{{html_radios name=is_enable options=$state_arr checked=$info.is_enable|default:0}}</dd>
+            </dl>
+            <dl class="nowrap">
+            	<dt>投票选项：</dt>
+            	<dd><a class="btnAdd" href="#" onclick="addVoteOption()" title="增加投票选项"><span>添加</span></a>增加</dd>
+            </dl>
+            {{if $options}}
+	            {{section name=loop loop=$options}}
+	            	<p><label>选项{{$smarty.section.loop.rownum}}：</label><input type="text" class="textInput" size="30" name="option_{{$smarty.section.loop.rownum}}" value="{{$options[loop].name}}"><input type="text" value="{{$options[loop].count}}" class="textInput" size="5" name="count_{{$smarty.section.loop.rownum}}"></p>
+	            {{/section}}
+            {{/if}}
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">{{if $smarty.const.ACTION_NAME eq "add"}}添加{{else}}修改{{/if}}</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	
+	var count = {{$options|@count|default:0}};
+	
+	/**
+	 * 添加投票选项
+	 */
+	function addVoteOption(){
+		count++;
+		var html = '<p><label>选项'+count+'：</label><input name="option_'+count+'" type="text" size="30" class="textInput"/><input name="count_'+count+'" type="text" size="5" class="textInput" value="0"/></p>';
+		$("#voteBox").append(html);
+	}
+	
+</script>

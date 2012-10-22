@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<title>{{'cfg_admin_sysname'|getCfgVar}}</title>
+<link href="{{$smarty.const.__SHARE__}}plug/dwz/themes/default/style.css" rel="stylesheet" type="text/css" />
+<link href="{{$smarty.const.__SHARE__}}plug/dwz/themes/css/core.css" rel="stylesheet" type="text/css" />
+<!--[if IE]>
+<link href="{{$smarty.const.__SHARE__}}plug/dwz/themes/css/ieHack.css" rel="stylesheet" type="text/css" />
+<![endif]-->
+
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/speedup.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/jquery-1.4.4.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/jquery.cookie.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/jquery.validate.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/jquery.bgiframe.js" type="text/javascript"></script>
+
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/xheditor/xheditor-1.1.14-zh-cn.min.js" type="text/javascript"></script>
+
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.core.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.util.date.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.validate.method.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.regional.zh.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.barDrag.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.drag.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.tree.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.accordion.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.ui.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.theme.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.switchEnv.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.alertMsg.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.contextmenu.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.navTab.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.tab.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.resize.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.jDialog.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.dialogDrag.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.cssTable.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.stable.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.taskBar.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.ajax.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.pagination.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.database.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.datepicker.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.effects.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.panel.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.checkbox.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.history.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.combox.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/dwz.regional.zh.js" type="text/javascript"></script>
+		
+<!--
+<script src="{{$smarty.const.__SHARE__}}plug/dwz/bin/dwz.min.js" type="text/javascript"></script>
+-->
+<script type="text/javascript">
+$(function(){
+	DWZ.init("{{$smarty.const.__SHARE__}}plug/dwz/dwz.frag.xml", {
+		loginUrl:"{{$smarty.const.__ROOT__}}public/loginDialog", loginTitle:"登录",	// 弹出登录对话框
+//		loginUrl:"{{$smarty.const.__ROOT__}}public/login",	// 跳到登录页面
+		statusCode:{ok:200, error:300, timeout:301}, //【可选】
+		pageInfo:{pageNum:"pageNum", numPerPage:"numPerPage", orderField:"orderField", orderDirection:"orderDirection"}, //【可选】
+		debug:false,	// 调试模式 【true|false】
+		callback:function(){
+			initEnv();
+			$("#themeList").theme({themeBase:"{{$smarty.const.__SHARE__}}plug/dwz/themes"});
+		}
+	});
+});
+
+// 解决IE6背景闪烁bug
+try{document.execCommand("BackgroundImageCache", false, true);}catch(e){};
+
+</script>
+</head>
+
+<body scroll="no">
+	<div id="layout">
+		<div id="header">
+			<div class="headerNav2"> 
+				<!--<div style="display:inline;"><a href="" target="_blank"><img src="" style="margin-top:5px;" /></a></div>-->
+				<div style='margin-top:10px; font-size: 20pt; font-family:"arial,sans-serif";'>{{'cfg_admin_sysname'|getCfgVar}}</div>
+				
+				<ul class="nav">
+					<!--
+					<li id="switchEnvBox"><a href="javascript:">（<span>北京</span>）切换城市</a>
+						<ul>
+							<li><a href="sidebar_1.html">北京</a></li>
+							<li><a href="sidebar_2.html">上海</a></li>
+							<li><a href="sidebar_2.html">南京</a></li>
+							<li><a href="sidebar_2.html">深圳</a></li>
+							<li><a href="sidebar_2.html">广州</a></li>
+							<li><a href="sidebar_2.html">天津</a></li>
+							<li><a href="sidebar_2.html">杭州</a></li>
+						</ul>
+					</li>
+					<li><a href="changepwd.html" target="dialog">设置</a></li>
+					<li><a href="http://www.cnblogs.com/dwzjs" target="_blank">博客</a></li>
+					<li><a href="http://weibo.com/dwzui" target="_blank">微博</a></li>
+					<li><a href="http://bbs.dwzjs.com" target="_blank">论坛</a></li>
+					-->
+					<li>
+                        <a href="{{'cfg_indexurl'|getCfgVar}}" target="_blank">{{'cfg_indexname'|getCfgVar}}</a>
+                    </li>
+					<li>
+                        <a href="{{$smarty.const.__ROOT__}}system/about" target="dialog">版本信息</a>
+                    </li>
+					<li>
+                        <a href="{{$smarty.const.__ROOT__}}manager/setPwd" target="dialog">修改密码</a>
+                    </li>
+                    <li>
+                        <a href="{{$smarty.const.__ROOT__}}public/logout">退出</a>
+                    </li>
+				</ul>
+				<ul class="themeList" id="themeList">
+					<li theme="default"><div class="selected">蓝色</div></li>
+					<li theme="green"><div>绿色</div></li>
+					<!--<li theme="red"><div>红色</div></li>-->
+					<li theme="purple"><div>紫色</div></li>
+					<li theme="silver"><div>银色</div></li>
+					<li theme="azure"><div>天蓝</div></li>
+				</ul>
+			</div>
+
+			<!-- navMenu -->
+			
+		</div>
+
+		<div id="leftside">
+			<div id="sidebar_s">
+				<div class="collapse">
+					<div class="toggleCollapse"><div></div></div>
+				</div>
+			</div>
+			<div id="sidebar">
+				<div class="toggleCollapse"><h2>主菜单</h2><div>收缩</div></div>
+
+				<div class="accordion" fillSpace="sidebar">
+				{{$modules}}
+				</div>
+
+			</div>
+		</div>
+		<div id="container">
+			<div id="navTab" class="tabsPage">
+				<div class="tabsPageHeader">
+					<div class="tabsPageHeaderContent"><!-- 显示左右控制时添加 class="tabsPageHeaderMargin" -->
+						<ul class="navTab-tab">
+							<li tabid="main" class="main"><a href="javascript:;"><span><span class="home_icon">我的主页</span></span></a></li>
+						</ul>
+					</div>
+					<div class="tabsLeft">left</div><!-- 禁用只需要添加一个样式 class="tabsLeft tabsLeftDisabled" -->
+					<div class="tabsRight">right</div><!-- 禁用只需要添加一个样式 class="tabsRight tabsRightDisabled" -->
+					<div class="tabsMore">more</div>
+				</div>
+				<ul class="tabsMoreList">
+					<li><a href="javascript:;">我的主页</a></li>
+				</ul>
+				<div class="navTab-panel tabsPageContent">
+					<div class="page">
+						<div class="accountInfo">
+							<!--<p><span></span></p>-->
+							<p>{{'cfg_admin_sysdesc'|getCfgVar}}</p>
+						</div>
+						<div class="pageFormContent" layoutH="58">
+							<table class="list">
+								<tr calss="row">
+								<td colspan="3" style="background: #B4EEB4;"><b>{{$welcome}}</b></td>
+								</tr>
+								<tr class="row" ><th colspan="3" class="space">系统信息</th></tr>
+								{{section name=loop loop=$info}}
+								<tr class="row"><td width="15%">{{$info[loop][0]}}</td><td>{{$info[loop][1]}}</td></tr>
+								{{/section}}
+							</table>	
+						</div>
+						
+						<div style="width:260px;position: absolute;top:60px;right:0" layoutH="80">
+							<!-- <iframe width="100%" height="430" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=430&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1888707615&verifier=1c853142&dpc=1"></iframe> -->
+							<div id="weather_box"></div>
+							<div id="select_box" style="display: none;">
+							<br/><br/>
+							<select id="province" class="combox" ref="city" change="setCity"></select>
+							<select name="city" id="city" class="combox">
+							<option value="">选择市</option>
+							</select>
+							<div class="buttonActive"><div class="buttonContent"><button type="button" onclick="var id=$('input[name=city]').val();if(id==''){alertMsg.error('请选择市!');}else{getWeather(id)}">查询</button></div></div>
+							</div>
+						</div>
+						 
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<div id="taskbar" style="left:0px; display:none;">
+			<div class="taskbarContent">
+				<ul></ul>
+			</div>
+			<div class="taskbarLeft taskbarLeftDisabled" style="display:none;">taskbarLeft</div>
+			<div class="taskbarRight" style="display:none;">taskbarRight</div>
+		</div>
+		<div id="splitBar"></div>
+		<div id="splitBarProxy"></div>
+	</div>
+	<div id="footer"><a href="{{'cfg_indexurl'|getCfgVar}}" target="_blank">{{'cfg_powerby'|getCfgVar}}</a></div>
+ 
+<!--拖动效果-->
+	<div class="resizable"></div>
+<!--阴影-->
+	<div class="shadow" style="width:508px; top:148px; left:296px;">
+		<div class="shadow_h">
+			<div class="shadow_h_l"></div>
+			<div class="shadow_h_r"></div>
+			<div class="shadow_h_c"></div>
+		</div>
+		<div class="shadow_c">
+			<div class="shadow_c_l" style="height:296px;"></div>
+			<div class="shadow_c_r" style="height:296px;"></div>
+			<div class="shadow_c_c" style="height:296px;"></div>
+		</div>
+		<div class="shadow_f">
+			<div class="shadow_f_l"></div>
+			<div class="shadow_f_r"></div>
+			<div class="shadow_f_c"></div>
+		</div>
+	</div>
+
+	<!--遮盖屏幕-->
+	<div id="alertBackground" class="alertBackground"></div>
+	<div id="dialogBackground" class="dialogBackground"></div>
+
+	<div id='background' class='background'></div>
+	<div id='progressBar' class='progressBar'>数据加载中，请稍等...</div>
+
+<script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/city.js"></script>
+<script type="text/javascript">
+	function getAreaID(){
+		$.getScript('http://61.4.185.48:81/g/', function(){
+			if(typeof(id) == "undefined"){return;}
+	   		getWeather(id);
+	   		$("#select_box").css("display", "block");
+		});
+	}
+
+	function getWeather(id){
+		$.ajax({
+       		type: 'POST',
+       		data: {city_id: id},
+       		url: "{{$smarty.const.__URL__}}",
+       		cache: false,
+       		success: function(text){
+   				$("#weather_box").html(text);
+           	},
+       		error: DWZ.ajaxError
+     	 });
+	}
+	{{if 'cfg_open_weather'|getCfgVar eq 1}}
+	setProvince();
+	setTimeout(getAreaID, 1000);
+	{{/if}}
+</script>
+
+</body>
+</html>

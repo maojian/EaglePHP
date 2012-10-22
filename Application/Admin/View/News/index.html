@@ -1,0 +1,96 @@
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}">
+	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
+	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
+	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
+	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
+	<input type="hidden" name="type" value="{{$smarty.post.type}}">
+	<input type="hidden" name="title" value="{{$smarty.post.title}}" />
+	<input type="hidden" name="create_uid" value="{{$smarty.post.create_uid}}" />
+	<input type="hidden" name="create_time" value="{{$smarty.post.create_time}}" />
+</form>
+
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					标题：<input type="text" name="title" value="{{$smarty.post.title}}" />
+				</td>
+				<td>
+					<select class="combox" name="type">
+						<option value="">--类型--</option>
+						{{html_options options=$types selected=$smarty.post.type}}
+					</select>
+				</td>
+				<td>
+					创建者编号：<input type="text" name="create_uid" value="{{$smarty.post.create_uid}}" />
+				</td>
+				<td>
+					创建日期：<input type="text" class="date" readonly="true" name="create_time" value="{{$smarty.post.create_time}}"/>
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<div class="panelBar">
+		<ul class="toolBar">
+			<li><a class="add" href="{{$smarty.const.__URL__}}add" target="navTab"><span>添加</span></a></li>
+			<li><a class="edit" href="{{$smarty.const.__URL__}}update/id/{news_id}" target="navTab"><span>修改</span></a></li>
+			<li><a class="delete" href="{{$smarty.const.__URL__}}delete" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
+			<li class="line">line</li>
+			<li><a class="icon" href="{{$smarty.const.__URL__}}export"><span>导出EXCEL</span></a></li>
+			<li class="line">line</li>
+			<li><a class="icon" href="{{$smarty.const.__URL__}}makeHtml" target="ajaxTodo" title="您确定要更新HTML吗？"><span>更新文档HTML</span></a></li>
+		</ul>
+	</div>
+	<table class="table" width="100%" layoutH="114">
+		<thead>
+			<tr>
+				<th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th orderField="id" class="{{$page.orderDirection}}">新闻编号</th>
+				<th>标题</th>
+				<th>类型</th>
+				<th>排序</th>
+				<th>创建者</th>
+				<th>创建时间</th>
+				<th>修改时间</th>
+				<th>点击数</th>
+				<th>评论数</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$news}}
+			<tr target="news_id" rel="{{$news[loop].id}}">
+				<td><input name="ids" value="{{$news[loop].id}}" type="checkbox"></td>
+				<td>{{$news[loop].id}}</td>
+				<td>{{$news[loop].title}}</td>
+				<td>{{$news[loop].type}}</td>
+				<td>{{$news[loop].rank}}</td>
+				<td>{{$news[loop].create_username}}</td>
+				<td>{{$news[loop].create_time}}</td>
+				<td>{{$news[loop].update_time}}</td>
+				<td>{{$news[loop].clicknum}}</td>
+				<td>{{$news[loop].comments}}</td>
+				<td>
+					<a target="ajaxTodo" href="{{$smarty.const.__URL__}}delete/ids/{{$news[loop].id}}" class="btnDel" title="确定要删除吗?">删除</a>
+					<a target="navTab" href="{{$smarty.const.__URL__}}update/id/{{$news[loop].id}}" class="btnEdit">编辑</a>
+				</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	{{include file="Include/page.html"}}
+</div>

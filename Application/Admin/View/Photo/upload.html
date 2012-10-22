@@ -1,0 +1,129 @@
+
+<link rel="stylesheet" type="text/css" href="{{$smarty.const.__SHARE__}}plug/swfupload/css/default.css"/>
+<script src="{{$smarty.const.__SHARE__}}plug/swfupload/js/swfupload.js"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/swfupload/js/handlers.js"></script>
+<script src="{{$smarty.const.__SHARE__}}plug/swfupload/js/fileprogress.js"></script>
+
+<div class="pageContent">
+	<form  id="coords" method="post" class="pageForm required-validate">
+		<div class="pageFormContent" layoutH="56">
+			
+			<dl class="nowrap">
+				<dt>相册：</dt>
+				<dd>
+					<select name="albumid" id="albumid" class="combox required">
+						<option value="">--相册--</option>
+						{{html_options options=$albums selected=$smarty.get.albumid}}
+					</select>
+				</dd>
+			</dl>
+			
+			<dl>
+				<dt>缩略图宽度：</dt>
+				<dd><input name="width" id="width" class="required" type="text" size="30" value="{{'cfg_img_width'|getCfgVar}}" alt=""/></dd>
+			</dl>
+			
+			<dl>
+				<dt>缩略图高度：</dt>
+				<dd><input name="height" id="height" class="required" type="text" size="30" value="{{'cfg_img_height'|getCfgVar}}" alt=""/></dd>
+			</dl>
+			
+			<dl class="nowrap">
+				<dt>图片：</dt>
+				<dd>
+					<div style="display: inline; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
+						<span id="spanButtonPlaceholder"></span>
+					</div>
+					<div class="fieldset flash" id="fsUploadProgress">
+					</div>
+					<p>共有 <span id="fileCount" style="color:red">0</span> 个文件,已上传 <span id="readyUploadCount" style="color:red">0</span> 个文件.</p>
+				</dd>
+			</dl>
+			
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="submitUpload()">上传</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+
+	var settings = {
+		flash_url : "{{$smarty.const.__SHARE__}}plug/swfupload/swfupload.swf",
+		upload_url: "{{$smarty.const.__URL__}}upload",
+		post_params: {"PHPSESSID" : "{{$PHPSESSID}}"},
+		file_size_limit : "10 MB",
+		file_types : "*.jpg;*.gif;*.jpeg;*.png",
+		file_types_description : "图片文件",
+		file_upload_limit : 50,
+		file_queue_limit : 0,
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+
+		// Button Settings
+		button_image_url : "{{$smarty.const.__SHARE__}}plug/swfupload/images/SmallSpyGlassWithTransperancy_17x18.png",
+		button_placeholder_id : "spanButtonPlaceholder",
+		button_width: 180,
+		button_height: 18,
+		button_text : '<span class="button">选择照片<span class="buttonSmall">(10 MB Max)</span></span>',
+		button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
+		button_text_top_padding: 0,
+		button_text_left_padding: 18,
+		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+		button_cursor: SWFUpload.CURSOR.HAND,
+
+		
+		// The event handler functions are defined in handlers.js
+		file_dialog_complete_handler : fileDialogComplete,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete
+	};
+	
+	var swfu = new SWFUpload(settings);
+	
+	
+	//jQuery.extend(jQuery.fn,{
+		//swfupload:function() {
+			//swfu = new SWFUpload(settings);
+	//}});
+	
+	function submitUpload(){                             
+		var albumid = $("input[name=albumid]", navTab.getCurrentPanel()).val();
+		var width = parseInt($("#width").val());
+		var height = parseInt($("#height").val());
+		
+		if(albumid == "" || albumid == undefined){ // typeof(albumid) != "number"
+			alertMsg.info('请选择相册！');
+		}else if(isNaN(width)){
+			alertMsg.info('您输入的图片宽度错误，请重新输入！');
+		}else if(isNaN(height)){
+			alertMsg.info('您输入的图片高度错误，请重新输入！');
+		}else if(parseInt($("#fileCount").text())<=0){
+			alertMsg.info('请选择您要上传的照片！');
+		}else{
+			swfu.addPostParam("albumid", albumid);
+			swfu.addPostParam("width", width);
+			swfu.addPostParam("height", height);
+			swfu.startUpload();
+		}
+	}
+	
+</script>
+
+
+
+

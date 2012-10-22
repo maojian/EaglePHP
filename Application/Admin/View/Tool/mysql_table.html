@@ -1,0 +1,123 @@
+
+<form id="pagerForm" method="post" action="{{$smarty.const.__ACTION__}}">
+	<input type="hidden" name="url_param" value="{{$url_param}}" />
+</form>
+
+<div class="pageContent">
+	<table class="table" width="100%" layoutH="200">
+		<thead>
+			<tr>
+				<th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
+				<th>名称</th>
+				<th>行数</th>
+				<th>大小</th>
+				<th>创建时间</th>
+				<th>修改时间</th>
+				<th>引擎</th>
+				<th>字符集</th>
+				<th>注释</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{section name=loop loop=$table_status}}
+			<tr>
+				<td><input class="choose_table" name="ids" value="{{$table_status[loop].name}}" type="checkbox"></td>
+				<td><a href="{{$smarty.const.__ACTION__}}go/record/table/{{$table_status[loop].name}}/?url_param={{$url_param}}" title="Mysql管理" target="navTab" rel="Tool" style="text-decoration: underline;color: blue;">{{$table_status[loop].name}}</a></td>
+				<td>{{$table_status[loop].rows}}</td>
+				<td>{{$table_status[loop].data_length}}</td>
+				<td>{{$table_status[loop].create_time}}</td>
+				<td>{{$table_status[loop].update_time}}</td>
+				<td>{{$table_status[loop].engine}}</td>
+				<td>{{$table_status[loop].collation}}</td>
+				<td>{{$table_status[loop].comment}}</td>
+				<td> 
+					<a href="{{$smarty.const.__ACTION__}}go/struct/table/{{$table_status[loop].name}}/?url_param={{$url_param}}" title="{{$table_status[loop].name}} 表结构" target="dialog" width="1000" height="600" style="text-decoration: underline;color: blue;">结构</a> |
+					<a href="{{$smarty.const.__ACTION__}}go/truncate/table/{{$table_status[loop].name}}/?url_param={{$url_param}}" target="ajaxTodo" callback="ajaxTodoCall" title="确定要清空{{$table_status[loop].name}}表吗？" style="text-decoration: underline;color: blue;">清空</a> |
+					<a href="{{$smarty.const.__ACTION__}}go/drop/table/{{$table_status[loop].name}}/?url_param={{$url_param}}" target="ajaxTodo" callback="ajaxTodoCall" title="确定删除这条数据吗？" style="text-decoration: underline;color: blue;">删除</a>
+				</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+	
+	<div class="panelBar">
+     	<div class="pages">
+             <span>
+     	     	总共表：{{$attach_arr.count}}&nbsp;&nbsp;&nbsp;&nbsp;总共行数：{{$attach_arr.rows}}&nbsp;&nbsp;&nbsp;&nbsp;总共大小：{{$attach_arr.length}}
+     	     </span>
+     	</div>
+     </div>
+     
+     <div class="panelBar">
+     	<div class="pages">
+             <span>
+     	     	<input type="checkbox" id="file_save" />保存文件
+     	     	<input type="text" id="file_path" size="80" value="{{$save_path}}"/>
+     	     	&nbsp;&nbsp;<a id="sava_file_cho" style="color: blue;text-decoration: underline;cursor: pointer;">导出已选表</a>
+     	     </span>
+     	</div>
+     </div>
+     
+     
+</div>
+
+
+
+<script type="text/javascript">
+<!--
+function ajaxTodoCall(){
+	navTab.reload('{{$smarty.const.__ACTION__}}?{{$url_param}}', {}, 'Tool');
+}
+
+$("#sava_file_cho").each(function(){
+    $(this).click(function(event){
+          var table_arr = new Array();
+          var table_str = null;
+          var file_save = $("#file_save").attr("checked");
+          var file_path = $("#file_path").val();
+          var url = "{{$smarty.const.__ACTION__}}go/export/?url_param={{$url_param}}";
+       	  $("input[name=ids][class=choose_table][checked=true]").each(function(){
+       			table_arr[table_arr.length] = $(this).val();
+       	  });
+
+       	  if(table_arr.length == 0){
+       			alertMsg.error("请选择您要导出的表!");
+       			return false;
+          }
+
+          if(file_save && file_path == ""){
+        	  	alertMsg.error("请输入您要保存的路径!");
+     			return false;
+          }
+
+  		  table_str = table_arr.join(',');
+          if(!file_save){
+        	  window.open(url+"&ids="+table_str);
+        	  return;
+          }
+
+          $.ajax({
+        		type: 'POST',
+        		data: {file_save: file_save, file_path: file_path, ids: table_str},
+        		url: url,
+        		dataType: "json",
+        		cache: false,
+        		success: function(response){
+					if(response.statusCode == 200){
+						alertMsg.correct(response.message);
+					}else{
+						alertMsg.error(response.message);
+					}
+            	},
+        		error: DWZ.ajaxError
+      	  });
+		  event.preventDefault();
+    });
+});
+
+
+//-->
+</script>
+
+

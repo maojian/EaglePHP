@@ -1,0 +1,77 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__}}add" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+		<div class="pageFormContent" layoutH="56">
+			<dl class="nowrap">
+				<dt>名称：</dt>
+				<dd><input name="name" class="required" type="text" size="30" value="" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>路径：</dt>
+				<dd><input name="url" class="" type="text" size="30" value="" alt=""/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>序号：</dt>
+				<dd><input name="number" class="" type="text" size="30" value="" alt="0"/></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>描述：</dt>
+				<dd><textarea name="info"  rows="5" cols="40"></textarea></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>父节点：</dt>
+				<dd>
+					<input type="hidden" name="orgLookup.id" value=""/>
+					<input type="text" class="textInput required" name="dwz_orgLookup.orgName" value="" readonly="readonly"/>
+					<a class="btnLook" href="{{$smarty.const.__URL__}}lookup" lookupGroup="" lookupName="orgLookup" maxable="false" resizable="false" title="查找父菜单"><hi:text key="查找带回"/></a>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>级别：</dt>
+				<dd>
+					<select name="level" class="required">
+						{{html_options options=$levels}}
+					</select>
+				</dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>弹出方式：</dt>
+				<dd>
+					<select name="target" class="required" onchange="targetChange(this.value);">
+						{{html_options options=$targets}}
+					</select>
+				</dd>
+			</dl>
+			<dl class="nowrap" id="width_box" style="display:none">
+				<dt>宽度：</dt>
+				<dd><input id="width" name="width" class="" type="text" size="3" value="" alt=""/></dd>
+			</dl>
+			<dl class="nowrap" id="height_box" style="display:none">
+				<dt>高度：</dt>
+				<dd><input id="height" name="height" class="" type="text" size="3" value="" alt=""/></dd>
+			</dl>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">添加</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	function targetChange(value){
+		if(value == "dialog"){
+			$("#width_box").css("display", "block");
+			$("#height_box").css("display", "block");
+			$("#width").focus();
+		}else{
+			$("#width_box").css("display", "none");
+			$("#height_box").css("display", "none");
+		}
+	}
+</script>
+

@@ -1,0 +1,138 @@
+
+{{include file="Include/head.html" music="actived"}}
+
+<link href="{{$smarty.const.__SHARE__}}plug/jPlayer/skin/blue.monday/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{{$smarty.const.__SHARE__}}plug/jPlayer/js/jquery.jplayer.min.js"></script>
+<script type="text/javascript" src="{{$smarty.const.__SHARE__}}plug/jPlayer/js/jplayer.playlist.min.js"></script>
+<script type="text/javascript" src="{{$smarty.const.__SHARE__}}plug/jPlayer/js/jquery.jplayer.inspector.js"></script>
+
+
+<script type="text/javascript"> 
+$(function() {
+$('#kanfa .kimageBar ul').cycle({
+        fx:      'scrollHorz',
+        timeout:  0,
+        prev:    '.pre',
+        next:    '.next'
+});
+ 
+$('#announcement ul').cycle({
+	fx:'scrollUp',
+	timeout:10000
+});
+ 
+$('#hotRankSlide').cycle({ 
+	fx:     'none', 
+	timeout: 5000, 
+	delay: 1000,
+	pagerEvent: 'mouseover',
+	pager:  '#hotRankNavi',
+	activePagerClass: 'actived',
+	pauseOnPagerHover: true,
+	allowPagerClickBubble: true,
+	cleartypeNoBg: true,
+	pagerAnchorBuilder: function(idx, slide) { 
+		// return selector string for existing anchor 
+		return '#hotRankNavi li:eq(' + idx + ') a'; 
+	} 
+});
+ 
+});
+</script>
+
+<script type="text/javascript"> 
+//<![CDATA[
+$(document).ready(function(){
+	new jPlayerPlaylist({
+      		jPlayer: "#jquery_jplayer_1",
+      		cssSelectorAncestor: "#jp_container_1"
+      	}, [{{$music}}], {
+      		swfPath: "{{$smarty.const.__SHARE__}}plug/jPlayer/js/",
+      		supplied: "mp3",
+      		wmode: "window",
+      		ready: function () {
+    			$(this).jPlayer("play");
+    		}
+	}); 		
+});
+//]]>
+</script>
+
+<div id="index">
+
+
+<div class="subContent">
+
+<div id="indexSearch" class="module">
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
+<input type="submit" class="button" value="搜索" />
+</form>
+</div>
+</div>
+
+<div class="mainContent">
+<div class="column">
+<div class="columnBody">
+<h2><span class="date">动感音乐</span> <span></span></h2>
+
+<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+ 
+		<div id="jp_container_1" class="jp-audio">
+			<div class="jp-type-playlist">
+				<div class="jp-gui jp-interface">
+					<ul class="jp-controls">
+						<li><a href="javascript:;" class="jp-previous" tabindex="1">previous</a></li>
+						<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+						<li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+						<li><a href="javascript:;" class="jp-next" tabindex="1">next</a></li>
+						<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+						<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+						<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
+						<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
+					</ul>
+					<div class="jp-progress">
+						<div class="jp-seek-bar">
+							<div class="jp-play-bar"></div>
+						</div>
+					</div>
+					<div class="jp-volume-bar">
+						<div class="jp-volume-bar-value"></div>
+					</div>
+					<div class="jp-time-holder">
+						<div class="jp-current-time"></div>
+						<div class="jp-duration"></div>
+					</div>
+					<ul class="jp-toggles">
+						<li><a href="javascript:;" class="jp-shuffle" tabindex="1" title="shuffle">shuffle</a></li>
+						<li><a href="javascript:;" class="jp-shuffle-off" tabindex="1" title="shuffle off">shuffle off</a></li>
+						<li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>
+						<li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>
+					</ul>
+				</div>
+				<div class="jp-playlist">
+					<ul>
+						<li></li>
+					</ul>
+				</div>
+				<div class="jp-no-solution">
+					<span>Update Required</span>
+					To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+				</div>
+			</div>			
+		</div>
+
+
+<div class="clear"></div>
+</div>
+
+<div class="columnFooter"></div>
+</div>
+
+<div class="module"><!-- blogbus_index_left_middle --></div>
+<p class="link2blog">{{$page}}</p>
+</div>
+
+{{include file="Include/subContent.html"}}
+
+{{include file="Include/foot.html"}}

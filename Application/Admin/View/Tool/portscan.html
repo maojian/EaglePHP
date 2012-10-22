@@ -1,0 +1,35 @@
+<div class="pageHeader">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__ACTION__}}" method="post">
+	<div class="searchBar">
+		<table class="searchContent">
+			<tr>
+				<td>
+					IP：<input type="text" name="ip" value="{{$smarty.post.ip}}" size="25"/>
+				</td>
+				<td>
+					端口：<input type="text" name="port" value="{{$smarty.post.port}}" size="80"/>
+				</td>
+				<td>
+					<div class="subBar">
+						<ul>
+							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">扫描</button></div></div></li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	</form>
+</div>
+<div class="pageContent">
+	<table class="table" width="100%" layoutH="114">
+		<tbody>
+			{{section name=loop loop=$data}}
+			<tr>
+				<td>{{$data[loop].result}}</td>
+			</tr>
+		    {{/section}}
+		</tbody>
+	</table>
+</div>

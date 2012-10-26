@@ -2,9 +2,25 @@
 
 欢迎使用EaglePHP框架！
 
-Author：maojianlw@139.com
+EaglePHP，是一款开源、高效、面向对象的PHP MVC开发框架，完全基于PHP5可用于开发WEB程序和服务，借鉴国外优秀框架的设计思路，分层的设计思想使独立开发成为可能，建立模型推动代码的重用，有助于促进快速软件开发(RAD)和创建更稳定的程序，节约了开发者的时间，并减少重复编写代码的劳动。 
 
-EaglePHP官网：www.eaglephp.com
+框架特点：
+1、代码完全采用php5面向对象编写、简洁、规范。
+2、模块化的结构设计，易于扩展。
+3、采用mvc模式，提高程序的可维护性。
+4、支持多项目管理，由不同的单入口控制转发。
+5、支持cli命令行模式。
+6、为mysql、cache相关基础类提供多驱动扩展。
+7、使用smarty模板引擎，分离表现层与业务层。
+8、提供统一的自动加载模式和统一的命名空间。
+9、提供技术人员开发调式工具及错误跟踪系统。
+10、基于页面url和表单(隐藏域)action的驱动架构。
+11、自动生成数据库表操作，支持二次开发。
+12、支持session在memcahe、database、file中的无缝切换。
+13、高安全性，内置filter组件实现过滤机制，防止sql注入及xss跨站脚本攻击。
+14、支持orm，真正实现OOP开发的快捷且性能优越。
+15、内置document输出模块，为指定项目生成chm或html格式的api开发手册。 
+
 
 /******************************************* 安装步骤和配置说明 ************************************************/
 
@@ -18,7 +34,7 @@ EaglePHP官网：www.eaglephp.com
   EaglePHP/Config
   EaglePHP/Public/share/upload
   
-3、访问安装系统页面： http://127.0.0.1/EaglePHP/index.php ，安装成功后请删除 Pub 下的 install 文件夹。
+3、首次访问EaglePHP会自动跳转到CMS安装页面 ，安装成功后请删除 Public 下的 install 文件夹。
 
 4、如正式部署至现网环境，请关闭调式模式，在后台参数设置-核心设置处选择。
 
@@ -110,8 +126,6 @@ class IndexController extends Controller{
   define('APP_NAME', 'blog'); // 应用名称
   include '../../Library/Loader.php';
   MagicFactory::getInstance('Application')->run();
-	
-7、Blog访问地址：http://127.0.0.1/EaglePHP/Public/Blog/
 
 
 /******************************************* 最后 ************************************************/
@@ -125,6 +139,4 @@ EaglePHP官网：           http://www.eaglephp.com
 EaglePHP源码下载：   http://eaglephp.googlecode.com
 EaglePHP留言反馈：   http://www.eaglephp.com/index.php/message
 							
-																								
-																MJ	2012年10月8日 8:00
 																	

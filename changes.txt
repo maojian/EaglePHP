@@ -17,21 +17,25 @@ CHANGES：
 
 1、修复数据库模型对象table()方法支持多表连接别名设置。
 
-2、公共库工具包新增Date日期时间操作类。
+2、修复Model对象的join方法与表名连接bug。
 
-3、修复Model对象的join方法与表名连接bug。
+3、修复框架在CLI命令行模式下执行删除操作出现参数无效的bug。
 
-4、修复框架在CLI命令行模式下执行删除操作出现参数无效的bug。
+4、修正前端资源文件不做url rewrite处理，为.htaccess文件增加RewriteCond %{REQUEST_URI} !^.*(\.js|\.css|\.gif|\.png|\.jpg|\.jpeg|\.html|\.xml|\.swf|\.json)$。
 
-5、修正前端资源文件不做url rewrite处理，为.htaccess文件增加RewriteCond %{REQUEST_URI} !^.*(\.js|\.css|\.gif|\.png|\.jpg|\.jpeg|\.html|\.xml|\.swf|\.json)$。
+5、修改自动加载类索引配置文件将类文件由绝对路径改为相对路径，解决切换到其他目录出现类无法找到的bug。
 
-6、修改自动加载类索引配置文件将类文件由绝对路径改为相对路径，解决切换到其他目录出现类无法找到的bug。
+6、解决URL_MODEL模式切换到普通URL参数时常量__URL__、__ACTION__还是pathinfo模式的bug。
 
-7、解决URL_MODEL模式切换到普通URL参数时常量__URL__、__ACTION__还是pathinfo模式的bug。
+7、公共库工具包新增Date日期时间操作类、通用验证类、IP地理位置查询类，此类需要qqwry.dat纯真IP数据文件支持。
 
 8、解决pathinfo模式路由解析参数值为0被过滤的bug，并将请求的控制器、方法名称赋值给$_GET数组中的c和a变量。
 
-9、系统工具包增加通过验证类。
+9、增加Widget页面表单控件实现库，通过对象完全封装dwz表单类，开发者无需任何html代码，只需创建对象即可实现常见功能的表单。
+
+10、自带CMS后台富客户端DWZ-RIA UI升级至最新版1.4.4。
+
+
 
 
 

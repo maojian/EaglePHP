@@ -12,7 +12,7 @@ class Behavior {
     public static function checkRefresh()
     {
         $cfgRefreshTime = intval(getCfgVar('cfg_refresh_time'));
-        if($_SERVER['REQUEST_METHOD'] == 'GET' && $cfgRefreshTime > 0)
+        if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET' && $cfgRefreshTime > 0)
         {            
             $pageUniqid = '_last_access_time_'.md5($_SERVER['REQUEST_URI']);
             // 检查页面刷新间隔

@@ -35,8 +35,8 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="{{$smarty.const.__URL__}}add" target="dialog" width="600" height="400"><span>添加</span></a></li>
-			<li><a class="edit" href="{{$smarty.const.__URL__}}update/id/{id}" target="dialog" width="600" height="400"><span>修改</span></a></li>
+			<li><a class="add" href="{{$smarty.const.__URL__}}add" target="dialog" width="800" height="400"><span>添加</span></a></li>
+			<li><a class="edit" href="{{$smarty.const.__URL__}}update/id/{id}" target="dialog" width="800" height="400"><span>修改</span></a></li>
 			<li><a class="delete" href="{{$smarty.const.__URL__}}delete" target="selectedTodo" rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
 		</ul>
 	</div>
@@ -59,7 +59,7 @@
 				<td>{{$list[loop].create_time}}</td>
 				<td>
 					<a target="ajaxTodo" href="{{$smarty.const.__URL__}}delete/ids/{{$list[loop].id}}" class="btnDel" title="确定要删除吗?">删除</a>
-					<a href="{{$smarty.const.__URL__}}update/id/{{$list[loop].id}}" class="btnEdit" target="dialog" width="600" height="400">编辑</a>
+					<a href="{{$smarty.const.__URL__}}update/id/{{$list[loop].id}}" class="btnEdit" target="dialog" width="800" height="400">编辑</a>
 				</td>
 			</tr>
 		    {{/section}}

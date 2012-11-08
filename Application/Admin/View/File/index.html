@@ -33,10 +33,10 @@
 					{{if $list[loop].edit eq 1}}
 					<a href="{{$smarty.const.__URL__}}edit/?file={{$list[loop].active_path}}" target="dialog" width="1000" height="600">[编辑]</a>&nbsp;&nbsp;
 					{{/if}}
-					<a href="{{$smarty.const.__URL__}}rename/?file={{$list[loop].active_path}}" target="dialog" width="600" height="200">[改名]</a>&nbsp;&nbsp;
+					<a href="{{$smarty.const.__URL__}}rename/?file={{$list[loop].active_path}}" target="dialog" width="800" height="200">[改名]</a>&nbsp;&nbsp;
 					<a target="ajaxTodo" href="{{$smarty.const.__URL__}}delete/?file={{$list[loop].active_path}}" title="确定要删除【{{$list[loop].name}}】吗?一旦删除将不可恢复，请仔细确认！">[删除]</a>&nbsp;&nbsp;
 					{{if $list[loop].img neq 'dir'}}
-					<a href="{{$smarty.const.__URL__}}move/?file={{$list[loop].active_path}}" target="dialog" width="600" height="200">[移动]</a>&nbsp;&nbsp;
+					<a href="{{$smarty.const.__URL__}}move/?file={{$list[loop].active_path}}" target="dialog" width="800" height="200">[移动]</a>&nbsp;&nbsp;
 					{{/if}}
 				</td>
 			</tr>
@@ -48,8 +48,8 @@
 		<ul class="toolBar">
 			<li><a href="{{$smarty.const.__URL__}}" target="navTab" rel="File" title="浏览文件"><img src="{{$smarty.const.__APP_RESOURCE__}}images/icon/dir2.gif"/>根目录</a></li><li class="line">line</li>
 			<li><a class="add" href="{{$smarty.const.__URL__}}create/type/file/?file={{$active_path|urlencode}}" target="dialog" width="800" height="600"><span>新建文件</span></a></li><li class="line">line</li>
-			<li><a class="add" href="{{$smarty.const.__URL__}}create/type/dir/?file={{$active_path|urlencode}}" target="dialog" width="550" height="200"><span>新建目录</span></a></li><li class="line">line</li>
-			<li><a class="icon" href="{{$smarty.const.__URL__}}upload/?file={{$active_path|urlencode}}" target="dialog" width="600" height="400"><span>文件上传</span></a></li><li class="line">line</li>
+			<li><a class="add" href="{{$smarty.const.__URL__}}create/type/dir/?file={{$active_path|urlencode}}" target="dialog" width="800" height="200"><span>新建目录</span></a></li><li class="line">line</li>
+			<li><a class="icon" href="{{$smarty.const.__URL__}}upload/?file={{$active_path|urlencode}}" target="dialog" width="800" height="400"><span>文件上传</span></a></li><li class="line">line</li>
 			<li><a class="icon" href="{{$smarty.const.__URL__}}space/?file={{$active_path|urlencode}}" target="dialog" width="400" height="200"><span>空间检查</span></a></li>
 			<li><span>{{$list|@count}}个对象</span></li>
 		</ul>

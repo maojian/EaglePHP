@@ -63,7 +63,7 @@ class Application {
 	    {
 	        $baseName = basename($scriptName);
 	        $scriptNameArr = array_filter(explode('/', str_replace($baseName, '', $scriptName)));
-	        $projectName = $scriptNameArr[1];
+	        $projectName = isset($scriptNameArr[1]) ? $scriptNameArr[1] : '';
 	        $pos = stripos($scriptName, '/public/');
 	        if($pos !== false)
 	        {

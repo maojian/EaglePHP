@@ -812,7 +812,7 @@ city_arr[33][2] = new Option("高雄","101340201");
 
 function setProvince()//设置省级列表
 {
-   var provinceObj = $("#province").get(0);
+   var provinceObj = $("#w_province").get(0);
    provinceObj.options[0]=new Option("选择省","0");
    provinceObj.options[1]=new Option("北京","1");
    provinceObj.options[2]=new Option("上海","2");
@@ -853,17 +853,21 @@ function setProvince()//设置省级列表
 function setCity(y)//设置城市列表
 {
 	var x = y-1;
+	var html = '<option value="">选择市</option>';;
 	if(y != 0)
 	{
-		var cityOptions = new Array();   
-		for (i=1;i<city_arr[x].length+1;i++)
+		for (i=1; i<city_arr[x].length+1; i++)
 		{   
-			cityOptions[cityOptions.length] = new Array(city_arr[x][i-1].value, city_arr[x][i-1].text);
+			html += '<option value="'+city_arr[x][i-1].value+'">' + city_arr[x][i-1].text + '</option>';
 		}
-		
-	}else{
-		var cityOptions = new Array(["", "选择市"]);
 	}
-	return cityOptions;
+	
+	var $ref = $("#w_city");
+	var $refCombox = $ref.parents("div.combox:first");
+	$ref.html(html).insertAfter($refCombox);
+	$refCombox.remove();
+	$ref.trigger("change").combox();
+
 }
+
 

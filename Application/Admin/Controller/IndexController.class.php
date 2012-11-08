@@ -59,8 +59,12 @@ EOT;
         $date = Date::format('Y年m月d日 H时i分s秒');
         $week = Date::getWeek();
         $info = Date::dateInfo('GZ');
+        $ip = get_client_ip();
+        $address = IpLocation::getlocation($ip);
         $text = "{$period}好，欢迎".$_SESSION[SESSION_USER_NAME]['username'];
         $text .= "&nbsp;&nbsp;{$date}&nbsp;&nbsp;($week)&nbsp;&nbsp;{$info}年";
+        $text .= "&nbsp;&nbsp;您的IP是：[{$ip}]";
+        if($address) $text .= "&nbsp;&nbsp;来自：".$address;
         return $text;
     }
 

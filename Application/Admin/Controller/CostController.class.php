@@ -125,7 +125,7 @@ class CostController extends CommonController{
 	 	$endDate = $_POST['endDate'];
 	 	
 	 	if(!$startDate || !$endDate){
-	 		$startDate = date('Y-m', strtotime('-9 month'));
+	 		$startDate = date('Y-m', strtotime('-10 month'));
 	 		$endDate = date('Y-m');
 	 		
 	 		$_POST['startDate'] = $startDate;

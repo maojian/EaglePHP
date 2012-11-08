@@ -25,6 +25,7 @@ class NewsController extends CommonController {
 	    if(is_null($this->channelIdArr)) return '';
 	    return 'type IN('.implode(',', $this->channelIdArr).')';
 	}
+		
 	
 	/**
 	 * 列表页

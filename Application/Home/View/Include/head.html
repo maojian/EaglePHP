@@ -2,8 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="author" content="{{'cfg_adminemail'|getCfgVar}}">
 <title>{{$title}} - {{'cfg_webname'|getCfgVar}}</title>
-<meta content="keywords" content="{{if $keywords neq ''}}{{$keywords}}{{else}}{{'cfg_keywords'|getCfgVar}}{{/if}}"/>
+<meta name="keywords" content="{{if $keywords neq ''}}{{$keywords}}{{else}}{{'cfg_keywords'|getCfgVar}}{{/if}}"/>
 <meta name="description" content="{{if $description neq ''}}{{$description}}{{else}}{{'cfg_description'|getCfgVar}}{{/if}}" />
 <link href="{{$smarty.const.__APP_RESOURCE__}}css/base.css" rel="stylesheet" type="text/css" media="screen" />
 <link href="{{$smarty.const.__APP_RESOURCE__}}css/index.css" rel="stylesheet" type="text/css" media="screen" />

@@ -2,11 +2,11 @@
 <div class="panelBar" >
 	<div class="pages">
 		<span>显示</span>
-		<select name="numPerPage" onchange="dwzPageBreak({targetType:'{{$targetType|default:navTab}}', numPerPage:this.value})">
-			 <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="40">40</option>
+		<select class="combox" name="numPerPage" onchange="dwzPageBreak({targetType:'{{$targetType|default:navTab}}', data:{numPerPage:this.value}})">
+			<option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
         </select>
         <span>条，共{{$page.totalCount}}条</span>
 	</div>

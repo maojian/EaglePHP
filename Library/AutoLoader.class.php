@@ -47,7 +47,7 @@ class AutoLoader {
 			$file = ROOT_DIR.self::getAutoloadConfig($class_name);
 		}
 		$rc = false;
-		if (is_readable($file)) 
+		if ($file && is_file($file)) 
 		{
 			require_once $file;
 			$rc = $file;

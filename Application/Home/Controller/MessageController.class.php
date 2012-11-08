@@ -16,6 +16,7 @@ class MessageController extends CommonController{
           $helper = M('helper');
   		  foreach ($list as &$v){
               $v['img'] = $helper->getGravatarByEmail($v['email'], $v['id']);
+              $v['ip'] = $v['ip'].' '.IpLocation::getlocation($v['ip']);
           }
   		  $this->assign('list', $list);
   		  $this->assign('page', $page->show(4));

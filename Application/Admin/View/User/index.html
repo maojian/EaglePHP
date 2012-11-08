@@ -30,17 +30,14 @@
 				<td>
 					创建日期：<input type="text" class="date" readonly="true" name="createtime" value="{{$smarty.post.createtime}}"/>
 				</td>
-				<td>
-					<div class="subBar">
-						<ul>
-							<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
-							<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
-						</ul>
-					</div>
-				</td>
 			</tr>
 		</table>
-		
+		<div class="subBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="button" onclick="return navTabSearch(this);">刷新</button></div></div></li>
+			</ul>
+		</div>
 	</div>
 	</form>
 </div>
@@ -53,7 +50,7 @@
 			<li><a class="delete" href="{{$smarty.const.__URL__}}delete" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
 		</ul>
 	</div>
-	<table class="table" width="100%" layoutH="114">
+	<table class="table" width="100%" layoutH="140">
 		<thead>
 			<tr>
 				<th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>

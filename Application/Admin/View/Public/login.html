@@ -5,8 +5,8 @@
 <title>{{'cfg_admin_sysname'|getCfgVar}}</title>
 <link href="{{$smarty.const.__APP_RESOURCE__}}images/png.css" rel="stylesheet" type="text/css" />
 <link href="{{$smarty.const.__APP_RESOURCE__}}images/login.css" rel="stylesheet" type="text/css" />
-<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/jquery-1.4.4.js" type="text/javascript"></script>
-<script src="{{$smarty.const.__SHARE__}}plug/dwz/javascripts/jquery.cookie.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}js/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="{{$smarty.const.__SHARE__}}js/jquery.cookie.js" type="text/javascript"></script>
 <script type="text/javascript">
 
 var cookie_username = $.cookie("username");
@@ -25,7 +25,7 @@ $(function(){
 		$('#username').focus();
 	}
 	
-	if(cookie_save_name == "true"){
+	if(cookie_save_name == "checked"){
 		$("#save_login_name").attr("checked", true);
 	}
 });
@@ -47,7 +47,7 @@ function login(){
 					if(obj.statusCode == 200){
 						if(!cookie_username || !cookie_password){
 							var save_name = $("#save_login_name").attr("checked");
-							if(save_name == true){
+							if(save_name == "checked"){
 								$.cookie("username", username, { path: '/', expires: 30 });			
 							}else{
 								$.cookie("username", "", { path: '/', expires: 0 });

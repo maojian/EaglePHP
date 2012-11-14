@@ -114,6 +114,17 @@ class Model {
 	
 	
 	/**
+	 * 过滤数组中的空值
+	 * @param string $val
+	 * @return bool
+	 */
+	protected function _arrayFilterVal($val)
+	{
+	    return $val === '' ? false : true;
+	}
+	
+
+	/**
 	 * 自动提取表单中的查询条件封装成where语句
 	 */
 	protected function _autoWhereMode(){
@@ -122,7 +133,7 @@ class Model {
 		if(isset($w_cache[$cache_name])){
 			$where = $w_cache[$cache_name];
 		}else{
-			$data = array_filter($this->_getFormParams());
+			$data = array_filter($this->_getFormParams(), array($this, '_arrayFilterVal'));
 			$fields = $this->_checkTableInfo();
 			$where = '';
 			if($data){
@@ -406,11 +417,13 @@ class Model {
 	
 	public function query($sql){
 		if(empty($sql)) return false;
+		$sql = str_replace('#__', $this->tablePrefix, $sql);
 		return $this->db->query($sql);
 	}
 	
 	public function execute($sql){
 		if(empty($sql)) return false;
+		$sql = str_replace('#__', $this->tablePrefix, $sql);
 		return $this->db->execute($sql);
 	}
 	

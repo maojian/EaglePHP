@@ -10,13 +10,13 @@ class MessageController extends CommonController{
      
      public function indexAction(){ 	
       	  $perpage = 10;
-      	  $total =  $this->cur_model->where(true)->where($sql)->count();
+      	  $total =  $this->cur_model->where(true)->count();
       	  $page = new Page(array ('total' =>$total, 'perpage' =>$perpage, 'url' => __ACTION__));
-  		  $list = $this->cur_model->where($sql)->where(true)->order('create_time DESC')->limit("{$page->offset},{$perpage}")->select();
+  		  $list = $this->cur_model->where(true)->order('create_time DESC')->limit("{$page->offset},{$perpage}")->select();
           $helper = M('helper');
   		  foreach ($list as &$v){
               $v['img'] = $helper->getGravatarByEmail($v['email'], $v['id']);
-              $v['ip'] = $v['ip'].' '.IpLocation::getlocation($v['ip']);
+              $v['ip'] = $v['ip'].' '.HttpRequest::getIpLocation($v['ip']);
           }
   		  $this->assign('list', $list);
   		  $this->assign('page', $page->show(4));

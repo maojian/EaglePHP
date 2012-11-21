@@ -49,7 +49,7 @@ class TraceException extends Exception{
     }
     
     
-    public function handle($e){
+    public static function handle($e){
     	$e->__toString();
     }
     

@@ -30,7 +30,7 @@ class Log {
 	 */
 	public static function init() {
 		set_error_handler(array('Log', 'errorHandler'));// 错误处理绑定函数
-		register_shutdown_function(array(Log, 'shutdonwHandler'));// 注册页面脚本终止前回调函数
+		register_shutdown_function(array('Log', 'shutdonwHandler'));// 注册页面脚本终止前回调函数
 	}
 	
 	
@@ -49,7 +49,7 @@ class Log {
 	/**
 	* 错误处理绑定函数
 	*/
-	public function errorHandler($error_no, $msg, $file, $line, $vars) {
+	public static function errorHandler($error_no, $msg, $file, $line, $vars) {
 		
 		// 调试信息
 		if (isset ($vars['debug_backtrace'])) {

@@ -124,14 +124,61 @@ $(document).ready(function(){
 
 
 <div class="clear"></div>
+
+
+<div id="share" style="background-color: #F0F8FF;">
+  <br/>
+	<div style="font-size: 18px;color: blue;"><i>根据虾米网的歌曲编号获取歌曲下载路径：</i></div>
+	<div style="font-size: 12px;color: green;;">如虾米网歌曲页面地址：http://www.xiami.com/song/389147,地址后面的数字389147就是歌曲的编号。</div>
+  <br/>
+  <div class="shareInput">
+    	<input type="text" class="textfield" id="song_id" value="请输入虾米歌曲编号" onfocus="if (this.value == '请输入虾米歌曲编号') this.value = '';" onblur="if (this.value == '') this.value = '请输入虾米歌曲编号';"  />
+  	<input class="button" type="button" value="获取" onclick="getSongInfo();"/>
+  </div>
+  <div id="infoBox" style="display: none;">正在获取中...</div>
+  <br/>
+  <div class="clear"></div>
+</div>
+
+
 </div>
 
 <div class="columnFooter"></div>
 </div>
 
-<div class="module"><!-- blogbus_index_left_middle --></div>
-<p class="link2blog">{{$page}}</p>
 </div>
+
+<script type="text/javascript">
+
+/**
+ * 获取歌曲信息
+ */
+function getSongInfo()
+{
+	var song_id = $("#song_id").val();
+	var info = $("#infoBox");
+	if(isNaN(song_id))
+	{
+		alert("请输入正确的歌曲编号");
+		return false;
+	}
+	
+	info.css("display", "block");
+	$.post("{{$smarty.const.__PUB__}}api/index.php/xiami/",
+       {song_id: song_id},
+       function(data){
+          var obj = {};
+          eval("obj="+data);
+          if(obj.statusCode == 200){
+				info.html("<br/><div><a href='http://www.xiami.com/song/"+song_id+"' target='_blank'><img src="+obj.data.album_cover+"/></a><br/>歌曲名称："+obj.data.song_name+"<br/>歌手名称："+obj.data.artist_name+"<br/>歌曲地址：<a href="+obj.data.location+">"+obj.data.location+"</a><br/>"+obj.data.widgetCode+"</div>");
+          }else{
+        	  	info.html(obj.message);
+          }
+       } 
+	); 	
+}
+
+</script>
 
 {{include file="Include/subContent.html"}}
 

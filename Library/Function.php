@@ -202,22 +202,11 @@ function get_client_ip() {
 		$ip = getenv ('HTTP_X_FORWARDED_FOR');
 	else if (getenv ('REMOTE_ADDR') && strcasecmp ( getenv ('REMOTE_ADDR'), 'unknown'))
 		$ip = getenv ('REMOTE_ADDR');
-	else if (isset ( $_SERVER ['REMOTE_ADDR'] ) && $_SERVER ['REMOTE_ADDR'] && strcasecmp ( $_SERVER ['REMOTE_ADDR'], 'unknown'))
-		$ip = $_SERVER ['REMOTE_ADDR'];
 	else
-		$ip = 'unknown';
+		$ip = HttpRequest::getServer('REMOTE_ADDR');
 	return ($ip);
 }
 
-
-
-/**
- * 获取文件绝对路径
- */
-function getFileAbsoluteUrl($src, $dir=''){
-	$url = "http://{$_SERVER['HTTP_HOST']}".dirname(__SHARE__).str_replace('../', '/', $dir).$src;
-	return $url;
-}
 
 /**
  * 获取上传文件地址
@@ -259,7 +248,7 @@ function throw_exception($message, $code=0, $type='TraceException'){
  */
 function halt($data, $attach=null){
 	$data = (is_array($data)) ? implode('<br/>', $data) : $data;
-	if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'){
+	if(HttpRequest::isAjaxRequest()){
 		ob_end_flush();
 		$output = json_encode(array('statusCode'=>300, 'message'=>$data, 'attach'=>$attach));
 	}else{

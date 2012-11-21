@@ -3,7 +3,7 @@
 class CommonController extends Controller{
 
     public function _initialize() {
-        if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'){
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'){
              return false;
         }
         $news_m = M('news');
@@ -17,7 +17,7 @@ class CommonController extends Controller{
     	$this->assign('case_list', M('case')->field('title,img,url')->where('state=0')->order('rank DESC,id DESC')->limit(4)->select(array('cache'=>true)));
     	$this->assign('hot_news', $news_m->getHot());
     	$this->assign('type_tree', $type_tree);
-    	$this->assign('recommend', $news_m->getRecommend($_GET['type']));
+    	$this->assign('recommend', $news_m->getRecommend(isset($_GET['type']) ? $_GET['type'] : ''));
     	$cfg_keywords = getCfgVar('cfg_keywords');
     	$this->assign('keywords_arr', ($cfg_keywords) ? explode(',', $cfg_keywords) : '');
     	$this->assign('links', M('links')->field('name,url,img')->where('state=0')->order('rank DESC,id DESC')->select(array('cache'=>true)));

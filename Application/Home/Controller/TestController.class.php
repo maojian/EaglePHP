@@ -10,17 +10,7 @@ class TestController extends Controller{
 
     public function __construct()
     {
-        header('Content-Type:text/html;charset=utf-8');
-        
-        $num = 10;
-     function multiply(){
-          $num = $num * 10;
-     }
-     multiply();
-     echo $num;
-        
-        
-  
+        var_dump(HttpRequest::isPut());
         exit;
 		$a = M('manager')->field('m.username,r.name')->table(array('manager'=>'m'))->join('left JOIN role as r ON m.role_id=r.id')->select();
 		echo M('manager')->getLastSql();

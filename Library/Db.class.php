@@ -157,7 +157,7 @@ class Db {
     }
    
     public function setWhere($options){
-    	$where = $options['where'];
+    	$where = isset($options['where']) ? $options['where'] : '';
     	if($where){
     		if(is_array($where)){
     			$where = implode(' AND ', $where);
@@ -192,7 +192,7 @@ class Db {
     }
     
     public function setJoin($options){
-    	$join = $options['join'];
+    	$join = isset($options['join']) ? $options['join'] : '';
     	if(!empty($join)){
     		if(stripos($join, 'JOIN') === false){
     			$join = "LEFT JOIN {$join}";
@@ -202,38 +202,38 @@ class Db {
     }
     
 	public function setOrder($options) {
-		return ($order = $options['order']) ? " ORDER BY {$order} " : '';
+		return isset($options['order']) && ($order = $options['order']) ? " ORDER BY {$order} " : '';
 	}
 
 	public function setGroup($options) {
-		return ($group = $options['group']) ? " GROUP BY {$group} " : '';
+		return isset($options['group']) && ($group = $options['group']) ? " GROUP BY {$group} " : '';
 	}
 	
 	public function setHaving($options){
-		return ($having = $options['having']) ? " HAVING {$having} " : '';
+		return isset($options['having']) && ($having = $options['having']) ? " HAVING {$having} " : '';
 	}
 
 	public function setLimit($options) {
-	    $limit = $options['limit'];
-	    if(is_numeric($limit) || is_string($limit)){
+	    $limit = isset($options['limit']) ? $options['limit'] : '';
+	    if(!empty($limit) && (is_numeric($limit) || is_string($limit))){
 	        return " LIMIT {$limit} ";
 	    }
 	}
 
 	public function setField($options) {
-		return ($field = $options['field']) ? $field : '*';
+		return isset($options['field']) && ($field = $options['field']) ? $field : '*';
 	}
 	
 	public function setUnion($options){
-	    return ($union = $options['union']) ? $union : '';
+	    return isset($options['union']) && ($union = $options['union']) ? $union : '';
 	}
     
     public function setLock($options){
-    	return ($options['lock'] === true) ? ' FOR UPDATE ' : '';
+    	return isset($options['lock']) && ($options['lock'] === true) ? ' FOR UPDATE ' : '';
     }
     
     public function serPrimary($options){
-       return ($primary = $options['primary']) ? $primary : '';
+       return isset($options['primary']) && ($primary = $options['primary']) ? $primary : '';
     }
     
     public function setSql($options=array()){
@@ -283,7 +283,7 @@ class Db {
    /**
     * 解析数据库连接配置
     */
-	protected function parseCfg($flag){
+	protected static function parseCfg($flag){
 		$config = import('Config.DbConfig', false, ROOT_DIR);
 		if(array_key_exists($flag, $config)){
 			return $config[$flag];

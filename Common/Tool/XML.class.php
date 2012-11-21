@@ -75,7 +75,7 @@ class XMLHelper{
 		$this->document = array();
 		$this->stack    = array();
 		$this->parent   = &$this->document;
-		return xml_parse($this->parser, &$data, true) ? $this->document : NULL;
+		return xml_parse($this->parser, $data, true) ? $this->document : NULL;
 	}
 	function open(&$parser, $tag, $attributes){
 		$this->data = ''; #stores temporary cdata

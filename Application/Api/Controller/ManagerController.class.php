@@ -43,7 +43,7 @@ class ManagerController extends ApiCommonController{
     				$login_time = date('Y-m-d H:i:s');
     				$this->user_model->where("uid={$manager_info['uid']}")->save(array('login_ip'=>$login_ip, 'login_time'=>$login_time));
     				if(getCfgVar('cfg_login_email')){ // 是否发送登录邮件
-    				     sendMail(getCfgVar('cfg_adminemail'), getCfgVar('cfg_admin_sysname').' 登录提醒', "{$username} 于 {$login_time} 在IP为： {$login_ip} 登录成功！");
+    				     sendMail(getCfgVar('cfg_adminemail'), getCfgVar('cfg_admin_sysname').' 登录提醒', "{$username} 于 {$login_time} 在IP为： {$login_ip} 登录成功！来自：".IpLocation::getlocation($login_ip));
     				}
     				$this->user_model->where('uid='.$manager_info['uid'])->save(array('login_num'=>array('exp'=>'login_num+1')));
     				$this->formatReturn(200, $manager_info);

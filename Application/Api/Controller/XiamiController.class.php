@@ -2,17 +2,16 @@
 class XiamiController extends ApiCommonController{
     
     public function indexAction(){
-       $song_id = (int)$_POST['song_id'];
-       if(empty($song_id)) $this->formatReturn(208);
+       $song_id = (int)$_GET['song_id'];
+       if(empty($song_id)){return false;}
        $data = $this->getBySongId($song_id);
        $data['location'] = $this->getLocation($data['location']);
-       $this->formatReturn(200, $data);
-       //$this->downFile($data);
+       $this->downFile($data);
     }
     
     public function getBySongId($sond_id){
        $xml = curlRequest('http://www.xiami.com/widget/xml-single/uid/0/sid/'.$sond_id);
-       $xmlArr = XML::XML_unserialize($xml);
+       $xmlArr = XML_unserialize($xml);
        return $xmlArr['trackList']['track'];
     }   
     

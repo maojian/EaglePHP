@@ -9,9 +9,9 @@ class AlbumController extends CommonController{
     
     public function indexAction(){	
     	$perpage = 10;
-    	$total =  $this->cur_model->count();
+    	$total =  $this->cur_model->where($sql)->count();
     	$page = new Page(array ('total' =>$total, 'perpage' =>$perpage, 'url' => __ACTION__));
-		$list = $this->cur_model->order('id DESC')->limit("{$page->offset},{$perpage}")->select(array('cache'=>true));
+		$list = $this->cur_model->where($sql)->order('id DESC')->limit("{$page->offset},{$perpage}")->select(array('cache'=>true));
         $photo_model = M('photo');
 		foreach($list as &$val){
              $photo_info = $photo_model->field('thumbnail')->where("albumid={$val['id']}")->order('id DESC')->find();

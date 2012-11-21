@@ -15,7 +15,6 @@ class MusicController extends CommonController{
     
     public function indexAction(){
 		$list = $this->cur_model->where("state=0")->order('rank DESC,id DESC')->select(array('cache'=>true));
-		$music = null;
 		foreach($list as $val){
 		    $music .= "{title: '{$val['title']}',artist: '{$val['author']}', mp3: '{$val['url']}'},";
 		}

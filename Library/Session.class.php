@@ -271,7 +271,7 @@ class Session {
       */
      public static function init(){
           $session_name = self::name();
-          $session_id = isset($_REQUEST[$session_name]) ? $_REQUEST[$session_name] : '';
+          $session_id = $_REQUEST[$session_name];
           if(in_array($type=SESSION_SAVE_TYPE, array('table', 'memcache', 'file')))
           {
                if($type == 'file')

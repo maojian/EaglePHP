@@ -37,10 +37,9 @@ class NewsModel extends Model{
       * 获取新闻列表
       */
      public function getList($perpage = 15){	
-      	  $type_id = isset($_GET['type']) ? (int) $_GET['type'] : '';
-      	  $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : '';
+      	  $type_id = (int)$_GET['type'];
+      	  $content = $_REQUEST['content'];
       	  
-		  $sql = $url = '';
       	  if($type_id){
       	       $sql = $type_id ? 'type IN('.$this->getChildType($type_id).')' : '';
       	       $url = "type/$type_id/";

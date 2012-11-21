@@ -47,14 +47,14 @@ class Model {
 	 */
 	public function __call($method, $args){
 		$name = strtolower($method);
-		$arg = isset($args[0]) ? $args[0] : '';
+		$arg = $args[0];
 		if(in_array($name, array('where', 'table', 'join', 'order', 'group', 'limit', 'having', 'field', 'lock'), true)){
 			if($arg !== ''){
 				if($name == 'where'){
 			        if($arg === true){
 			            $arg = $this->_autoWhereMode();
 			        }
-			        if(isset($this->options[$name]) && ($val = $this->options[$name])){
+			        if($val = $this->options[$name]){
 			           $arg .= ($arg ? ' AND ' : '').$val;
 			        }
 			    }
@@ -137,7 +137,6 @@ class Model {
 			$fields = $this->_checkTableInfo();
 			$where = '';
 			if($data){
-			    $whereArr = null;
 				foreach($data as $key=>$val){
 					$sep = '__';
 					if(strpos($key, $sep) !== false){
@@ -179,18 +178,10 @@ class Model {
 	
 	/**
 	 * 获得表单提交的参数
-	 * @return array
 	 */
 	protected function _getFormParams(){
 		$params = array();
-		switch (HttpRequest::getRequestMethod())
-		{
-		    case 'POST':
-		        $params = HttpRequest::getPost();
-		        break;
-		    case 'GET':
-		        $params = HttpRequest::getGet();
-		}
+		eval ("\$params = \$_{$_SERVER['REQUEST_METHOD']};");
 		return $params;
 	}
 	
@@ -420,7 +411,7 @@ class Model {
 		if(is_null($result)){
 			return null;
 		}
-		$this->data = isset($result[0]) ? $result[0] : '';
+		$this->data = $result[0];
 		return $this->data;
 	}
 	

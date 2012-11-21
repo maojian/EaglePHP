@@ -30,7 +30,6 @@ return array (
   'DbPdo' => 'Common\\Db\\DbPdo.class.php',
   'DbSqlite' => 'Common\\Db\\DbSqlite.class.php',
   'DbSqlSrv' => 'Common\\Db\\DbSqlSrv.class.php',
-  'HttpRequest' => 'Common\\Http\\HttpRequest.class.php',
   'Mailer' => 'Common\\Mail\\Mailer.class.php',
   'Pop3' => 'Common\\Mail\\Pop3.class.php',
   'Smtp' => 'Common\\Mail\\Smtp.class.php',

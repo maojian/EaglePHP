@@ -30,8 +30,7 @@ class Application {
 		$action = ACTION_NAME . 'Action';
 		
 		$controller_obj = MagicFactory :: getInstance($controller);
-		$cls_parent = class_parents($controller);
-		$parent_name = array_shift($cls_parent);
+		$parent_name = array_shift(class_parents($controller));
 		$parent_obj = new $parent_name ();
 
 		$method = '_initialize';

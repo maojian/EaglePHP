@@ -137,7 +137,7 @@ class IpLocation {
      * @access private
      * @return int
      */
-    private static function getlong() {
+    private function getlong() {
         //将读取的little-endian编码的4个字节转化为长整型数
         $result = unpack('Vlong', fread(self::$fp, 4));
         return $result['long'];
@@ -149,7 +149,7 @@ class IpLocation {
      * @access private
      * @return int
      */
-    private static function getlong3() {
+    private function getlong3() {
         //将读取的little-endian编码的3个字节转化为长整型数
         $result = unpack('Vlong', fread(self::$fp, 3).chr(0));
         return $result['long'];
@@ -162,7 +162,7 @@ class IpLocation {
      * @param string $ip
      * @return string
      */
-    private static function packip($ip) {
+    private function packip($ip) {
         // 将IP地址转化为长整型数，如果在PHP5中，IP地址错误，则返回False，
         // 这时intval将Flase转化为整数-1，之后压缩成big-endian编码的字符串
         return pack('N', intval(ip2long($ip)));
@@ -175,7 +175,7 @@ class IpLocation {
      * @param string $data
      * @return string
      */
-    private static function getstring($data = '') {
+    private function getstring($data = '') {
         $char = fread(self::$fp, 1);
         while (ord($char) > 0) {        // 字符串按照C格式保存，以\0结束
             $data .= $char;             // 将读取的字符连接到给定字符串之后
@@ -190,7 +190,7 @@ class IpLocation {
      * @access private
      * @return string
      */
-    private static function getarea() {
+    private function getarea() {
         $byte = fread(self::$fp, 1);    // 标志字节
         switch (ord($byte)) {
             case 0:                     // 没有区域信息

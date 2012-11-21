@@ -32,7 +32,7 @@ class MagicFactory {
 		= $value;
 	}
 
-	public static function getHistroy() {
+	public function getHistroy() {
 		return self :: $history;
 	}
 
@@ -40,7 +40,7 @@ class MagicFactory {
 	/**
 	 * 根据类名获取对象实例
 	 */
-	public static function getInstance($class_name) {
+	public function getInstance($class_name) {
 		$args = array_slice(func_get_args(), 1);
 		$args_str = implode(',', $args);
 		if (count($args) > 0 || !isset (self :: $history[$class_name])) {

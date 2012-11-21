@@ -30,7 +30,7 @@ class CommonController extends Controller {
 	public function checkLogin(){
 		if(!isset(self::$adminUser)){
 			// 如果为Ajax请求，则返回json数据
-			if(HttpRequest::isAjaxRequest()){
+			if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'){
 				$this->ajaxReturn(301, '会话已超时，请重新登录');
 			}else{
 				$this->redirect('public/login');	
@@ -58,7 +58,7 @@ class CommonController extends Controller {
 		$isAccess = M('role')->authRoleAccess($url, $role_modules);
 		if(!$isAccess){
 			$message = '对不起，你没有权限执行此操作！';
-			if(HttpRequest::isAjaxRequest()){
+			if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'){
 				$this->ajaxReturn(300, $message);
 			}else{
 				$this->redirect(__ROOT__, 3, $message);

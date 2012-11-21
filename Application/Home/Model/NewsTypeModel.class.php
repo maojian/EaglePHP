@@ -11,7 +11,6 @@ class NewsTypeModel extends Model{
        }
        
        public function getChild($id, $list){
-			$child = array();
             if(is_array($list)){
                  foreach ($list as $val){
                      if($val['parent'] == $id){
@@ -19,7 +18,7 @@ class NewsTypeModel extends Model{
                      }
                  }
             }
-			return $child;
+            return $child;
        }
        
        public function getTree($id, $list){

@@ -9,9 +9,9 @@ class NoteController extends CommonController{
     
     public function indexAction(){  	
     	$perpage = 15;
-    	$total =  $this->cur_model->where(true)->count();
+    	$total =  $this->cur_model->where(true)->where($sql)->count();
     	$page = new Page(array ('total' =>$total, 'perpage' =>$perpage, 'url' => __ACTION__));
-		$list = $this->cur_model->where(true)->order('create_time DESC')->limit("{$page->offset},{$perpage}")->select();
+		$list = $this->cur_model->where($sql)->where(true)->order('create_time DESC')->limit("{$page->offset},{$perpage}")->select();
         
 		$this->assign('list', $list);
 		$this->assign('page', $page->show(4));

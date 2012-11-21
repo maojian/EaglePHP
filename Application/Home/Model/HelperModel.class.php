@@ -23,7 +23,7 @@ class HelperModel extends Model{
               foreach($list as $val){
                   if($val['parent'] == $id){
                       $arr[$val['id']] = $val['title'];
-                      $this->getChild($val['id'], $list);
+                      $this->getChild($val['id'], $list, $values);
                   }elseif($val['id'] == $id){
                       $arr[$id] = $val['title'];
                   }
@@ -39,7 +39,7 @@ class HelperModel extends Model{
       * @param int $size
       */
      public function getGravatarByEmail($email, $id, $size = 48){
-         return "http://{$_SERVER['HTTP_HOST']}/".__APP_RESOURCE__.'imgs/avatar/'.((intval($id)%22)+1).'.jpg';
+         return "http://{$_SERVER[HTTP_HOST]}/".__APP_RESOURCE__.'imgs/avatar/'.((intval($id)%22)+1).'.jpg';
          //return 'http://www.gravatar.com/avatar/'.md5(strtolower(trim($email))).'?d='. urlencode($default).'&s='.$size;
      }
      

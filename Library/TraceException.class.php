@@ -35,8 +35,8 @@ class TraceException extends Exception{
     		array_shift($trace);
     		
   		$message = $this->type.' '.$this->message;
-  		$file = $trace[0]['file'];
-  		$line = $trace[0]['line'];
+  		$file = isset($trace[0]['file']) ? $trace[0]['file'] : '';
+  		$line = isset($trace[0]['line']) ? $trace[0]['line'] : '';
   		Log :: errorHandler(Log::EXCEPTION, $message, $file, $line, '');
     }
     
@@ -49,7 +49,7 @@ class TraceException extends Exception{
     }
     
     
-    public function handle($e){
+    public static function handle($e){
     	$e->__toString();
     }
     

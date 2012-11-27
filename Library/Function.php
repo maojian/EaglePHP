@@ -34,30 +34,30 @@ function redirect($url, $time = 0, $msg = '') {
  * 提示信息模板
  */
 function template($message, $title='Notice'){
-	$message = nl2br($message);
-	$copyright = getCfgVar('cfg_webname');
-	$html = <<<EOT
-				<!DOCTYPE html>
-				<html>
-				<head>
-					<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-					<title>{$title} - {$copyright}</title>
-					<style type="text/css"> 
-						body{font-size:10pt; padding:10pt; margin:0; color:#111; font-family:Arial,sans-serif,Helvetica,"宋体";}
-						pre{margin:5px;padding:4px 10px;border:1px dotted #ff9797;background:#fffff2;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
-						h1{font-size:14pt; font-weight:bold; padding:0 0 10px 0; line-height:1.2em; margin:0; color:#911; _padding-left:0px;}
-						.box{border:1px solid #ccc; padding:10px; background:#ffffd6; line-height:1.4em; border-radius:4px; word-wrap:break-word; width:800px; margin:0 auto;}
-					</style>
-				</head>
-				<body>
-					<div class="box">
-					    <b>{$title}：</b>
-					    <pre>{$message}</pre>
-					</div>
-				</body>
-				</html>
+    $message = nl2br($message);
+    $copyright = getCfgVar('cfg_webname');
+    $html = <<<EOT
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                    <title>{$title} - {$copyright}</title>
+                    <style type="text/css"> 
+                        body{font-size:10pt; padding:10pt; margin:0; color:#111; font-family:Arial,sans-serif,Helvetica,"宋体";}
+                        .error_message{margin:5px;padding:4px 10px;font-family: Lucida Console;font-size: 14px;border:1px dotted #ff9797;background:#fffff2;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
+                        h1{font-size:14pt; font-weight:bold; padding:0 0 10px 0; line-height:1.2em; margin:0; color:#911; _padding-left:0px;}
+                        .box{position:relative;border:1px solid #ccc; padding:10px; background:#ffffd6; line-height:1.4em; border-radius:4px; word-wrap:break-word; width:800px; margin:0 auto;}
+                    </style>
+                </head>
+                <body>
+                    <div class="box">
+                        <b>{$title}：</b>
+                        <div class="error_message">{$message}</div>
+                    </div>
+                </body>
+                </html>
 EOT;
-	return $html;
+    return $html;
 }
 
 
@@ -98,8 +98,9 @@ function dump($vars, $label = null, $return = false) {
 function import($path, $ext = true, $baseUrl = COM_DIR) {
 	$file = $baseUrl.str_replace('.', '/', $path);
 	$file .= (is_bool($ext) ? ($ext ? '.class.php' : '.php') : $ext);
+	$file = realpath($file);
 	static $f_cache = array();
-	$env_name = "IMPORT_{$baseUrl}_{$path}";
+	$env_name = "IMPORT_{$file}";
 	if(!isset($f_cache[$env_name])){
 		if(is_file($file)){
 			$f_cache[$env_name] = require ($file);
@@ -125,7 +126,7 @@ function M($className, $dbFlag = __DEFAULT_DATA_SOURCE__) {
 function C($file_name) {
     static $fileData  = array();
     if(!isset($fileData[$file_name])){
-        $file = APP_CONFIG_DIR . $file_name . '.inc.php';
+        $file = realpath(APP_CONFIG_DIR . $file_name . '.inc.php');
     	if(is_file($file)){
     		$fileData[$file_name] = require ($file);
     	}else{
@@ -160,6 +161,7 @@ function F($name, $value='', $path=DATA_DIR){
  	}
 	return $value;	
 }
+
 
 
 /**
@@ -202,22 +204,11 @@ function get_client_ip() {
 		$ip = getenv ('HTTP_X_FORWARDED_FOR');
 	else if (getenv ('REMOTE_ADDR') && strcasecmp ( getenv ('REMOTE_ADDR'), 'unknown'))
 		$ip = getenv ('REMOTE_ADDR');
-	else if (isset ( $_SERVER ['REMOTE_ADDR'] ) && $_SERVER ['REMOTE_ADDR'] && strcasecmp ( $_SERVER ['REMOTE_ADDR'], 'unknown'))
-		$ip = $_SERVER ['REMOTE_ADDR'];
 	else
-		$ip = 'unknown';
+		$ip = HttpRequest::getServer('REMOTE_ADDR');
 	return ($ip);
 }
 
-
-
-/**
- * 获取文件绝对路径
- */
-function getFileAbsoluteUrl($src, $dir=''){
-	$url = "http://{$_SERVER['HTTP_HOST']}".dirname(__SHARE__).str_replace('../', '/', $dir).$src;
-	return $url;
-}
 
 /**
  * 获取上传文件地址
@@ -259,7 +250,7 @@ function throw_exception($message, $code=0, $type='TraceException'){
  */
 function halt($data, $attach=null){
 	$data = (is_array($data)) ? implode('<br/>', $data) : $data;
-	if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'){
+	if(HttpRequest::isAjaxRequest()){
 		ob_end_flush();
 		$output = json_encode(array('statusCode'=>300, 'message'=>$data, 'attach'=>$attach));
 	}else{
@@ -621,14 +612,14 @@ function getFileSize($size)
 /**
  * 获取系统配置文件变量
  */
-function getCfgVar($varname)
+function getCfgVar($varname = null)
 {
    static $config = null;
    if(!$config)
    {
-        $config = import('Config.SysInfo', false, ROOT_DIR);
+        $config = import('Config.SysInfo', false, DATA_DIR);
    }
-   return $config[$varname];
+   return ($varname != null && isset($config[$varname])) ? $config[$varname] : $config;
 }
 
 
@@ -733,3 +724,33 @@ function L($key, $params = array())
     return I18n::getMessage($key, $params);
 }
 
+
+/**
+ * 将数组中的某元素组合成一维数组
+ * @param 1 : 数组
+ * @param 2 : 维数(2维)
+ * @param 3 : 取其中的某字段/也可以是取其中两个作为key和value关系array('id'=>'name')
+ */
+function arr2one($arr,$num=0,$field='') {
+	if(!is_array($arr)) return false;
+	if($field=='') return false;
+	elseif(is_array($field)) { $kkkkk=$field[0]; $vvvvv=$field[1]; }
+	else { $kkkkk=''; $vvvvv=$field; }
+	$num=(int)$num;//必须二维数组 或 三维数组
+	$result = array();
+	if($num==2){
+		foreach($arr as $key=>$value){
+			if(isset($value[$vvvvv])) {
+				if($kkkkk=='')	$result[]=$value[$vvvvv];
+				else			$result[$value[$kkkkk]]=$value[$vvvvv];
+			}
+		}
+	}elseif($num==3){
+		foreach($arr as $key=>$value){
+			foreach($value as $k=>$v){
+				if(isset($value[$k][$vvvvv])) $result[$value[$kkkkk]]=$v[$vvvvv];
+			}
+		}
+	}
+	return $result;
+}

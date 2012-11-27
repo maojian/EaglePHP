@@ -12,7 +12,7 @@ class IndexController extends CommonController {
     
     
     private function getWeather(){
-        $city_id = $_POST['city_id'];
+        $city_id = $this->getParameter('city_id');
         //$city_id = 101280101;
         if(empty($city_id)) return false;
         $flag = 'cache_weather_'.$city_id;
@@ -59,9 +59,9 @@ EOT;
         $date = Date::format('Y年m月d日 H时i分s秒');
         $week = Date::getWeek();
         $info = Date::dateInfo('GZ');
-        $ip = get_client_ip();
-        $address = IpLocation::getlocation($ip);
-        $text = "{$period}好，欢迎".$_SESSION[SESSION_USER_NAME]['username'];
+        $ip = HttpRequest::getClientIP();
+        $address = HttpRequest::getIpLocation($ip);
+        $text = "{$period}好，欢迎".self::$adminUser['username'];
         $text .= "&nbsp;&nbsp;{$date}&nbsp;&nbsp;($week)&nbsp;&nbsp;{$info}年";
         $text .= "&nbsp;&nbsp;您的IP是：[{$ip}]";
         if($address) $text .= "&nbsp;&nbsp;来自：".$address;
@@ -88,23 +88,23 @@ EOT;
      */
     protected function getServerInfo(){
     	$dis_func = get_cfg_var('disable_functions');
-    	$upsize= $this->getCfg('file_uploads') ? $this->getCfg('upload_max_filesize') : 'Not allowed';
-		$adminmail=isset($_SERVER['SERVER_ADMIN']) ? $_SERVER['SERVER_ADMIN'] : $this->getCfg('sendmail_from');
+    	$upsize = $this->getCfg('file_uploads') ? $this->getCfg('upload_max_filesize') : 'Not allowed';
+		$adminmail = HttpRequest::getServer('SERVER_ADMIN', $this->getCfg('sendmail_from'));
 		!$dis_func && $dis_func = 'No';	
 		$info = array(
-			array('服务器时间',date('Y-m-d H:i:s')),
-			array('服务器主机',$_SERVER['SERVER_NAME']),
-			array('服务器IP',gethostbyname($_SERVER['SERVER_NAME'])),
+			array('服务器时间',Date::format()),
+			array('服务器主机',HttpRequest::getServerName()),
+			array('服务器IP',gethostbyname(HttpRequest::getServerName())),
 			array('EaglePHP版本',getCfgVar('cfg_sys_version').' <a href="http://www.eaglephp.com/" target="_blank">[查看最新版]</a>'),
 			array('操作系统',PHP_OS),
 			//array('Server OS Charset',$_SERVER['HTTP_ACCEPT_LANGUAGE']),
-			array('服务器软件',$_SERVER['SERVER_SOFTWARE']),
-			array('服务器端口',$_SERVER['SERVER_PORT']),
+			array('服务器软件',HttpRequest::getServer('SERVER_SOFTWARE')),
+			array('服务器端口',HttpRequest::getServerPort()),
 			array('PHP运行模式',strtoupper(php_sapi_name())),
 			//array('The file path',__FILE__),
 	
 			array('PHP版本',PHP_VERSION),
-			array('PHP信息',(IS_PHPINFO ? '<a href="'.__ROOT__.'system/phpinfo" target="_blank" style="text-decoration:underline;color:blue" >Yes</a>' : 'No')),
+			array('PHP信息','<a href="'.__ROOT__.'system/phpinfo" target="_blank" style="text-decoration:underline;color:blue" >Yes</a>'),
 			array('安全模式',$this->getCfg('safe_mode')),
 			array('管理员',$adminmail),
 			//array('allow_url_fopen',$this->getCfg('allow_url_fopen')),

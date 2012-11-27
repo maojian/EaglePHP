@@ -18,7 +18,7 @@ class AutoLoader {
 	{
 		if (self :: $loader == null) 
 		{
-		    self :: $autoload_file = CONF_DIR.'AutoloadConfig.php';
+		    self :: $autoload_file = DATA_DIR.'Config/AutoloadConfig.php';
 			self :: $loader = new AutoLoader();
 		}
 		return self :: $loader;
@@ -72,7 +72,7 @@ class AutoLoader {
     	        $autoloadConfigArr = self::setAutoloadConfig();
     	    }
 	    }
-	    return $key ? $autoloadConfigArr[$key] : $autoloadConfigArr;
+	    return isset($autoloadConfigArr[$key]) ? $autoloadConfigArr[$key] : $autoloadConfigArr;
 	}
 	
 	/**
@@ -94,7 +94,7 @@ class AutoLoader {
             }
             $data[$filename] = $file;
         }
-        $data['Smarty'] = basename(COM_DIR).__DS__.'Smarty'.__DS__.'Smarty.class.php';
+        $data['SmartyBC'] = basename(COM_DIR).__DS__.'Smarty'.__DS__.'SmartyBC.class.php';
         File::write(self::$autoload_file, "<?php\r\nreturn ".var_export($data, true).';');
         return $data;
 	}

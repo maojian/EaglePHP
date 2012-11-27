@@ -19,14 +19,15 @@ class AccountController extends CommonController{
 	 * 列表页
 	 */
 	public function indexAction(){
-	    $remark = $_POST['remark'];
-	    $startTime = $_POST['startTime'];
-	    $endTime = $_POST['endTime'];
+	    $remark = $this->getParameter('remark');
+	    $startTime = $this->getParameter('startTime');
+	    $endTime = $this->getParameter('endTime');
+	    $sql = null;
 	    if($remark){
-	     $sql[] = "remark LIKE '%{$remark}%'";
+	        $sql[] = "remark LIKE '%{$remark}%'";
 	    }
 	    if($startTime && $endTime){
-	     $sql[] = "(usetime BETWEEN '{$startTime}' AND '{$endTime}')"; 
+	        $sql[] = "(usetime BETWEEN '{$startTime}' AND '{$endTime}')"; 
 	    }
 		$page = $this->page($this->curModel->where($sql)->count(), 'usetime');
 		$list = $this->curModel->where($sql)->order($page['orderFieldStr'])->limit("{$page['limit']},{$page['numPerPage']}")->select();	

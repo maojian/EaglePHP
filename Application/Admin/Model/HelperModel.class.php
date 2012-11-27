@@ -96,6 +96,7 @@ class HelperModel extends Model{
     public function getChild($id, $list)
     {
         if(is_array($list)){
+             $child = null;
              foreach ($list as $val){
                  if($val['parent'] == $id){
                      $child[] = $val;

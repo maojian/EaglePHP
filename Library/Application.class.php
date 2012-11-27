@@ -10,7 +10,6 @@ class Application {
     
     public static function init()
     {
-        Behavior::checkRefresh();
         if (URL_MODEL == 1 && !(__CLI__)) 
         {
 			self::pathinfoURL();
@@ -19,6 +18,7 @@ class Application {
 		{
 			self::usuallyURL();
 		}
+		Behavior::checkRefresh();
     }
  
 	/**
@@ -29,13 +29,15 @@ class Application {
 		$controller = CONTROLLER_NAME . 'Controller';
 		$action = ACTION_NAME . 'Action';
 		
+		$cls_parent = class_parents($controller);
+		if($cls_parent !== false)
+		{
+    		$parent_name = array_shift($cls_parent);
+    		$parent_obj = new $parent_name ();
+    		$method = '_initialize';
+    		if (method_exists($parent_obj, $method)) $parent_obj-> $method (); // 执行父类的初始化方法
+		}
 		$controller_obj = MagicFactory :: getInstance($controller);
-		$parent_name = array_shift(class_parents($controller));
-		$parent_obj = new $parent_name ();
-
-		$method = '_initialize';
-		if (method_exists($parent_obj, $method))
-			$parent_obj-> $method (); // 执行父类的初始化方法
 		$controller_obj-> $action ();
 	}
 
@@ -167,7 +169,8 @@ class Application {
 			$len = count($pathinfoArr);
 			for ($i = 3; $i < $len; $i++)
 			{
-			    $_GET[$pathinfoArr[$i]] = $pathinfoArr[++$i];
+			    $num = ++$i;
+			    $_GET[$pathinfoArr[$i-1]] = isset($pathinfoArr[$num]) ? $pathinfoArr[$num] : '';
 			}
 			$_GET['c'] = $controller;
 		    $_GET['a'] = $action;
@@ -175,5 +178,5 @@ class Application {
 		}
 		self::defineConst($controller, $action);
 	}
-
+    
 }

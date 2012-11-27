@@ -27,6 +27,7 @@ class ModuleModel extends Model{
     */
    private function getChilds($data, $id, $type){
    		if(is_array($data)){
+   		    $childs = null;
    			foreach($data as $v){
    				if($v['parent'] == $id){
 					if($type==1 && $v['level']==1){
@@ -121,6 +122,7 @@ class ModuleModel extends Model{
 		
 		$module_model = M('module');
 		$role_id = (int)$_SESSION[SESSION_USER_NAME]['role_id'];
+		$module_ids = '';
 		if($role_id == 1){
 		    $module_id_arr = $module_model->field('id')->order('number DESC')->select();
 		    if($module_id_arr){
@@ -144,8 +146,9 @@ class ModuleModel extends Model{
 			if($childs == null){
 				return null;
 			}
+			
+			$tree = '';
 			foreach($childs as $child){
-				$tree .= '';
 				$url = $child['url'];
 				if($url){
 					$urls = explode('/', $url);
@@ -169,6 +172,7 @@ class ModuleModel extends Model{
 			return $tree;
 		}
 		
+		$tree = null;
 		if(is_array($modules)){
 			foreach($modules as $module){
 				$tree .= '<div class="accordionHeader"><h2><span>Folder</span>'.$module['name'].'</h2></div><div class="accordionContent"><ul class="tree treeFolder">';

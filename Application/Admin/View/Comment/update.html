@@ -13,7 +13,7 @@
 			</dl>
 			<dl class="nowrap">
 				<dt>IP地址：</dt>
-				<dd>{{$info.ip}}</dd>
+				<dd>{{$info.ip}} {{$info.location}}</dd>
 			</dl>
 			<dl class="nowrap">
 				<dt>评论人邮箱：</dt>
@@ -30,6 +30,10 @@
 			<dl class="nowrap">
 				<dt>管理员回复：</dt>
 				<dd><textarea name="revert" rows="7" cols="40"></textarea></dd>
+			</dl>
+			<dl class="nowrap">
+				<dt>发送邮件：</dt>
+				<dd><input type="checkbox" name="isSendEmail" value="1"/></dd>
 			</dl>
 		</div>
 		<div class="formBar">

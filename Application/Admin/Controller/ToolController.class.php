@@ -199,28 +199,27 @@ class ToolController extends CommonController{
      * mysql管理
      */
     public function mysqlAction(){
-         if($url_param = $_REQUEST['url_param']){
+         if($url_param = $this->getParameter('url_param')){
               parse_str(base64_decode(urldecode($url_param)), $param_arr);
-              $_REQUEST = array_merge($_REQUEST, $param_arr);
+              $_REQUEST = $_GET = array_merge($_REQUEST, $param_arr);
          }
-         if(isset($_REQUEST['dbhost'])){
-              
-              $dbhost = $_REQUEST['dbhost'];
-              $dbuser = $_REQUEST['dbuser'];
-              $dbname = $_REQUEST['dbname'];
-              $go = $_REQUEST['go'];
+         if(isset($_REQUEST['dbhost'])){    
+              $dbhost = $this->getParameter('dbhost');
+              $dbuser = $this->getParameter('dbuser');
+              $dbname = $this->getParameter('dbname');
+              $go = $this->getParameter('go');
               
               $config = array(
                      'dbdriver' => 'mysql',
                      'dbtype' => 'mysql',
                      'dbhost' => $dbhost,
-                     'dbport' => $_REQUEST['dbport'],
+                     'dbport' => $this->getParameter('dbport'),
                      'dbuser' => $dbuser,
-                     'dbpwd' => $_REQUEST['dbpwd'],
+                     'dbpwd' => $this->getParameter('dbpwd'),
                      'dbname' => $dbname,
-                     'dbcharset' => $_REQUEST['dbcharset']
+                     'dbcharset' => $this->getParameter('dbcharset')
               );
-
+              
               $this->assign('url_param', urlencode(base64_encode(http_build_query($config))));
               
               
@@ -229,6 +228,7 @@ class ToolController extends CommonController{
               
               $this->dbObj->connect(true);
               $dbs = $this->dbObj->query('SHOW DATABASES'); // 显示所有数据库
+              $db_arr = array();
               if(is_array($dbs)){
                    foreach ($dbs as $db_name){
                         $db_name = current($db_name);
@@ -243,7 +243,7 @@ class ToolController extends CommonController{
               }
               
               // 当前表
-              $table = $_REQUEST['table'];
+              $table = $this->getParameter('table');
               $this->assign('table', $table);
 
               switch ($go){
@@ -285,7 +285,7 @@ class ToolController extends CommonController{
                            $this->assign('list', $this->querySql($_REQUEST['query']));
                            $_REQUEST['go'] = 'query';
                        }elseif($dbname){
-                           $data = $this->getTableState($dbmysql);
+                           $data = $this->getTableState();
                            $this->assign('table_status', $data['list']);
                            $this->assign('attach_arr', $data['attach_arr']);
                            $this->assign('save_path', realpath(DATA_DIR.getCfgVar('cfg_backup_dir')).__DS__.$dbname.'_'.date('Ymd').'.sql');
@@ -348,7 +348,7 @@ class ToolController extends CommonController{
               $type_str =  $column['Type'];
               $matchs = array();
               preg_match("/\d+/", $type_str, $matchs);
-              $length = $matchs[0];
+              $length = isset($matchs[0]) ? $matchs[0] : '';
               $type_arr = explode('(', $type_str);
               $fields[] = array('name'=>$column['Field'], 'type'=>$type_arr[0], 'length'=>$length, 'key'=>strtolower($column['Key']), 'auto'=>$column['Extra'], 'default'=>$column['Default'], 'comment'=>$column['Comment'], 'null'=>strtolower($column['Null']));
          }
@@ -361,6 +361,7 @@ class ToolController extends CommonController{
      */
     private function getTableData($table, $list=null){
          $columns = $this->getFieldInfo($table);
+         $page = null;
          if($list == null){
              $c_arr = $this->dbObj->query("SELECT COUNT(*) AS count FROM `$table`");
              $count = $c_arr[0]['count'];

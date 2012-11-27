@@ -57,17 +57,17 @@ class NewsController extends CommonController {
 	    $cfg_check_title = getCfgVar('cfg_check_title');
 	    $cfg_arc_autokeyword = getCfgVar('cfg_arc_autokeyword');
 	    
-	    $host = $_SERVER['HTTP_HOST'];
-	    $title = $_POST['title'];
-	    $remote = $_POST['remote'];
-	    $type = $_POST['type'];
-	    $autolitpic = $_POST['autolitpic'];
-	    $dellink = $_POST['dellink'];
-	    $needwatermark = $_POST['needwatermark'];
-	    $content = html_entity_decode($_POST['content']);
-	    $keywords = $_POST['keywords'];
-	    $description = $_POST['description'];
-	    $vote_id = (int)$_POST['orgLookup_id'];
+	    $host = HttpRequest::getHttpHost();
+	    $title = $this->getParameter('title');
+	    $remote = $this->getParameter('remote');
+	    $type = $this->getParameter('type');
+	    $autolitpic = $this->getParameter('autolitpic');
+	    $dellink = $this->getParameter('dellink');
+	    $needwatermark = $this->getParameter('needwatermark');
+	    $content = html_entity_decode($this->getParameter('content'));
+	    $keywords = $this->getParameter('keywords');
+	    $description = $this->getParameter('description');
+	    $vote_id = (int)$this->getParameter('orgLookup_id');
 	    
 	    if(!is_null($this->channelIdArr) && !in_array($type, $this->channelIdArr)){
 	        $this->ajaxReturn(300, L('NEWS:type.error'));
@@ -242,7 +242,7 @@ class NewsController extends CommonController {
 	 * @param string $url
 	 */
 	public function pickAction(){
-	    $url = $_POST['url'];
+	    $url = $this->getParameter('url');
 	    if(empty($url)){
 	        $this->ajaxReturn(300, L('NEWS:url.empty'));
 	    }
@@ -334,7 +334,7 @@ class NewsController extends CommonController {
 		    $this->checkText();
 			$_POST['update_time'] = date('Y-m-d H:i:s');
 			if($this->news_model->save()){
-			    $news_id = $_POST['id'];
+			    $news_id = $this->getParameter('id');
 			    //M('helper')->weblogUpdates($this->news_model->getHref($news_id));
 			    $this->news_model->makeHtml($news_id);
 				$this->ajaxReturn(200, L('PUBLIC:update.success'), '', 'closeCurrent');
@@ -342,7 +342,7 @@ class NewsController extends CommonController {
 				$this->ajaxReturn(300, L('PUBLIC:update.failure'), '');
 			}
 		}else{
-			$news_id = (int)$_REQUEST['id'];
+			$news_id = (int)$this->getParameter('id');
 			$typeIdSql = $this->getTypeIdSql();
 		    $sql = $typeIdSql ? " AND $typeIdSql" : '';
 			$news_info = $this->news_model->where("id=$news_id {$sql}")->find();
@@ -351,7 +351,6 @@ class NewsController extends CommonController {
 			
 			$this->assign('news_info', $news_info);
 			$this->assign('types', $this->types);
-			$this->assign('status', $this->status);
 			$this->assign('PHPSESSID', session_id());
 			$this->assign('uploadUrl', urlencode(__URL__.'upload/immediate/1/target/image/'));
 			$this->display();
@@ -370,7 +369,7 @@ class NewsController extends CommonController {
 	 * 删除用户
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->getParameter('ids');
 		$cfg_upload_switch = getCfgVar('cfg_upload_switch');
 		$typeIdSql = $this->getTypeIdSql();
 		$sql = "id IN($ids)".($typeIdSql ? " AND $typeIdSql" : '');
@@ -440,8 +439,8 @@ class NewsController extends CommonController {
 	 */
 	public function uploadAction(){
 		if(count($_POST) > 0 && count($_FILES) > 0){
-			$immediate = (int)$_REQUEST['immediate'];
-			$target = $_REQUEST['target'];
+			$immediate = (int)$this->getParameter('immediate');
+			$target = $this->getParameter('target');
 			$dir_arr = $this->getUploadDir($target);
 			$fileName = $this->upload($dir_arr['uploadDir'], '*');
 			$url = (($immediate) ? '!' : '' ).__UPLOAD__.$dir_arr['imgDir'].$fileName;

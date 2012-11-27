@@ -22,7 +22,7 @@
 		</thead>
 		<tbody>
 			{{section name=loop loop=$list}}
-			<tr target="id" rel="{{$list[loop].id}}">
+			<tr>
 				<td><input name="ids" value="{{$list[loop].Name}}" type="checkbox"></td>
 				<td>{{$list[loop].Name}}</td>
 				<td>{{$list[loop].Engine}}</td>

@@ -39,17 +39,19 @@ class ClientApi{
     public static function getTaoBaoKeItems($param){
         import('Sdk.taobao.request.TaobaokeItemsGetRequest', false);
         $req = new TaobaokeItemsGetRequest;
-        $req->setFields('num_iid,title,nick,pic_url,price,click_url,commission,commission_rate,commission_volume,commission_num');
+        $req->setFields('num_iid,title,nick,item_location,seller_credit_score,pic_url,price,click_url,shop_click_url,commission,commission_rate,commission_volume,commission_num,volume');
         $req->setPid(self::$pid);
         $req->setKeyword($param['keyword']);
         $req->setPageNo($param['page']);
         $req->setPageSize($param['page_size']);
         $req->setCid($param['cid']);
-        $req->setSort($param['sort']?$param['sort']:'commissionNum_desc');
-        
+        $req->setSort((isset($param['sort']) && $param['sort'])?$param['sort']:'commissionNum_desc');
+        $req->setStartPrice(isset($param['start_price']) ? $param['start_price'] : '');
+        $req->setEndPrice(isset($param['end_price']) ? $param['end_price'] : '');
+        $req->setRealDescribe('true');
         $object = self::$client->execute($req);
         $data = array();
-        $data['list'] = $object->taobaoke_items->taobaoke_item;
+        $data['list'] = isset($object->taobaoke_items) ? $object->taobaoke_items->taobaoke_item : '';
         $data['count'] = $object->total_results;
         return $data;
     } 

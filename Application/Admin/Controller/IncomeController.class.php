@@ -19,9 +19,10 @@ class IncomeController extends CommonController{
 	 * 列表页
 	 */
 	public function indexAction(){
-	    $remark = $_POST['remark'];
-	    $startTime = $_POST['startTime'];
-	    $endTime = $_POST['endTime'];
+	    $remark = $this->getParameter('remark');
+	    $startTime = $this->getParameter('startTime');
+	    $endTime = $this->getParameter('endTime');
+	    $sql = null;
 	    if($remark){
 	     $sql[] = "remark LIKE '%{$remark}%'";
 	    }

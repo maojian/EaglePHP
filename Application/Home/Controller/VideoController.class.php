@@ -9,7 +9,7 @@ class VideoController extends CommonController{
     
     public function indexAction(){  	
     	$perpage = 14;
-    	$total =  $this->cur_model->where($sql)->count();
+    	$total =  $this->cur_model->count();
     	$page = new Page(array ('total' =>$total, 'perpage' =>$perpage, 'url' => __ACTION__));
 		$list = $this->cur_model->field('id,title,img')->where('state=0')->order('rank DESC,id DESC')->limit("{$page->offset},{$perpage}")->select(array('cache'=>true));
 		$this->assign('list', $list);

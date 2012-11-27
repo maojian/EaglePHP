@@ -19,6 +19,7 @@ class VoteModel extends Model
 	    $viewLink = __PROJECT__."index.php/vote/view/id/$id";
 	    $actionLink = __PROJECT__."index.php/vote/add/id/$id";
 	    $info = $this->where("id=$id")->find();
+	    $str = '';
 	    
 	    if($info)
 	    {

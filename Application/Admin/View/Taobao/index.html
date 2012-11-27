@@ -55,7 +55,7 @@
 			<tr target="num_iid" rel="{{$list[loop]->num_iid}}">
 				<td><input name="ids" value="{{$list[loop]->num_iid}}" type="checkbox"></td>
 				<td class="box" width="45%"><img src="{{$list[loop]->pic_url}}_100x100.jpg" style="width: 50px;float: left;"/>{{$list[loop]->title}}<br/><a href="{{$list[loop]->click_url}}" style="color: #0088cc;" target="_blank">推广链接</a></td>
-				<td>{{$list[loop]->nick}}</td>
+				<td><a href="{{$list[loop]->shop_click_url}}" target="_blank" style="color: #0088cc;">{{$list[loop]->nick}}</a></td>
 				<td>{{$list[loop]->price}}</td>
 				<td>{{$list[loop]->commission_rate/100|round:2}}%</td>
 				<td>{{$list[loop]->commission}}元</td>

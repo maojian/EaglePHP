@@ -13,6 +13,8 @@ include 'AutoLoader.class.php';
 
 AutoLoader :: init();
 
+Date :: timeZone('PRC');
+
 Application :: init();
 
 Controller :: init();

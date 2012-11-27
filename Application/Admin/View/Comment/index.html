@@ -64,11 +64,11 @@
 				<td width="3%">{{$list[loop].id}}</td>
 				<td width="6%">{{$list[loop].news_id}}</td>
 				<td width="10%" title="{{$list[loop].news_title}}">{{$list[loop].news_title}}</td>
-				<td width="10%">{{$list[loop].name}}</td>
+				<td width="5%">{{$list[loop].name}}</td>
 				<td width="10%">{{$list[loop].email}}</td>
-				<td class="box" width="20%">{{$list[loop].content}}</td>
-				<td width="10%">{{$list[loop].ip}}</td>
-				<td width="13%">{{$list[loop].create_time}}</td>
+				<td class="box" width="35%">{{$list[loop].content}}</td>
+				<td width="8%">{{$list[loop].ip}}</td>
+				<td width="10%">{{$list[loop].create_time}}</td>
 				<td>
 					<a target="ajaxTodo" href="{{$smarty.const.__URL__}}delete/ids/{{$list[loop].id}}" class="btnDel" title="确定要删除吗?">删除</a>
 					<a target="dialog" width="800" height="600" href="{{$smarty.const.__URL__}}update/id/{{$list[loop].id}}" class="btnEdit">编辑</a>

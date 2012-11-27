@@ -36,7 +36,7 @@ class ApiCommonController extends Controller{
     	if(!empty($list)){
     		$data['data'] = $list;
     	}
-    	if($_REQUEST['format'] == 'xml'){
+    	if($this->getParameter('format') == 'xml'){
     		$this->xmlReturn($data);
     	}else{
     		$this->jsonReturn($data);

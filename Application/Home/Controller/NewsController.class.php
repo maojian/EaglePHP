@@ -12,7 +12,7 @@ class NewsController extends CommonController{
 	 * 新闻列表页
 	 */
     public function indexAction(){
-        $type_id = (int)$_GET['type'];
+        $type_id = (int)$this->getParameter('type');
         if($type_id){
             $type_info = M('news_type')->field('title')->where("id=$type_id")->find();
             $this->assign('type_name', $type_info['title']);
@@ -26,10 +26,11 @@ class NewsController extends CommonController{
     
     
     public function getDataAction(){
-        $id = (int)$_GET['id'];
+        $id = (int)$this->getParameter('id');
         $this->curModel->where("id=$id")->save(array('clicknum'=>array('exp'=>'clicknum+1')));
         
         $list = M('comment')->field('id,name,content,create_time,email')->where("news_id=$id")->order('id DESC')->select();
+        $html = null;
         if(is_array($list)){
             $helper = M('helper');
             foreach ($list as $val){
@@ -88,7 +89,7 @@ class NewsController extends CommonController{
      * 新闻内容页
      */
     public function showAction(){
-    	$id = (int)$_GET['id'];
+    	$id = (int)$this->getParameter('id');
     	$info = $this->curModel->field('id,type,title,content,create_time,keywords,auth,source,description')->where("id=$id")->find();
     	if($info){
     	    $title = $info['title'];
@@ -101,7 +102,7 @@ class NewsController extends CommonController{
         	// 文章内容分页
         	if($total > 0)
         	{
-        	    $page = intval($_GET['page']);
+        	    $page = intval($this->getParameter('page'));
         	    $page = ($page > $total) ? 1 : $page;
         	    $page = ($page == 0) ? 1 : $page;
         	    $info['content'] = $contentArr[$page-1];
@@ -132,27 +133,34 @@ class NewsController extends CommonController{
     	$this->display();
     }
     
-    public function commentAction(){
-        if(count($_POST) > 0){
-			 //$this->ajaxReturn(300, '很抱歉，五一假期评论功能将暂时关闭，谢谢关注！');
-             $yzm = $_POST['yzm'];
-             $content = $_POST['content'];
-             if(Session::get('verify') != md5($_POST['yzm'])){
+    
+    /**
+     * 文章评论
+     * @return void
+     */
+    public function commentAction()
+    {
+        if(HttpRequest::isAjaxRequest()){
+             $yzm = $this->getParameter('yzm');
+             $content = $this->getParameter('content');
+             $news_id = $this->getParameter('news_id');
+             $name = $this->getParameter('name');
+             if(Session::get('verify') != md5($yzm)){
                  $this->ajaxReturn(300, '验证码错误，请重新输入！');
              }
              if(preg_match('#('.getCfgVar('cfg_filter_word').')#i', $content)){
                  $this->ajaxReturn(300, '评论内容包含禁词，请检查！');
              }
-             $_POST['ip'] = get_client_ip();
-             $_POST['create_time'] = date('Y-m-d H:i:s');
+             $_POST['ip'] = HttpRequest::getClientIP();
+             $_POST['create_time'] = Date::format();
              if($id = M('comment')->add()){
                  $helper = M('helper');
-                 $this->curModel->where("id={$_POST['news_id']}")->save(array('comments'=>array('exp'=>'comments+1')));
+                 $this->curModel->where("id={$news_id}")->save(array('comments'=>array('exp'=>'comments+1')));
                  $img = $helper->getGravatarByEmail($_POST['email'], $id);
                  $html = '<li '.((intval($id)%2 == 0) ? 'class="style2"' : '').'>
                  <img alt="" src="'.$img.'">
                  <div class="info">
-                 <h4><a>'.$_POST['name'].'</a> <span class="time">'.$_POST['create_time'].'</span></h4>'.$content.'</div>
+                 <h4><a>'.$name.'</a> <span class="time">'.$_POST['create_time'].'</span></h4>'.$content.'</div>
                  <div class="clear"></div>
                  </li>';
                  $this->ajaxReturn(200, $html);

@@ -37,7 +37,7 @@ class NewsModel extends Model{
 	 * (non-PHPdoc)
 	 * @see Model::_beforeAdd()
 	 */
-	protected function _beforeAdd($data, $options)
+	protected function _beforeAdd(&$data, $options)
 	{
 	    
 	    return true;
@@ -47,7 +47,7 @@ class NewsModel extends Model{
 	 * (non-PHPdoc)
 	 * @see Model::_afterAdd()
 	 */
-	protected function _afterAdd($data, $options)
+	protected function _afterAdd(&$data, $options)
 	{
 	    
 	}
@@ -56,7 +56,7 @@ class NewsModel extends Model{
 	 * (non-PHPdoc)
 	 * @see Model::_beforeUpdate()
 	 */
-	protected function _beforeUpdate($data, $options)
+	protected function _beforeUpdate(&$data, $options)
 	{
 	    return true;
 	}
@@ -65,7 +65,7 @@ class NewsModel extends Model{
 	 * (non-PHPdoc)
 	 * @see Model::_afterUpdate()
 	 */
-	protected function _afterUpdate($data, $options)
+	protected function _afterUpdate(&$data, $options)
 	{
 
 	}

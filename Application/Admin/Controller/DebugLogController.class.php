@@ -89,6 +89,7 @@ class DebugLogController extends CommonController{
     private function getXMLData(){
     	$colors = array('#FF9E01','#0D8ECF','#64004B','#489620','#FCD202');
     	$num = 0;
+    	$graph = $series = null;
     	foreach($this->logDirArr as $appName){
     		$graph .= '<graph title="'.$appName.'" line_width="2" bullet="round" color="'.$colors[$num].'">';
 	    	for($i=14;$i>=0;$i--){
@@ -112,7 +113,7 @@ class DebugLogController extends CommonController{
      * 报表
      */
     public function reportAction(){
-    	$flag = $_GET['flag'];
+    	$flag = $this->getParameter('flag');
     	if($flag == 'set'){
     		$this->getSet();
     	}else if($flag == 'data'){

@@ -28,7 +28,7 @@ class NoteController extends CommonController{
 	}
 	
 	private function check(){
-	     if(mb_strlen($_POST['content'], 'utf-8') > 240){
+	     if(mb_strlen($this->getParameter('content'), 'utf-8') > 240){
 	         $this->ajaxReturn(300, '内容不能超过240个字！');
 	     }
 	}
@@ -62,7 +62,7 @@ class NoteController extends CommonController{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->getParameter('id');
 			$info = $this->cur_model->where("id=$id")->find();
 			$this->assign('info', $info);
 			$this->display();
@@ -73,7 +73,7 @@ class NoteController extends CommonController{
 	 * 删除新闻类型
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->getParameter('ids');
 		if(!empty($ids) && $this->cur_model->where("id IN($ids)")->delete()){
 			$this->ajaxReturn(200, '删除成功');
 		}else{

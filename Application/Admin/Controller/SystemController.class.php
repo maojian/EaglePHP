@@ -28,6 +28,7 @@ class SystemController extends CommonController{
     	if($dbArr = import('Config.DbConfig', false, ROOT_DIR)){
     	    // 在更新ORM映射关系前清空所有的配置文件
     	    rm_dir(DATA_DIR.getCfgVar('cfg_orm_dir').__DS__);
+    	    $dbStr = null;
     		foreach($dbArr as $key=>$val){
     		    $ormM = M('ORM', $key);
     			$dbStr .= $val['dbname'].',';
@@ -76,10 +77,10 @@ class SystemController extends CommonController{
        $list = M('sys_config')->field('varname,value')->order('id ASC')->select();
        if(is_array($list)){
         foreach ($list as $val){
-         $data[$val['varname']] = $val['value'];
+             $data[$val['varname']] = $val['value'];
         }
        }
-       return F('SysInfo', $data, CONF_DIR);
+       return F('SysInfo', $data, DATA_DIR.'Config/');
     }
     
     private function addParam(){
@@ -125,9 +126,9 @@ class SystemController extends CommonController{
             $this->assign('boolArr', array(1=>'是', 0=>'否'));
             $this->assign('list', $list);
             $this->display('System/sys_info');
-        }elseif($_GET['action'] == 'add'){
+        }elseif($this->getParameter('action') == 'add'){
             $this->addParam();
-        }elseif($_GET['action'] == 'save'){
+        }elseif($this->getParameter('action') == 'save'){
             $this->saveParam();
         }else{
             $this->assign('list', $this->getParamGroup());
@@ -155,7 +156,7 @@ class SystemController extends CommonController{
               }
               F('Mark/watermark',$_POST);
               $this->ajaxReturn(200, '修改成功！');
-         }elseif($_GET['target'] == 'showImg'){
+         }elseif($this->getParameter('target') == 'showImg'){
               $file = DATA_DIR.'Mark/'.$mark_info['img'];
               $image_info = Image::getImageInfo($file);
               header('Content-type:'.$image_info['mime']);

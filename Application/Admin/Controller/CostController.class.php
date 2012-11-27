@@ -19,7 +19,7 @@ class CostController extends CommonController{
 	 * 列表页
 	 */
 	public function indexAction(){
-		$flag = $_GET['flag'];
+		$flag = $this->getParameter('flag');
 		if($flag == 'set'){
 			$this->getFlashSetting();
 		}elseif($flag == 'data'){
@@ -27,14 +27,15 @@ class CostController extends CommonController{
 		}elseif($flag == 'page'){
 			$this->flashPage();
 		}else{
-		    $remark = $_POST['remark'];
-		    $startTime = $_POST['startTime'];
-		    $endTime = $_POST['endTime'];
+		    $remark =$this->getParameter('remark');
+		    $startTime = $this->getParameter('startTime');
+		    $endTime = $this->getParameter('endTime');
+		    $sql = null;
 		    if($remark){
-		     $sql[] = "remark LIKE '%{$remark}%'";
+		         $sql[] = "remark LIKE '%{$remark}%'";
 		    }
 		    if($startTime && $endTime){
-		     $sql[] = "(usetime BETWEEN '{$startTime}' AND '{$endTime}')"; 
+		         $sql[] = "(usetime BETWEEN '{$startTime}' AND '{$endTime}')"; 
 		    }
 		    
 			$page = $this->page($this->curModel->where($sql)->count(), 'usetime');
@@ -106,7 +107,7 @@ class CostController extends CommonController{
 	 */
 	 public function reportAction(){
 	 	
-	 	$particularDate = $_GET['particularDate'];
+	 	$particularDate = $this->getParameter('particularDate');
 	 	if($particularDate){ // 查看月消费明细
 	 		$list = $this->curModel->field('remark,money,usetime')->order('usetime DESC')->where("DATE_FORMAT(usetime,'%Y-%m')='{$particularDate}'")->select();
 			if($list)
@@ -121,8 +122,8 @@ class CostController extends CommonController{
 	 		exit;
 	 	}
 	 	
-	 	$startDate = $_POST['startDate'];
-	 	$endDate = $_POST['endDate'];
+	 	$startDate = $this->getParameter('startDate');
+	 	$endDate = $this->getParameter('endDate');
 	 	
 	 	if(!$startDate || !$endDate){
 	 		$startDate = date('Y-m', strtotime('-10 month'));
@@ -149,7 +150,7 @@ class CostController extends CommonController{
 		
 		$incomeM = M('income');
 		$accountM = M('account');
-		
+		$info = array('incomeTotal'=>0, 'accountTotal'=>0, 'costTotal'=>0);
 		if(is_array($dateArr)){
 			foreach($dateArr as $k=>$date){
 				$sql = "DATE_FORMAT(usetime,'%Y-%m')='{$date}'";

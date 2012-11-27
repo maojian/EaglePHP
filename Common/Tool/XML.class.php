@@ -14,7 +14,7 @@ class XML{
     # XML_unserialize: takes raw XML as a parameter (a string)
     # and returns an equivalent PHP data structure
     ###################################################################################
-    function & XML_unserialize($xml){
+    public static function XML_unserialize($xml){
     	$xml_parser = new XMLHelper();
     	$data = $xml_parser->parse($xml);
     	$xml_parser->destruct();
@@ -25,7 +25,7 @@ class XML{
     # XML_serialize: serializes any PHP data structure into XML
     # Takes one parameter: the data to serialize. Must be an array.
     ###################################################################################
-    function & XML_serialize(&$data, $level = 0, $prior_key = NULL){
+    public static function XML_serialize(&$data, $level = 0, $prior_key = NULL){
     	if($level == 0){ ob_start(); echo '<?xml version="1.0" ?>',"\n"; }
     	while(list($key, $value) = each($data))
     		if(!strpos($key, ' attr')) #if it's not an attribute
@@ -48,9 +48,8 @@ class XML{
     				else echo ">\n",self::XML_serialize($value, $level+1),str_repeat("\t", $level),"</$tag>\n";
     			}
     	reset($data);
-    	if($level == 0){ $str = &ob_get_contents(); ob_end_clean(); return $str; }
+    	if($level == 0){ $str = ob_get_contents(); ob_end_clean(); return $str; }
     }
-    
 }
 
 ###################################################################################
@@ -75,7 +74,7 @@ class XMLHelper{
 		$this->document = array();
 		$this->stack    = array();
 		$this->parent   = &$this->document;
-		return xml_parse($this->parser, &$data, true) ? $this->document : NULL;
+		return xml_parse($this->parser, $data, true) ? $this->document : NULL;
 	}
 	function open(&$parser, $tag, $attributes){
 		$this->data = ''; #stores temporary cdata

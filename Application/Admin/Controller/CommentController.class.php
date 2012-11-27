@@ -39,22 +39,43 @@ class CommentController extends CommonController {
 	 */
 	public function updateAction(){
 		if(count($_POST) > 0){
-		    $revert = $_REQUEST['revert'];
+		    $revert = $this->getParameter('revert');
 		    if(!empty($revert)){
 		        $_REQUEST['content'] .= "<br/><br/><font color=red>管理员回复：{$revert}</font><br/>";
 		    }
 		    $_POST['content'] = addslashes($_REQUEST['content']);
-			if($this->curModel->save()){
+		    if($this->curModel->save() !== false){
+			    if($this->getParameter('isSendEmail') > 0)
+			    {
+			        $id = $this->getParameter('id');
+			        $info = $this->curModel->where("id=$id")->find();
+			        $news_info = M('news')->field('title')->where("id={$info['news_id']}")->find();
+			        $email = $info['email'];
+			        $news_title = $news_info['title'];
+			        $emailArr = explode('@', $email);
+			        $url = HttpRequest::getHostInfo();
+			        $link = $url.__PUB__.'index.php/news/show/id/'.$info['news_id'];
+			        $user = getCfgVar('cfg_smtp_user');
+			        $title = "{$user}刚刚回复了评论： {$news_title}(请不要回复此邮件)";
+			        $content = "{$emailArr[0]},你好<br/><br/>".
+			                    "你在 &nbsp;<strong>{$news_title}</strong>&nbsp;发表评论已得到管理员回复：<br/><br/>".
+			                    $_REQUEST['content'].
+			                    "<br/>你可以点击查看评论：<br/>".
+			                    "<a href='{$link}' target='_blank'>{$link}</a><br/>".
+			                    "<br/>想了解更多信息，请访问 <a href='{$url}' target='_blank'>{$url}</a>";
+			        sendMail($email, $title, $content);
+			    }
 				$this->ajaxReturn(200, '修改成功');
 			}else{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->getParameter('id');
 			$info = $this->curModel->where("id=$id")->find();
 			if($info){
 			    $news_info = M('news')->field('title')->where("id={$info['news_id']}")->find();
 			    $info['news_title'] = $news_info['title'];
+			    $info['location'] = IpLocation::getlocation($info['ip']);
 			}
 			$this->assign('info', $info);
 			$this->display();

@@ -28,9 +28,20 @@ class Model {
    		static $m_cache = array();
    		$cacheName = "__{$flag}_{$name}_Model__";
 		if(!isset($m_cache[$cacheName])){
+		    if(strpos($name, '.') !== false) // 是否调用其他app下面的模型对象
+		    {
+		        $nameArr = explode('.', $name);
+		        $app = $nameArr[0]; // 应用名称
+		        $name = $nameArr[1]; // 模型名称
+		        $appDir = dirname(APP_DIR).__DS__.ucfirst($app).__DS__;
+		    }
+		    else
+		    {
+		        $appDir = APP_DIR;
+		    }
 		    $modelName = ucfirst($name) . 'Model';
-			if (!class_exists($modelName, true))
-			eval ("class {$modelName} extends Model{}");
+		    import("Model.{$modelName}", true, $appDir);
+			if (!class_exists($modelName, true)) eval ("class {$modelName} extends Model{}");
 			$modelObj = new $modelName();
 	   		$modelObj->db = Db::getInstance($flag);
 	   		$modelObj->fieldPath = getCfgVar('cfg_orm_dir').__DS__.$modelObj->db->getDbName().__DS__;
@@ -47,14 +58,14 @@ class Model {
 	 */
 	public function __call($method, $args){
 		$name = strtolower($method);
-		$arg = $args[0];
+		$arg = isset($args[0]) ? $args[0] : '';
 		if(in_array($name, array('where', 'table', 'join', 'order', 'group', 'limit', 'having', 'field', 'lock'), true)){
 			if($arg !== ''){
 				if($name == 'where'){
 			        if($arg === true){
 			            $arg = $this->_autoWhereMode();
 			        }
-			        if($val = $this->options[$name]){
+			        if(isset($this->options[$name]) && ($val = $this->options[$name])){
 			           $arg .= ($arg ? ' AND ' : '').$val;
 			        }
 			    }
@@ -137,6 +148,7 @@ class Model {
 			$fields = $this->_checkTableInfo();
 			$where = '';
 			if($data){
+			    $whereArr = null;
 				foreach($data as $key=>$val){
 					$sep = '__';
 					if(strpos($key, $sep) !== false){
@@ -178,10 +190,18 @@ class Model {
 	
 	/**
 	 * 获得表单提交的参数
+	 * @return array
 	 */
 	protected function _getFormParams(){
 		$params = array();
-		eval ("\$params = \$_{$_SERVER['REQUEST_METHOD']};");
+		switch (HttpRequest::getRequestMethod())
+		{
+		    case 'POST':
+		        $params = HttpRequest::getPost();
+		        break;
+		    case 'GET':
+		        $params = HttpRequest::getGet();
+		}
 		return $params;
 	}
 	
@@ -411,7 +431,7 @@ class Model {
 		if(is_null($result)){
 			return null;
 		}
-		$this->data = $result[0];
+		$this->data = isset($result[0]) ? $result[0] : '';
 		return $this->data;
 	}
 	

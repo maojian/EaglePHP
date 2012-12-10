@@ -18,7 +18,7 @@ class AutoLoader {
 	{
 		if (self :: $loader == null) 
 		{
-		    self :: $autoload_file = DATA_DIR.'Config/AutoloadConfig.php';
+		    self :: $autoload_file = DATA_DIR.'Config/Autoload.php';
 			self :: $loader = new AutoLoader();
 		}
 		return self :: $loader;

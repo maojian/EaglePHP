@@ -10,7 +10,7 @@ class MusicController extends CommonController{
     private $cur_model;   
  
     public function __construct(){
-        $this->cur_model = M('music');
+        $this->cur_model = model('music');
     }
     
     public function indexAction(){
@@ -22,7 +22,7 @@ class MusicController extends CommonController{
 		$this->assign('music', trim($music, ','));
 		$this->assign('list', $list);
 		$this->assign('title', '音乐');
-		$this->assign('hot_news', M('news')->getHot());
+		$this->assign('hot_news', model('news')->getHot());
         $this->display();
     }
     

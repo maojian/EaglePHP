@@ -3,7 +3,7 @@ class IndexController extends CommonController {
    
     public function indexAction(){
         $this->getWeather();
-    	$this->assign('modules', M('module')->getMenuTree());
+    	$this->assign('modules', model('module')->getMenuTree());
     	$this->assign('info', $this->getServerInfo());
     	$this->assign('welcome', $this->getWelcome());
     	$this->display();
@@ -12,11 +12,11 @@ class IndexController extends CommonController {
     
     
     private function getWeather(){
-        $city_id = $this->getParameter('city_id');
+        $city_id = $this->post('city_id');
         //$city_id = 101280101;
         if(empty($city_id)) return false;
         $flag = 'cache_weather_'.$city_id;
-        $text = H($flag);
+        $text = cache($flag);
         if(empty($text))
         {
             $text = curlRequest("http://m.weather.com.cn/data/{$city_id}.html", '', 'get');
@@ -44,7 +44,7 @@ class IndexController extends CommonController {
     				  <dd style="{$dd_style}">人体舒适度：{$wi_arr['index_co']}</dd>
                     </dl>
 EOT;
-            if(is_array($wi_arr)) H($flag, $text, 60 * 60 * 3);
+            if(is_array($wi_arr)) cache($flag, $text, 60 * 60 * 3);
         }
         exit($text);
     }

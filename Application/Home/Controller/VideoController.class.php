@@ -4,7 +4,7 @@ class VideoController extends CommonController{
     private $cur_model;   
  
     public function __construct(){
-        $this->cur_model = M('video');
+        $this->cur_model = model('video');
     }
     
     public function indexAction(){  	
@@ -20,7 +20,7 @@ class VideoController extends CommonController{
     
     
     public function showAction(){
-        $id = (int)$_GET['id'];
+        $id = (int)$this->get('id');
         $info = $this->cur_model->field('title,url')->getbyId($id);
         $this->assign('info', $info);
         $this->assign('title', "{$info['title']} | 视频");

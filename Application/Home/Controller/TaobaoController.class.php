@@ -24,20 +24,32 @@ class TaobaoController extends CommonController{
     }
     
     public function indexAction(){
-        $cid = (int)$this->getParameter('cid');
-        //$_REQUEST['cid'] = $cid;
-        $pageNum = (int)$this->getParameter('page');
-        $keyword = $this->getParameter('keyword');
-        $sort = $this->getParameter('sort');
-        $start_price = (int)$this->getParameter('start_price');
-        $end_price = (int)$this->getParameter('end_price');
+        $cid = (int)$this->request('cid');
+        $pageNum = (int)$this->request('page');
+        $keyword = $this->request('keyword');
+        $sort = $this->request('sort');
+        $start_price = (int)$this->request('start_price');
+        $end_price = (int)$this->request('end_price');
         if($start_price === 0) $start_price = '';
         if($end_price === 0) $end_price = '';
         if($keyword == '搜索你感兴趣的商品') $keyword = '';	
+        if(HttpRequest::isGet() && $keyword)
+        {
+            $keyword = mb_convert_encoding($keyword, 'utf-8', 'gbk');
+            $this->request('keyword', $keyword);
+        }
         $perpage = 33;
         $data = $this->taobaoClient->getTaoBaoKeItems(array('cid'=>$cid, 'sort'=>$sort, 'start_price'=>$start_price, 'end_price'=>$end_price, 'keyword'=>$keyword, 'page'=>$pageNum, 'page_size'=>$perpage));
-        //dump($data);exit;
-        $page = new Page(array ('total' =>$data['count'], 'perpage' =>$perpage, 'url' => __ACTION__."?cid=$cid&keyword=$keyword"));
+        $url = __ACTION__;
+     
+        // 组装查询条件
+        if($cid) $url .= "cid/{$cid}/";
+        if($keyword) $url .= 'keyword/'.urlencode($keyword).'/';
+        if($sort) $url .= "sort/{$sort}/";
+        if($start_price) $url .= "start_price/{$start_price}/";
+        if($end_price) $url .= "end_price/$end_price/";
+        
+        $page = new Page(array ('total' =>$data['count'], 'perpage' =>$perpage, 'url' => $url));
     	$this->assign('cats', $this->taobaoClient->getItemCates());
         $this->assign('list', $data['list']);
         $this->assign('page', $page->show(4));

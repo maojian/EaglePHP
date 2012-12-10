@@ -12,7 +12,7 @@ class NewsTypeController extends CommonController{
     private $cur_model;
 
     public function __construct(){
-		$this->cur_model = M('news_type');
+		$this->cur_model = model('news_type');
 	}
 	
 	/**
@@ -23,7 +23,7 @@ class NewsTypeController extends CommonController{
 		$list = $this->cur_model->where(true)->order($page['orderFieldStr'])->limit("{$page['limit']},{$page['numPerPage']}")->select();
 		if(is_array($list)){
 		    $state_arr = $this->getData('state');
-		    $news_model = M('news');
+		    $news_model = model('news');
     		foreach ($list as &$val){
     		    $type_info = $this->cur_model->field('title')->where("id={$val['parent']}")->find();
     		    $val['parent_name'] = $type_info ? "{$type_info['title']}&nbsp;&nbsp;（{$val['parent']}）" : '主类&nbsp;&nbsp;（0）'; 
@@ -50,7 +50,7 @@ class NewsTypeController extends CommonController{
 			}
 		}else{
 		    $this->assign('state_arr', $this->getData('state'));
-		    $this->assign('type_arr', M('helper')->getNewsTypeList());
+		    $this->assign('type_arr', model('helper')->getNewsTypeList());
 			$this->display();
 		}
 	}
@@ -66,11 +66,11 @@ class NewsTypeController extends CommonController{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->cur_model->where("id=$id")->find();
 			$this->assign('info', $info);
 			$this->assign('state_arr', $this->getData('state'));
-		    $this->assign('type_arr', M('helper')->getNewsTypeList());
+		    $this->assign('type_arr', model('helper')->getNewsTypeList());
 			$this->display();
 		}
 	}
@@ -79,7 +79,7 @@ class NewsTypeController extends CommonController{
 	 * 删除新闻类型
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		if(!empty($ids) && $this->cur_model->where("id IN($ids)")->delete()){
 			$this->ajaxReturn(200, '删除成功');
 		}else{

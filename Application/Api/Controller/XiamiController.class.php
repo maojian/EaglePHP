@@ -2,7 +2,7 @@
 class XiamiController extends ApiCommonController{
     
     public function indexAction(){
-       $song_id = (int)$_POST['song_id'];
+       $song_id = (int)$this->request('song_id');
        if(empty($song_id)) $this->formatReturn(208);
        $data = $this->getBySongId($song_id);
        $data['location'] = $this->getLocation($data['location']);

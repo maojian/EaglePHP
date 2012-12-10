@@ -12,7 +12,7 @@ class CacheMemcache extends Cache{
     {
         if(!extension_loaded('memcache'))
         {
-            throw_exception(L('SYSTEM:module.not.loaded', array('memcache')));
+            throw_exception(language('SYSTEM:module.not.loaded', array('memcache')));
         }
         
         if(!isset($options['host'])) $options['host'] = getCfgVar('cfg_memcache_host') ? getCfgVar('cfg_memcache_host') : '127.0.0.1';

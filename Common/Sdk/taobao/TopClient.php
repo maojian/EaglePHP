@@ -20,6 +20,8 @@ class TopClient
 	
 	protected $is_open = null;
 	
+	protected $code = null;
+	
 	public function __construct(){
 	    $this->is_open = getCfgVar('cfg_taobao_isopen');
 	}
@@ -197,9 +199,9 @@ class TopClient
 		if (false === $respWellFormed)
 		{
 			//$this->logCommunicationError($sysParams["method"],$requestUrl,"HTTP_RESPONSE_NOT_WELL_FORMED",$resp);
-			$result->code = 0;
-			$result->msg = "HTTP_RESPONSE_NOT_WELL_FORMED";
-			return $result;
+			$this->code = 0;
+			$this->msg = "HTTP_RESPONSE_NOT_WELL_FORMED";
+			return $this;
 		}
 
 		//如果TOP返回了错误码，记录到业务错误日志中

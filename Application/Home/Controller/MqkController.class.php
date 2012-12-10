@@ -11,7 +11,7 @@ class MqkController extends Controller{
 	private $curModel = null;
 	
     public function __construct() {
-    	$this->curModel = M('mqk');
+    	$this->curModel = model('mqk');
     }
     
     public function indexAction(){

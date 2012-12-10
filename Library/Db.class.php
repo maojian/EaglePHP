@@ -6,7 +6,8 @@
  * @since 2012-2-1
  */
 
-class Db {
+class Db 
+{
 	
    	protected $linkID = '';
    	protected $queryID ='';
@@ -30,19 +31,25 @@ class Db {
 	/**
 	 * 返回数据库实例
 	 */
-	public static function getInstance($flag = __DEFAULT_DATA_SOURCE__){
+	public static function getInstance($flag = __DEFAULT_DATA_SOURCE__)
+	{
 	    $config = self::parseCfg($flag);
 	    $dbname = $config['dbname'];
 		static $_db_cache_ = array();
 		$name = "__DB_CACHE_{$flag}_{$dbname}__";
-		if(isset($_db_cache_[$name])){
+		if(isset($_db_cache_[$name]))
+		{
 			$db = $_db_cache_[$name];
-		}else{
+		}
+		else
+		{
 			// 优先采用系统配置中的数据库驱动器
 			$dbtype = (empty($flag)) ? getCfgVar('cfg_mysql_type') : $flag;
-			if(!in_array($dbtype, array('mysql', 'mysqli', 'pdo', 'oracle', 'sqlite'))){
+			if(!in_array($dbtype, array('mysql', 'mysqli', 'pdo', 'oracle', 'sqlite')))
+			{
 			    $dbtype = $config['dbtype'];
-     			if(in_array(strtolower($dbtype),array('mssql'),true)){
+     			if(in_array(strtolower($dbtype),array('mssql'),true))
+     			{
      				$dbtype = 'DbPdo';
      			}
 			}
@@ -57,37 +64,57 @@ class Db {
 			unset($config);
 		}
 		return $db;
-	} 
+	}
+	
+	
+	/**
+	 * 初始化数据库连接
+	 * 
+	 * @return void
+	 */
+	public function checkContent(){
+		if(!is_resource($this->linkID)){
+			$this->close();
+			$this->linkID = $this->connect();
+		}
+	}
+	
 	
 	/**
 	 * 返回数据库驱动器
 	 */
-	public function getDbDriver(){
+	public function getDbDriver()
+	{
 		return $this->dbDriver;
 	}
 	
 	/**
 	 * 返回当前数据库名称
 	 */
-	public function getDbName(){
+	public function getDbName()
+	{
 		return $this->dbName;
 	}
 	
 	/**
 	 * 返回数据库表前缀
 	 */
-	public function getTablePrefix(){
+	public function getTablePrefix()
+	{
 		return $this->tablePrefix;
 	}
 
    /**
     * 增加记录
     */
-    public function insert($data, $options){
+    public function insert($data, $options)
+    {
     	if(empty($data)) return false;
-   		foreach($data as $key => $val){
+   		foreach($data as $key => $val)
+   		{
     		$val = $this->setValue($val);
-    		if(is_scalar($val)){
+    		if(is_scalar($val))
+    		{
     			$fields[] = $this->setSign($key);
     			$values[] = $val;
     		}
@@ -103,11 +130,14 @@ class Db {
    /**
     * 修改记录
     */
-    public function update($data, $options){
+    public function update($data, $options)
+    {
     	if(empty($data)) return false;
-    	foreach($data as $key => $val){
+    	foreach($data as $key => $val)
+    	{
     		$val = $this->setValue($val);
-    		if(is_scalar($val)){
+    		if(is_scalar($val))
+    		{
     			$set[] = $this->setSign($key).'='.$val;
     		}
     	}
@@ -125,7 +155,8 @@ class Db {
    /**
     * 删除记录
     */
-    public function delete($options){
+    public function delete($options)
+    {
 		if(!isset($options['where'])) return false;
     	$sql = 'DELETE FROM '.
     			$this->setTable($options).
@@ -139,27 +170,34 @@ class Db {
    	/**
    	 * 查询记录
    	 */
-    public function select($options = array()){
+    public function select($options = array())
+    {
         $sql = $this->setSql($options);
         $cache = (isset($options['cache']) ? $options['cache'] : false);
-        if($cache){
+        if($cache)
+        {
             $key = (!empty($cache['key']) ? $cache['key'] : md5($sql));
-            $val = H($key, '', $cache['expire'], $cache['type']);
-            if($val !== false){
+            $val = cache($key, '', $cache['expire'], $cache['type']);
+            if($val !== false)
+            {
                 return $val;
             }
         }
         $data = $this->query($sql);
-        if($cache !== false && $data){
-            H($key, $data, $cache['expire'], $cache['type']);
+        if($cache !== false && $data)
+        {
+            cache($key, $data, $cache['expire'], $cache['type']);
         }
 		return $data;
     }
    
-    public function setWhere($options){
+    public function setWhere($options)
+    {
     	$where = isset($options['where']) ? $options['where'] : '';
-    	if($where){
-    		if(is_array($where)){
+    	if($where)
+    	{
+    		if(is_array($where))
+    		{
     			$where = implode(' AND ', $where);
     		}
     		$where = " WHERE {$where}";
@@ -171,18 +209,24 @@ class Db {
      * 定义表连接，为防止表名为数据库关键字，自动为表名添加`符号区分。
      * @param array $options
      */
-    public function setTable($options){
+    public function setTable($options)
+    {
         if(!isset($options['table'])) return '';
         $tableNames = $options['table'];
-        if(is_string($tableNames)){
+        if(is_string($tableNames))
+        {
             $tableNames = strtolower($tableNames);
             $tableNames = explode(',', $tableNames);
-            foreach ($tableNames as &$tableName){
+            foreach ($tableNames as &$tableName)
+            {
                 $tableName = !empty($this->tablePrefix) ? $this->tablePrefix.$tableName : $tableName;
                 $tableName = $this->setSign($tableName);
             }
-        }elseif(is_array($tableNames)){ //模型对象table方法传递数组为支持表别名定义，如：M('user')->table(array('user'=>'u', 'role'=>'r'))->select();
-            foreach ($tableNames as $tableName=>$alias){
+        }
+        elseif(is_array($tableNames))
+        { //模型对象table方法传递数组为支持表别名定义，如：model('user')->table(array('user'=>'u', 'role'=>'r'))->select();
+            foreach ($tableNames as $tableName=>$alias)
+            {
                 $tableName = !empty($this->tablePrefix) ? $this->tablePrefix.$tableName : $tableName;
                 $data[] = $this->setSign($tableName).' '.$alias;
             }
@@ -191,52 +235,65 @@ class Db {
     	return implode(',', $tableNames);
     }
     
-    public function setJoin($options){
+    public function setJoin($options)
+    {
     	$join = isset($options['join']) ? $options['join'] : '';
-    	if(!empty($join)){
-    		if(stripos($join, 'JOIN') === false){
+    	if(!empty($join))
+    	{
+    		if(stripos($join, 'JOIN') === false)
+    		{
     			$join = "LEFT JOIN {$join}";
     		}
 			return ' '.$join;
     	}
     }
     
-	public function setOrder($options) {
+	public function setOrder($options) 
+	{
 		return isset($options['order']) && ($order = $options['order']) ? " ORDER BY {$order} " : '';
 	}
 
-	public function setGroup($options) {
+	public function setGroup($options) 
+	{
 		return isset($options['group']) && ($group = $options['group']) ? " GROUP BY {$group} " : '';
 	}
 	
-	public function setHaving($options){
+	public function setHaving($options)
+	{
 		return isset($options['having']) && ($having = $options['having']) ? " HAVING {$having} " : '';
 	}
 
-	public function setLimit($options) {
+	public function setLimit($options) 
+	{
 	    $limit = isset($options['limit']) ? $options['limit'] : '';
-	    if(!empty($limit) && (is_numeric($limit) || is_string($limit))){
+	    if(!empty($limit) && (is_numeric($limit) || is_string($limit)))
+	    {
 	        return " LIMIT {$limit} ";
 	    }
 	}
 
-	public function setField($options) {
+	public function setField($options) 
+	{
 		return isset($options['field']) && ($field = $options['field']) ? $field : '*';
 	}
 	
-	public function setUnion($options){
+	public function setUnion($options)
+	{
 	    return isset($options['union']) && ($union = $options['union']) ? $union : '';
 	}
     
-    public function setLock($options){
+    public function setLock($options)
+    {
     	return isset($options['lock']) && ($options['lock'] === true) ? ' FOR UPDATE ' : '';
     }
     
-    public function serPrimary($options){
+    public function serPrimary($options)
+    {
        return isset($options['primary']) && ($primary = $options['primary']) ? $primary : '';
     }
     
-    public function setSql($options=array()){
+    public function setSql($options=array())
+    {
         return str_replace(
              array('#FIELDS#','#TABLE#','#JOIN#','#WHERE#','#GROUP#','#HAVING#','#ORDER#','#LIMIT#','#UNION#','#PRIMARY#','#LOCK#'), 
              array(
@@ -254,41 +311,72 @@ class Db {
              ), $this->replaceSql);
     }
 	
-	public function setValue(&$val){
-		if(is_string($val)){
-			$val = '\''.$val.'\'';
-		}elseif(is_null($val)){
+    
+    /**
+     * 值处理
+     * 
+     * @param string $val
+     * @return string
+     */
+	public function setValue(&$val)
+	{
+		if(is_string($val))
+		{
+			$val = '\''.$this->escapeStr($val).'\'';
+		}elseif(is_null($val))
+		{
 			$val = 'null';
-		}elseif(is_array($val) && array_key_exists('exp', $val)){
-		    $val = $val['exp'];
+		}
+		elseif(is_array($val) && array_key_exists('exp', $val))
+		{
+		    $val = $this->escapeStr($val['exp']);
 		}
 		return $val;
 	}
 	
-	public function setSign($val){
-		if(strtolower($this->dbDriver) == 'mysql'){
+	
+	/**
+	 * 为字段添加`符号，避免关键字引起歧义，只针对mysql处理
+	 * 
+	 * @param string $val
+	 * @return string
+	 */
+	public function setSign($val)
+	{
+		if(strtolower($this->dbDriver) == 'mysql')
+		{
 			$val = '`'.trim($val).'`';
 		}
 		return $val;
 	}
+	
     
     /**
      * 获得最近的错误信息
+     * 
+     * @return string
      */
-    public function getError(){
+    public function getError()
+    {
     	return $this->error;
     }
 
    
    /**
     * 解析数据库连接配置
+    * 
+    * @param string $flag
     */
-	protected static function parseCfg($flag){
-		$config = import('Config.DbConfig', false, ROOT_DIR);
-		if(array_key_exists($flag, $config)){
+	protected static function parseCfg($flag)
+	{
+		$config = import('Config.Database', false, ROOT_DIR);
+		if(isset($config[$flag]))
+		{
 			return $config[$flag];
-		}else{
-			throw_exception(L('SYSTEM:db.flag.not.exists', array($flag)));
+		}
+		else
+		{
+			throw_exception(language('SYSTEM:db.flag.not.exists', array($flag)));
 		}
 		return false;
 	}
@@ -296,13 +384,29 @@ class Db {
         
    /**
     * 获得最近执行的SQL语句
+    * 
+    * @return void
     */
-    public function getLastSql(){
+    public function getLastSql()
+    {
 		return $this->queryStr;
     }
     
-    public function getInsertID(){
+    public function getInsertID()
+    {
 		return $this->insertID;
+	}
+	
+	
+	/**
+	 * SQL特殊字符处理
+	 * 
+	 * @param string $str
+	 * @return string
+	 */
+	public function escapeStr($str)
+	{
+	    return ($str);
 	}
 
 	

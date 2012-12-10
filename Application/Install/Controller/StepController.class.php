@@ -65,13 +65,13 @@ class StepController extends Controller {
 	}
 
 	public function twoAction() {
-		if($_POST){
-			$hostname = $_POST['hostname'];
-			$port = $_POST['port'];
-			$database = $_POST['database'];
-			$username = $_POST['username'];
-			$password = $_POST['password'];
-			$dbprefix = $_POST['dbprefix'];
+		if($this->isPost()){
+			$hostname = $this->post('hostname');
+			$port = $this->post('port');
+			$database = $this->post('database');
+			$username = $this->post('username');
+			$password = $this->post('password');
+			$dbprefix = $this->post('dbprefix');
 			if($hostname == '' || $port == '' || $database == '' || $username == ''){
 				$this->assign('err_msg', '请填写完整.');
 			}else{
@@ -87,8 +87,8 @@ class StepController extends Controller {
 				    'dbprefix' => $dbprefix
 				);
 				
-				file_put_contents(CONF_DIR.'DbConfig.php', "<?php\r\n \$dbs=".var_export($dbs, true). ";\r\nreturn \$dbs; \r\n?>");
-				$model = M('Install');
+				file_put_contents(CONF_DIR.'Database.php', "<?php\r\n \$dbs=".var_export($dbs, true). ";\r\nreturn \$dbs; \r\n?>");
+				$model = model('Install');
 				
 				$databases = $model->query('SHOW DATABASES');
 				
@@ -113,7 +113,7 @@ class StepController extends Controller {
 	
 	
 	public function threeAction() {
-		$path = realpath(CONF_DIR.'DbConfig.php');
+		$path = realpath(CONF_DIR.'Database.php');
 		$file_content = highlight_file($path, true);
 		$this->assign('path', $path);
 		$this->assign('file_content', $file_content);
@@ -122,7 +122,7 @@ class StepController extends Controller {
 		
 	
 	public function fourAction() {
-		$install_model = M('install');
+		$install_model = model('install');
 		$db_name = $install_model->getDb()->getDbName();
 		$sql_content = file_get_contents(DATA_DIR.'Install/eaglephp.sql');
 		$sql_arr = array_filter(explode(";\n", $sql_content));
@@ -136,7 +136,7 @@ class StepController extends Controller {
 		
 		$table_arr = $install_model->query("SHOW TABLES FROM $db_name");
 		if(is_array($table_arr)){
-			$dbCfg = import('DbConfig', false, CONF_DIR);
+			$dbCfg = import('Database', false, CONF_DIR);
 			$dbPrefix = $dbCfg[__DEFAULT_DATA_SOURCE__]['dbprefix'];
 			
 			foreach($table_arr as $tab){

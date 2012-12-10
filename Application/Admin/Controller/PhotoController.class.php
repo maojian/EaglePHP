@@ -11,7 +11,7 @@ class PhotoController extends CommonController {
 	private $curModel;
 	
 	public function __construct(){
-		$this->curModel = M('photo');
+		$this->curModel = model('photo');
 	}
 	
 	
@@ -19,7 +19,7 @@ class PhotoController extends CommonController {
 	 * 获取相册
 	 */
 	protected function getAlbum(){
-		if($albums = M('album')->field('id,title')->select()){
+		if($albums = model('album')->field('id,title')->select()){
 			foreach($albums as $v){
 				$data[$v['id']] = $v['title'];
 			}
@@ -51,8 +51,8 @@ class PhotoController extends CommonController {
 	 * 添加
 	 */
 	public function addAction(){
-		if(count($_POST) > 0){
-			$_POST['uploadtime'] = date('Y-m-d H:i:s');
+		if($this->isPost()){
+			$_POST['uploadtime'] = Date::format();
 			$_POST['uid'] = $this->uid;
 			if($this->curModel->add()){
 				$this->ajaxReturn(200, '添加成功', '', 'closeCurrent');
@@ -69,15 +69,15 @@ class PhotoController extends CommonController {
 	 * 修改
 	 */
 	public function updateAction(){
-		if(count($_POST) > 0){
-			$_POST['uploadtime'] = date('Y-m-d H:i:s');
+		if($this->isPost()){
+			$_POST['uploadtime'] = Date::format();
 			if($this->curModel->save()){
 				$this->ajaxReturn(200, '修改成功', '', 'closeCurrent');
 			}else{
 				$this->ajaxReturn(300, '修改失败', '');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->curModel->where("id=$id")->find();
 			$this->assign('info',$info);
 			$this->assign('albums', $this->getAlbum());
@@ -89,7 +89,7 @@ class PhotoController extends CommonController {
 	 * 删除
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		$where = "id IN($ids)";
 		if(!empty($ids)){
 			$list = $this->curModel->field('original,middle,thumbnail')->where($where)->select();
@@ -121,7 +121,7 @@ class PhotoController extends CommonController {
 	 * 上传照片
 	 */
 	public function uploadAction(){
-		if(count($_POST) > 0 && count($_FILES) > 0){
+		if($this->isPost() && count($this->file()) > 0){
 			$_POST['title'] = substr($_FILES['Filedata']['name'], 0, strrpos($_FILES['Filedata']['name'], '.'));
 			
 			$uploadDir = getUploadAddr();
@@ -140,7 +140,7 @@ class PhotoController extends CommonController {
 			// 缩略图处理
 			if($fileName !== false){
 				$bigInfo = Image::thumb($uploadDir.$originalFile, $uploadDir.$middleFile, '', 500, 500); 
-				$thumbInfo = Image::thumb($uploadDir.$originalFile, $uploadDir.$thumbnailFile, '', $_POST['width'], $_POST['height']);
+				$thumbInfo = Image::thumb($uploadDir.$originalFile, $uploadDir.$thumbnailFile, '', $this->post('width'), $this->post('height'));
 				if($bigInfo !== false && $thumbInfo !== false){
 					$_POST['original'] = $originalFile;
 					$_POST['middle'] = $middleFile;
@@ -161,13 +161,13 @@ class PhotoController extends CommonController {
      * 图片裁剪
      */
     public function cutAction(){
-    	$id = (int)$_REQUEST['id'];
+    	$id = (int)$this->request('id');
 		$info = $this->curModel->where("id=$id")->find();
-    	if(count($_POST) > 0){
-    		$x = (int)$_POST['x'];
-    		$y = (int)$_POST['y'];
-    		$w = (int)$_POST['w'];
-    		$h = (int)$_POST['h'];
+    	if($this->isPost()){
+    		$x = (int)$this->post('x');
+    		$y = (int)$this->post('y');
+    		$w = (int)$this->post('w');
+    		$h = (int)$this->post('h');
     		$uploadDir = getUploadAddr();
     		$middleFile = $uploadDir.$info['middle'];
     		$thumbnailFile = $uploadDir.$info['thumbnail'];

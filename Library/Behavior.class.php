@@ -8,29 +8,32 @@ class Behavior {
     
     /**
      * 防刷机制
+     * 
+     * @return void
      */
     public static function checkRefresh()
     {
         $cfgRefreshTime = intval(getCfgVar('cfg_refresh_time'));
-        if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'GET' && $cfgRefreshTime > 0)
+        //$cfgRefreshTime = 10;
+        if($cfgRefreshTime > 0 && HttpRequest::getRequestMethod() == 'GET')
         {            
-            $pageUniqid = '_last_access_time_'.md5($_SERVER['REQUEST_URI']);
-            // 检查页面刷新间隔
-            if(time() < Cookie::get($pageUniqid))
+            $pageUniqid = '_last_access_time_'.md5(HttpRequest::getServer('REQUEST_URI'));
+            if(Date::getTimeStamp() < Cookie::get($pageUniqid)) // 检查页面刷新间隔
             {
-                // 页面刷新读取浏览器缓存
-                header('HTTP/1.1 304 Not Modified');
-                exit;
+                HttpResponse::sendHeader(304); // 页面刷新读取浏览器缓存
             }
             else
             {
-                // 缓存当前页面地址和访问时间
-                $time = $_SERVER['REQUEST_TIME']+$cfgRefreshTime;
+                $time = HttpRequest::getServer('REQUEST_TIME') + $cfgRefreshTime; // 缓存当前页面地址和访问时间
                 Cookie::set($pageUniqid, $time, false, $time);
             }
         }
     }
-    
-    
+    /*
+	    header('Last-Modified: '.Date::format('D,d M Y H:i:s').' GMT');
+        header('Cache-Control: max-age=600');
+        header('Expires: '.Date::format('D,d M Y H:i:s', Cookie::get($pageUniqid)).' GMT');
+        header('Date: '.Date::format('D,d M Y H:i:s').' GMT');
+     */
     
 }

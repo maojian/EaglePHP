@@ -4,7 +4,7 @@ class AlbumController extends CommonController{
     private $cur_model;   
  
     public function __construct(){
-        $this->cur_model = M('album');
+        $this->cur_model = model('album');
     }
     
     public function indexAction(){	
@@ -12,10 +12,10 @@ class AlbumController extends CommonController{
     	$total =  $this->cur_model->count();
     	$page = new Page(array ('total' =>$total, 'perpage' =>$perpage, 'url' => __ACTION__));
 		$list = $this->cur_model->order('id DESC')->limit("{$page->offset},{$perpage}")->select(array('cache'=>true));
-        $photo_model = M('photo');
+        $photo_model = model('photo');
 		foreach($list as &$val){
              $photo_info = $photo_model->field('thumbnail')->where("albumid={$val['id']}")->order('id DESC')->find();
-             $img = $photo_info['thumbnail'];
+             $img = ($photo_info) ? $photo_info['thumbnail'] : '';
              $val['img'] = ($img) ? __UPLOAD__.$img : __APP_RESOURCE__.'imgs/nopic.jpg';
         }
 		$this->assign('list', $list);

@@ -25,6 +25,7 @@ class VoteModel extends Model
 	    {
 	        $data = unserialize($info['content']);
 	        $attr = ($info['is_more'] == 1) ? 'type=\'checkbox\' name=\'voteitem[]\'' : 'type=\'radio\' name=\'voteitem\'';
+	        if(is_array($data))
 	        foreach ($data as $k=>$v)
 	        {
 	            $str .= "<tr><td height=30 bgcolor=#FFFFFF style='color:#666666'><input {$attr} value='{$k}' />{$v['name']}</td></tr>"; 

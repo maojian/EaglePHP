@@ -22,9 +22,14 @@ class Model {
    	
    		
 	/**
-   	 * 初始化数据连接
-   	 */
-   	public static function getModel($name='', $flag=''){
+	 * 初始化数据连接
+	 * 
+	 * @param string $name
+	 * @param string $flag
+	 * @return object
+	 */
+   	public static function getModel($name='', $flag='')
+   	{
    		static $m_cache = array();
    		$cacheName = "__{$flag}_{$name}_Model__";
 		if(!isset($m_cache[$cacheName])){
@@ -55,8 +60,12 @@ class Model {
    	
 	/**
 	 * 魔术方法，针对特定的方法进行处理
+	 * 
+	 * @param string $method
+	 * @param array $args
 	 */
-	public function __call($method, $args){
+	public function __call($method, $args)
+	{
 		$name = strtolower($method);
 		$arg = isset($args[0]) ? $args[0] : '';
 		if(in_array($name, array('where', 'table', 'join', 'order', 'group', 'limit', 'having', 'field', 'lock'), true)){
@@ -90,15 +99,18 @@ class Model {
 	}
 	
 	
-	public function __set($name, $value){
+	public function __set($name, $value)
+	{
 		$this->data[$name] = $value;
 	}
 	
-	public function __get($name){
+	public function __get($name)
+	{
 		return isset($this->data[$name]) ? $this->data[$name] : null;
 	}
 	
-	public function getFieldList($tableName=''){
+	public function getFieldList($tableName='')
+	{
 	    return $this->_checkTableInfo($tableName);
 	}
 	
@@ -106,7 +118,8 @@ class Model {
 	/**
 	 * 统计查询
 	 */
-	protected function totalSelect($field, $where=''){
+	protected function totalSelect($field, $where='')
+	{
 		if(empty($where) && isset($this->options['where'])){
 			$where = $this->options['where'];
 		}
@@ -138,7 +151,8 @@ class Model {
 	/**
 	 * 自动提取表单中的查询条件封装成where语句
 	 */
-	protected function _autoWhereMode(){
+	protected function _autoWhereMode()
+	{
 		static $w_cache = array();
 		$cache_name = '__AUTO_WHERE_MODE_STR__'; 
 		if(isset($w_cache[$cache_name])){
@@ -174,7 +188,8 @@ class Model {
 	/**
 	 * 数据类型转换
 	 */
-	protected function _packWhere($type, $field, $val, $isLike = true){
+	protected function _packWhere($type, $field, $val, $isLike = true)
+	{
 		if(strpos($type, 'int') !== false){
 			$sql = $field .'='. (int)$val;
 		}elseif(in_array($type, array('float', 'double'))){
@@ -192,7 +207,8 @@ class Model {
 	 * 获得表单提交的参数
 	 * @return array
 	 */
-	protected function _getFormParams(){
+	protected function _getFormParams()
+	{
 		$params = array();
 		switch (HttpRequest::getRequestMethod())
 		{
@@ -209,7 +225,8 @@ class Model {
 	/**
 	 * 设置数据
 	 */
-	protected function _setData($data=''){
+	protected function _setData($data='')
+	{
 		if(empty($this->fields)){
 			$this->_checkTableInfo();
 		}
@@ -238,15 +255,17 @@ class Model {
 	/**
 	 * 获取表信息
 	 */
-	protected function _checkTableInfo($tableName = ''){
+	protected function _checkTableInfo($tableName = '')
+	{
 		$tableName = ($tableName) ? $tableName : $this->_getTableName();
-		$this->fields = F("{$this->fieldPath}{$tableName}");
+		$this->fields = fileRW("{$this->fieldPath}{$tableName}");
 		if(!$this->fields)
 			$this->_getFields($tableName);
 		return $this->fields;
 	}
 	
-	protected function _getPk(){
+	protected function _getPk()
+	{
 	    $this->_checkTableInfo();
 		return (isset($this->fields['_pk'])) ? $this->fields['_pk'] : $this->pk;
 	}
@@ -255,7 +274,8 @@ class Model {
 	/**
 	 * 获取当前数据对象名称
 	 */
-	protected function _getModelName(){
+	protected function _getModelName()
+	{
 		if(empty($this->name)){
 			$this->name = ucfirst(substr(get_class($this), 0, -5));
 		}
@@ -265,7 +285,8 @@ class Model {
 	/**
 	 * 获取当前模型对象映射表名
 	 */
-	protected function _getTableName(){
+	protected function _getTableName()
+	{
 		$this->tableName = $this->tablePrefix.strtolower($this->name);
 		return $this->tableName;
 	}
@@ -273,14 +294,16 @@ class Model {
 	/**
 	 * 获取数据库db对象
 	 */
-	public function getDb(){
+	public function getDb()
+	{
 		return $this->db;
 	}
 	
 	/**
 	 * 获取字段信息，如果信息不存在，则查询数据库自动缓存
 	 */
-	public function _getFields($tableName){
+	public function _getFields($tableName)
+	{
 		$fields = $this->db->fields(($tableName));
 		if(!empty($fields)){
 		    //$this->map = array_keys($fields);
@@ -295,14 +318,15 @@ class Model {
     			}
     		}
     		$this->fields['_type'] = $type;
-    		F("{$this->fieldPath}{$tableName}", $this->fields);
+    		fileRW("{$this->fieldPath}{$tableName}", $this->fields);
     		return $this->fields; 
 		}else{
 		    return false;
 		}
 	}
 	
-	protected function _getOptions($options=array()){
+	protected function _getOptions($options=array())
+	{
 		if(is_array($options))
 			$options = array_merge($this->options, $options);
 
@@ -316,28 +340,41 @@ class Model {
 	/**
 	 * 新增数据前的回调方法
 	 */
-    protected function _beforeAdd(&$data, $options){}
+    protected function _beforeAdd(&$data, $options)
+    {
+    
+    }
 	
     /**
      * 新增数据后的回调方法
      */
-	protected function _afterAdd(&$data, $options){}
+	protected function _afterAdd(&$data, $options)
+	{
+	
+	}
 	
 	/**
 	 * 修改数据前的回调方法
 	 */
-	protected function _beforeUpdate(&$data, $options){}
+	protected function _beforeUpdate(&$data, $options)
+	{
+	
+	}
 	
 	/**
 	 * 修改数据后的回调方法
 	 */
-	protected function _afterUpdate(&$data, $options){}
+	protected function _afterUpdate(&$data, $options)
+	{
+	
+	}
 	
 	
 	/**
 	 * 增加
 	 */
-	public function add($data='', $options = array()){
+	public function add($data='', $options = array())
+	{
 		$data = $this->_setData($data);
 		if($this->_beforeAdd($data, $options) === false)return false;
 		$result = $this->db->insert($data, $this->_getOptions($options));
@@ -355,7 +392,8 @@ class Model {
 	/**
 	 * 替换 
 	 */
-	public function replace($data='', $options=array()){
+	public function replace($data='', $options=array())
+	{
 		$options['replace'] = true;
 		return $this->add($data, $options);
 	}
@@ -363,7 +401,8 @@ class Model {
 	/**
 	 * 修改
 	 */
-	public function save($data='', $options = array()){
+	public function save($data='', $options = array())
+	{
 		$data = $this->_setData($data);
 		if($this->_beforeUpdate($data, $options) === false) return false;
 		$options = $this->_getOptions($options);
@@ -386,7 +425,8 @@ class Model {
 	/**
 	 * 删除
 	 */
-	public function delete($options = array()){
+	public function delete($options = array())
+	{
 		$data = $this->_setData();
 		// 如果传递的值为空，则删除数据对象中的对应的记录
 		if(empty($options) && empty($this->options)){
@@ -404,7 +444,8 @@ class Model {
 	/**
 	 * 查询
 	 */
-	public function select($options = array()){
+	public function select($options = array())
+	{
 
 	    if(in_array($this->db->getDbDriver(), array('sqlsrv', 'mssql'))){
 	      $options['primary'] = $this->_getPk(); // 在此获取主键是为了兼容sql server 2000的分页模式。
@@ -422,7 +463,8 @@ class Model {
 	/**
 	 * 查找一条
 	 */
-	public function find($options = array()){
+	public function find($options = array())
+	{
 		$this->options['limit'] = 1;
 		$result = $this->db->select($this->_getOptions($options));
 		if($result === false){
@@ -435,41 +477,49 @@ class Model {
 		return $this->data;
 	}
 	
-	public function query($sql){
+	public function query($sql)
+	{
 		if(empty($sql)) return false;
 		$sql = str_replace('#__', $this->tablePrefix, $sql);
 		return $this->db->query($sql);
 	}
 	
-	public function execute($sql){
+	public function execute($sql)
+	{
 		if(empty($sql)) return false;
 		$sql = str_replace('#__', $this->tablePrefix, $sql);
 		return $this->db->execute($sql);
 	}
 	
-	public function getLastSql(){
+	public function getLastSql()
+	{
 		return $this->db->getLastSql();
 	}
 	
-	public function getInsertID(){
+	public function getInsertID()
+	{
 		return $this->db->getInsertID();
 	}
 	
-	public function getDbError(){
+	public function getDbError()
+	{
 		return $this->db->error();
 	}
 	
-	public function startTrans(){
+	public function startTrans()
+	{
 		$this->db->commit();
 		$this->db->startTrans();
 		return;
 	}
 	
-	public function commit(){
+	public function commit()
+	{
 		return $this->db->commit();
 	}
 	
-	public function rollback(){
+	public function rollback()
+	{
 		return $this->db->rollback();
 	}
 

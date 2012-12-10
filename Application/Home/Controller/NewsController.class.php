@@ -5,16 +5,16 @@ class NewsController extends CommonController{
 	private $curModel = null;
     
     public function __construct(){
-    	$this->curModel = M('news');
+    	$this->curModel = model('news');
     }
 	
 	/**
 	 * 新闻列表页
 	 */
     public function indexAction(){
-        $type_id = (int)$this->getParameter('type');
+        $type_id = (int)$this->get('type');
         if($type_id){
-            $type_info = M('news_type')->field('title')->where("id=$type_id")->find();
+            $type_info = model('news_type')->field('title')->where("id=$type_id")->find();
             $this->assign('type_name', $type_info['title']);
             $this->assign('title', $type_info['title']);
         }else{
@@ -26,13 +26,13 @@ class NewsController extends CommonController{
     
     
     public function getDataAction(){
-        $id = (int)$this->getParameter('id');
+        $id = (int)$this->get('id');
         $this->curModel->where("id=$id")->save(array('clicknum'=>array('exp'=>'clicknum+1')));
         
-        $list = M('comment')->field('id,name,content,create_time,email')->where("news_id=$id")->order('id DESC')->select();
+        $list = model('comment')->field('id,name,content,create_time,email')->where("news_id=$id")->order('id DESC')->select();
         $html = null;
         if(is_array($list)){
-            $helper = M('helper');
+            $helper = model('helper');
             foreach ($list as $val){
                  $img = $helper->getGravatarByEmail($val['email'], $val['id']);
                  $html .= '<li '.((intval($val['id'])%2 == 0) ? 'class="style2"' : '').'>
@@ -89,7 +89,7 @@ class NewsController extends CommonController{
      * 新闻内容页
      */
     public function showAction(){
-    	$id = (int)$this->getParameter('id');
+    	$id = (int)$this->get('id');
     	$info = $this->curModel->field('id,type,title,content,create_time,keywords,auth,source,description')->where("id=$id")->find();
     	if($info){
     	    $title = $info['title'];
@@ -102,7 +102,7 @@ class NewsController extends CommonController{
         	// 文章内容分页
         	if($total > 0)
         	{
-        	    $page = intval($this->getParameter('page'));
+        	    $page = intval($this->get('page'));
         	    $page = ($page > $total) ? 1 : $page;
         	    $page = ($page == 0) ? 1 : $page;
         	    $info['content'] = $contentArr[$page-1];
@@ -112,8 +112,8 @@ class NewsController extends CommonController{
     		
     		// 获取父节点类型
     		$type_id = (int)$info['type'];
-    		$type_arr = M('news_type')->field('id,title,parent')->select();
-            $parent_arr = M('helper')->getParent($type_id, $type_arr);
+    		$type_arr = model('news_type')->field('id,title,parent')->select();
+            $parent_arr = model('helper')->getParent($type_id, $type_arr);
             
     		$this->assign('type_arr', array_reverse($parent_arr, true));
     		$this->assign('type_info', array('id'=>$type_id, 'title'=>$parent_arr[$type_id]));
@@ -141,10 +141,10 @@ class NewsController extends CommonController{
     public function commentAction()
     {
         if(HttpRequest::isAjaxRequest()){
-             $yzm = $this->getParameter('yzm');
-             $content = $this->getParameter('content');
-             $news_id = $this->getParameter('news_id');
-             $name = $this->getParameter('name');
+             $yzm = $this->post('yzm');
+             $content = $this->post('content');
+             $news_id = $this->post('news_id');
+             $name = $this->post('name');
              if(Session::get('verify') != md5($yzm)){
                  $this->ajaxReturn(300, '验证码错误，请重新输入！');
              }
@@ -153,14 +153,14 @@ class NewsController extends CommonController{
              }
              $_POST['ip'] = HttpRequest::getClientIP();
              $_POST['create_time'] = Date::format();
-             if($id = M('comment')->add()){
-                 $helper = M('helper');
+             if($id = model('comment')->add()){
+                 $helper = model('helper');
                  $this->curModel->where("id={$news_id}")->save(array('comments'=>array('exp'=>'comments+1')));
-                 $img = $helper->getGravatarByEmail($_POST['email'], $id);
+                 $img = $helper->getGravatarByEmail($this->post('email'), $id);
                  $html = '<li '.((intval($id)%2 == 0) ? 'class="style2"' : '').'>
                  <img alt="" src="'.$img.'">
                  <div class="info">
-                 <h4><a>'.$name.'</a> <span class="time">'.$_POST['create_time'].'</span></h4>'.$content.'</div>
+                 <h4><a>'.$name.'</a> <span class="time">'.$this->post('create_time').'</span></h4>'.$content.'</div>
                  <div class="clear"></div>
                  </li>';
                  $this->ajaxReturn(200, $html);

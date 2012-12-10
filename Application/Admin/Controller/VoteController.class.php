@@ -12,7 +12,7 @@ class VoteController extends CommonController{
     public function __construct(){
         $this->state_arr = array(0=>'开启', 1=>'关闭');
         $this->more_arr = array(0=>'单选', 1=>'多选');
-		$this->cur_model = M('vote');
+		$this->cur_model = model('vote');
 	}
     
 	public function indexAction()
@@ -52,21 +52,21 @@ class VoteController extends CommonController{
 	    {
 	        if(stripos($k, 'option_') !== false && !empty($v))
 	        {
-	            $data[] = array('name'=>$v, 'count'=>$_POST['count_'.substr($k, 7)]);
+	            $data[] = array('name'=>$v, 'count'=>$this->post('count_'.substr($k, 7)));
 	        }
 	    }
-	    $_POST['start_time'] = strtotime($_POST['start_time']);
-	    $_POST['end_time'] = strtotime($_POST['end_time']);
+	    $_POST['start_time'] = strtotime($this->post('start_time'));
+	    $_POST['end_time'] = strtotime($this->post('end_time'));
 	    $_POST['content'] = serialize($data);
 	}
 	
 
 	public function addAction()
 	{
-		if(count($_POST) > 0)
+		if($this->isPost())
 		{
 		    $this->dataHandle();
-			if($id = $this->cur_model->add())
+			if($id = $this->cur_model->add($_POST))
 			{
 			    $this->cur_model->getJs($id);
 				$this->ajaxReturn(200, '添加成功');
@@ -87,12 +87,12 @@ class VoteController extends CommonController{
 
 	public function updateAction()
 	{
-		if(count($_POST) > 0)
+		if($this->isPost())
 		{
 		    $this->dataHandle();
-			if($this->cur_model->save())
+			if($this->cur_model->save($_POST))
 			{	
-			    $this->cur_model->getJs($_POST['id']);
+			    $this->cur_model->getJs($this->post('id'));
 				$this->ajaxReturn(200, '修改成功');
 			}
 			else
@@ -102,7 +102,7 @@ class VoteController extends CommonController{
 		}
 		else
 		{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->cur_model->where("id=$id")->find();
 			if($info) $this->assign('options', unserialize($info['content']));
 			$this->assign('info', $info);
@@ -114,7 +114,7 @@ class VoteController extends CommonController{
 
 	public function deleteAction()
 	{
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		if(!empty($ids) && $this->cur_model->where("id IN($ids)")->delete())
 		{
 		    $idArr = explode(',', $ids);
@@ -141,7 +141,7 @@ class VoteController extends CommonController{
 	 */
 	public function getCodeAction()
 	{
-	    $id = (int)$_GET['id'];
+	    $id = (int)$this->request('id');
 	    $this->assign('js', $this->cur_model->getJs($id));
 	    $this->assign('html', $this->cur_model->getHtml($id));
 	    $this->display();

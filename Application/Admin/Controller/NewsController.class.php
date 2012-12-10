@@ -13,10 +13,10 @@ class NewsController extends CommonController {
 	const __IMG_REGEXP__ = '/<img.*?\"([^\"]*(jpg|bmp|jpeg|gif|png)).*?>/i';
 	
 	public function __construct(){
-		$this->news_model = M('news');
+		$this->news_model = model('news');
 		$this->uid = (int)$_SESSION[SESSION_USER_NAME]['uid'];
-		$userInfo = M('manager')->field('channel_ids')->where("uid={$this->uid}")->find();
-		$this->types = M('helper')->getNewsTypeList($userInfo['channel_ids'], $this->channelIdArr);
+		$userInfo = model('manager')->field('channel_ids')->where("uid={$this->uid}")->find();
+		$this->types = model('helper')->getNewsTypeList($userInfo['channel_ids'], $this->channelIdArr);
 	}
 
 	
@@ -35,7 +35,7 @@ class NewsController extends CommonController {
 		$page = $this->page($this->news_model->where($sql)->where(true)->count());
 		$news = $this->news_model->where($sql)->where(true)->order($page['orderFieldStr'])->limit("{$page['limit']},{$page['numPerPage']}")->select();
 		if(is_array($news)){
-			$manager_model = M('manager');
+			$manager_model = model('manager');
 			foreach($news as &$n){
 				$n['type'] = str_replace('&nbsp;', '', $this->types[$n['type']]);
 				$manager_info = $manager_model->field('username')->where("uid={$n['create_uid']}")->find();
@@ -58,19 +58,19 @@ class NewsController extends CommonController {
 	    $cfg_arc_autokeyword = getCfgVar('cfg_arc_autokeyword');
 	    
 	    $host = HttpRequest::getHttpHost();
-	    $title = $this->getParameter('title');
-	    $remote = $this->getParameter('remote');
-	    $type = $this->getParameter('type');
-	    $autolitpic = $this->getParameter('autolitpic');
-	    $dellink = $this->getParameter('dellink');
-	    $needwatermark = $this->getParameter('needwatermark');
-	    $content = html_entity_decode($this->getParameter('content'));
-	    $keywords = $this->getParameter('keywords');
-	    $description = $this->getParameter('description');
-	    $vote_id = (int)$this->getParameter('orgLookup_id');
+	    $title = $this->post('title');
+	    $remote = $this->post('remote');
+	    $type = $this->post('type');
+	    $autolitpic = $this->post('autolitpic');
+	    $dellink = $this->post('dellink');
+	    $needwatermark = $this->post('needwatermark');
+	    $content = html_entity_decode($this->post('content'));
+	    $keywords = $this->post('keywords');
+	    $description = $this->post('description');
+	    $vote_id = (int)$this->post('orgLookup_id');
 	    
 	    if(!is_null($this->channelIdArr) && !in_array($type, $this->channelIdArr)){
-	        $this->ajaxReturn(300, L('NEWS:type.error'));
+	        $this->ajaxReturn(300, language('NEWS:type.error'));
 	    }
 	    
 	    $matchs = array();
@@ -127,15 +127,16 @@ class NewsController extends CommonController {
 	    
 	    // 检查标题长度
 	    if(mb_strlen($title, 'utf-8') > $cfg_title_maxlen){
-	       $this->ajaxReturn(300, L('NEWS:max.length.limit', array($cfg_title_maxlen)));
+	       $this->ajaxReturn(300, language('NEWS:max.length.limit', array($cfg_title_maxlen)));
 	    }
 	    
 	    // 检查标题是否重复
 	    if($cfg_check_title == 1){
 	       $sql = "title='{$title}'";
-	       $sql .= ($_POST['id']) ? " AND id!={$_POST['id']} " : '';
+	       $id = $this->post('id');
+	       $sql .= $id ? " AND id!=$id " : '';
 	       if($this->news_model->field('id')->where($sql)->find()){
-	           $this->ajaxReturn(300, L('NEWS:title.exists'));
+	           $this->ajaxReturn(300, language('NEWS:title.exists'));
 	       }
 	    }
 	    
@@ -230,7 +231,7 @@ class NewsController extends CommonController {
 	    // 插入投票
 	    if($vote_id > 0)
 	    {
-            $scriptJs = M('vote')->getJs($vote_id);
+            $scriptJs = model('vote')->getJs($vote_id);
             $_POST['content'] .= "<!--插入投票start-->\r\n{$scriptJs}\r\n<!--插入投票end-->\r\n";
 	    }
 	    
@@ -242,24 +243,24 @@ class NewsController extends CommonController {
 	 * @param string $url
 	 */
 	public function pickAction(){
-	    $url = $this->getParameter('url');
+	    $url = $this->post('url');
 	    if(empty($url)){
-	        $this->ajaxReturn(300, L('NEWS:url.empty'));
+	        $this->ajaxReturn(300, language('NEWS:url.empty'));
 	    }
 	    $url_info = parse_url($url);
 	    $host = $url_info['host'];
 	    if(empty($host)){
-	        $this->ajaxReturn(300, L('NEWS:url.error'));
+	        $this->ajaxReturn(300, language('NEWS:url.error'));
 	    }
 	    
 	    $content = curlRequest($url);
 	    
 	    if($content === false){
-	        $this->ajaxReturn(300, L('NEWS:url.not.open'));
+	        $this->ajaxReturn(300, language('NEWS:url.not.open'));
 	    }
 	    
 	    // 提取采集规则进行内容匹配
-	    $pick_info = M('pick')->field('lang,rule')->where("url LIKE '%{$host}%'")->find();
+	    $pick_info = model('pick')->field('lang,rule')->where("url LIKE '%{$host}%'")->find();
 	    if($pick_info){
     	    $rule_arr = explode('{@body}', $pick_info['rule']);
     	    $sw = $rule_arr[0];
@@ -272,15 +273,15 @@ class NewsController extends CommonController {
 	    // 标题
 	    $matches = array();
 	    preg_match_all('/<title>(.*)<\/title>/isU', $content, $matches);
-	    $data['title'] = $matches[1][0];
+	    $data['title'] = isset($matches[1][0]) ? $matches[1][0] : '';
 	    
 	    // 关键字
 	    preg_match_all('/<meta[\s]+name=[\'"]keywords[\'"] content=[\'"](.*)[\'"]/isU', $content, $matches);
-	    $data['keywords'] = $matches[1][0];
+	    $data['keywords'] = isset($matches[1][0]) ? $matches[1][0] : '';
 	    
 	    // 描述
 	    preg_match_all('/<meta[\s]+name=[\'"]description[\'"] content=[\'"](.*)[\'"]/isU', $content, $matches);
-	    $data['description'] = $matches[1][0];
+	    $data['description'] = isset($matches[1][0]) ? $matches[1][0] : '';
 	    
 	    if($sw != '' && $ew!=''){
 	        $start = strpos($content, $sw);
@@ -309,14 +310,14 @@ class NewsController extends CommonController {
 			$_POST['create_uid'] = $this->uid;
 			$_POST['clicknum'] = 0;
 			if($news_id = $this->news_model->add()){
-			    //M('helper')->weblogUpdates($this->news_model->getHref($news_id));
+			    //model('helper')->weblogUpdates($this->news_model->getHref($news_id));
 			    $this->news_model->makeHtml($news_id);
-				$this->ajaxReturn(200, L('PUBLIC:add.success'), '', 'closeCurrent');
+				$this->ajaxReturn(200, language('PUBLIC:add.success'), '', 'closeCurrent');
 			}else{
-				$this->ajaxReturn(300, L('PUBLIC:add.failure'));
+				$this->ajaxReturn(300, language('PUBLIC:add.failure'));
 			}
 		}else{
-		    $mark_info = F('_mark/watermark');
+		    $mark_info = fileRW('_mark/watermark');
 		    $this->assign('needwatermark', $mark_info['upload']);
 			$this->assign('username', $_SESSION[SESSION_USER_NAME]['username']);
 			$this->assign('types', $this->types);
@@ -330,25 +331,24 @@ class NewsController extends CommonController {
 	 * 修改用户
 	 */
 	public function updateAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 		    $this->checkText();
 			$_POST['update_time'] = date('Y-m-d H:i:s');
 			if($this->news_model->save()){
-			    $news_id = $this->getParameter('id');
-			    //M('helper')->weblogUpdates($this->news_model->getHref($news_id));
+			    $news_id = $this->post('id');
+			    //model('helper')->weblogUpdates($this->news_model->getHref($news_id));
 			    $this->news_model->makeHtml($news_id);
-				$this->ajaxReturn(200, L('PUBLIC:update.success'), '', 'closeCurrent');
+				$this->ajaxReturn(200, language('PUBLIC:update.success'), '', 'closeCurrent');
 			}else{
-				$this->ajaxReturn(300, L('PUBLIC:update.failure'), '');
+				$this->ajaxReturn(300, language('PUBLIC:update.failure'), '');
 			}
 		}else{
-			$news_id = (int)$this->getParameter('id');
+			$news_id = (int)$this->get('id');
 			$typeIdSql = $this->getTypeIdSql();
 		    $sql = $typeIdSql ? " AND $typeIdSql" : '';
 			$news_info = $this->news_model->where("id=$news_id {$sql}")->find();
-			$manager_info = M('manager')->field('username')->where("uid={$news_info['create_uid']}")->find();
+			$manager_info = model('manager')->field('username')->where("uid={$news_info['create_uid']}")->find();
 			$news_info['create_username'] = $manager_info['username'];
-			
 			$this->assign('news_info', $news_info);
 			$this->assign('types', $this->types);
 			$this->assign('PHPSESSID', session_id());
@@ -361,7 +361,7 @@ class NewsController extends CommonController {
     public function makeHtmlAction(){
         //set_time_limit(0);
 		ini_set('max_execution_time', 0);
-        $this->ajaxReturn(200, L('NEWS:update.file.count', array(M('news')->makeAllHtml())));
+        $this->ajaxReturn(200, language('NEWS:update.file.count', array(model('news')->makeAllHtml())));
     }
 	
 	
@@ -369,7 +369,7 @@ class NewsController extends CommonController {
 	 * 删除用户
 	 */
 	public function deleteAction(){
-		$ids = $this->getParameter('ids');
+		$ids = $this->request('ids');
 		$cfg_upload_switch = getCfgVar('cfg_upload_switch');
 		$typeIdSql = $this->getTypeIdSql();
 		$sql = "id IN($ids)".($typeIdSql ? " AND $typeIdSql" : '');
@@ -398,15 +398,15 @@ class NewsController extends CommonController {
      	        $this->news_model->delHtml($val);
     		    
     	    }
-    		$msg = L('NEWS:delete.img.file', array($i));
+    		$msg = language('NEWS:delete.img.file', array($i));
 		}
 		
 		if(!empty($ids) && $this->news_model->where($sql)->delete()){
 		    // 同时删除该文章下的评论
-		    M('comment')->where("news_id IN($ids)")->delete();
-			$this->ajaxReturn(200, L('PUBLIC:delete.success').$msg);
+		    model('comment')->where("news_id IN($ids)")->delete();
+			$this->ajaxReturn(200, language('PUBLIC:delete.success').$msg);
 		}else{
-			$this->ajaxReturn(300, L('PUBLIC:delete.failure'));
+			$this->ajaxReturn(300, language('PUBLIC:delete.failure'));
 		}
 	}
 	
@@ -418,8 +418,8 @@ class NewsController extends CommonController {
 		$data[0] = array('编号', '标题', '内容', '类型', '创建时间', '创建者', '修改时间', '排序值', '点击数','评论数','图片路径','关键字','作者','来源','简介');
 		$news = $this->news_model->where($this->getTypeIdSql())->where(true)->limit(10000)->order('id DESC')->select();
 		if(is_array($news)){
-			$manager_model = M('manager');
-			$news_type_model = M('news_type');
+			$manager_model = model('manager');
+			$news_type_model = model('news_type');
 			foreach($news as &$n){
 				$typeInfo = $news_type_model->field('title')->where("id={$n['type']}")->find();
 				$n['type'] = $typeInfo['title'];
@@ -438,9 +438,9 @@ class NewsController extends CommonController {
 	 * 上传文件
 	 */
 	public function uploadAction(){
-		if(count($_POST) > 0 && count($_FILES) > 0){
-			$immediate = (int)$this->getParameter('immediate');
-			$target = $this->getParameter('target');
+		if($this->isPost() && count($this->file()) > 0){
+			$immediate = (int)$this->post('immediate');
+			$target = $this->post('target');
 			$dir_arr = $this->getUploadDir($target);
 			$fileName = $this->upload($dir_arr['uploadDir'], '*');
 			$url = (($immediate) ? '!' : '' ).__UPLOAD__.$dir_arr['imgDir'].$fileName;

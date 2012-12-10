@@ -23,7 +23,7 @@ class Cache{
          $class = 'Cache'.ucfirst($type);
          if(!class_exists($class))
          {
-             throw_exception(L('SYSTEM:class.not.exists', array($class, 'getInstance')));
+             throw_exception(language('SYSTEM:class.not.exists', array($class, 'getInstance')));
          }
          $cache_class = new $class($options);
          return $cache_class;

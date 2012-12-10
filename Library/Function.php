@@ -4,9 +4,79 @@
  * EaglePHP框架系统公共函数库
  * 
  * @author maojianlw@139.com
- * @since 1.8 - 2012-05-31
+ * @since 2.3 - 2012-11-27
  * @link www.eaglephp.com
  */
+
+
+/**
+ * 显示404页面
+ * 
+ * @return void
+ */
+function show_404()
+{
+    if(!__CLI__) //非命令行模式
+    {
+        $html = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+                 <HTML><HEAD>
+                 <TITLE>404 Not Found</TITLE>
+                 </HEAD><BODY>
+                 <H1>Not Found</H1>
+                 The requested URL '.HttpRequest::getServer('REQUEST_URI').' was not found on this server.<P>
+                 <HR>
+                 <ADDRESS>Web Server at '.HttpRequest::getHttpHost().' Port '.HttpRequest::getServerPort().'</ADDRESS>
+                 </BODY></HTML>';
+        echo $html;
+        HttpResponse::sendHeader(404);
+    }
+    exit('404 Not Found');
+}
+
+
+/**
+ * 删除不可见字符
+ * @param string $str
+ * @param bool $urlEncoded
+ * @return string
+ */
+function removeInvisibleCharacters($str, $urlEncoded = true)
+{
+    $invisibleArr = array();
+    if($urlEncoded)
+    {
+        $invisibleArr[] = '/%0[0-8bcef]/';	// url encoded 00-08, 11, 12, 14, 15
+        $invisibleArr[] = '/%1[0-9a-f]/';	// url encoded 16-31
+    }
+    $invisibleArr[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S';	// 00-08, 11, 12, 14-31, 127
+    do
+    {
+        $str = preg_replace($invisibleArr, '', $str, -1, $count);
+    }
+    while ($count);
+    
+    return $str;
+}
+
+
+/**
+ * html特殊字符转码
+ * @param mixed $var
+ * @return mixed
+ */
+function htmlEscape($var)
+{
+    if(is_array($var))
+    {
+        return array_map('htmlEscape', $var);
+    }
+    else
+    {
+        return htmlspecialchars($var, ENT_QUOTES);
+    }
+}
+
+
 
 /**
  * 跳转至指定的路径
@@ -15,17 +85,18 @@
  * @param string $msg 页面显示的提示信息
  * @return void 直接退出
  */
-function redirect($url, $time = 0, $msg = '') {
-	if (!headers_sent()) {
-		header($time > 0 ? "refresh:{$time};url={$url}" : "Location:{$url}");
-	} else {
+function redirect($url, $time = 0, $msg = '') 
+{
+    $html = $meta = null;
+	if (!HttpResponse::isSendHeader()) 
+	{
+		HttpResponse::sendContentHeader($time > 0 ? "refresh:{$time};url={$url}" : "Location:{$url}");
+	} 
+	else 
+	{
 		$meta = "<meta http-equiv=refresh content={$time};URL={$url}>";
 	}
-
-	if ($time > 0) {
-		$html = template(L('SYSTEM:auto.jump.tips', array($msg, $time)));
-	}
-	
+	if ($time > 0) $html = template(language('SYSTEM:auto.jump.tips', array($msg, $time)));
 	exit ($html . $meta);
 }
 
@@ -33,7 +104,8 @@ function redirect($url, $time = 0, $msg = '') {
 /**
  * 提示信息模板
  */
-function template($message, $title='Notice'){
+function template($message, $title='Notice')
+{
     $message = nl2br($message);
     $copyright = getCfgVar('cfg_webname');
     $html = <<<EOT
@@ -64,7 +136,8 @@ EOT;
 /**
  * 格式化输出，一般用于调试跟踪
  */
-function dump($vars, $label = null, $return = false) {
+function dump($vars, $label = null, $return = false) 
+{
 	if (ini_get('html_errors')) {
 		$content = "<pre>\n";
 		if ($label !== null && $label !== '') {
@@ -94,17 +167,23 @@ function dump($vars, $label = null, $return = false) {
  * @param string $path
  * @param bool or string $ext
  * @param string $baseUrl
+ * @return mixed
  */
-function import($path, $ext = true, $baseUrl = COM_DIR) {
+function import($path, $ext = true, $baseUrl = COM_DIR) 
+{
 	$file = $baseUrl.str_replace('.', '/', $path);
 	$file .= (is_bool($ext) ? ($ext ? '.class.php' : '.php') : $ext);
 	$file = realpath($file);
 	static $f_cache = array();
 	$env_name = "IMPORT_{$file}";
-	if(!isset($f_cache[$env_name])){
-		if(is_file($file)){
+	if(!isset($f_cache[$env_name]))
+	{
+		if(is_file($file))
+		{
 			$f_cache[$env_name] = require ($file);
-		}else{
+		}
+		else
+		{
 			return false;
 		}
 	}
@@ -113,23 +192,60 @@ function import($path, $ext = true, $baseUrl = COM_DIR) {
 
 
 /**
- * 获取模型层对象，在除了控制器类外的对象调用
+ * model函数别名
+ * 
+ * @param string $className
+ * @param string $dbFlag
  */
-function M($className, $dbFlag = __DEFAULT_DATA_SOURCE__) {
+function M($className, $dbFlag = __DEFAULT_DATA_SOURCE__)
+{
+    return model($className, $dbFlag);
+}
+
+
+/**
+ * 获取模型层对象，在除了控制器类外的对象调用
+ * 
+ * @param string $className
+ * @param string $dbFlag
+ * @return object
+ */
+function model($className, $dbFlag = __DEFAULT_DATA_SOURCE__) 
+{
 	return Model::getModel($className, $dbFlag);
 }
 
 
 /**
- * 获取配置文件
+ * 获取配置文件，config函数别名
+ * 
+ * @param string $file_name
+ * @return mixed
  */
-function C($file_name) {
+function C($file_name)
+{
+    return config($file_name);
+}
+
+
+/**
+ * 获取配置文件
+ * 
+ * @param string $file_name
+ * @return mixed
+ */
+function config($file_name) 
+{
     static $fileData  = array();
-    if(!isset($fileData[$file_name])){
+    if(!isset($fileData[$file_name]))
+    {
         $file = realpath(APP_CONFIG_DIR . $file_name . '.inc.php');
-    	if(is_file($file)){
+    	if(is_file($file))
+    	{
     		$fileData[$file_name] = require ($file);
-    	}else{
+    	}
+    	else
+    	{
     		return false;
     	}
     }
@@ -138,56 +254,101 @@ function C($file_name) {
 
 
 /**
- * 文件数据读写(简单数据类型、数组、字符串等)
+ * 文件数据读写(简单数据类型、数组、字符串等)，fileRW函数别名
+ * 
  * @param string $name
  * @param string $value
  * @param string $path
  */
-function F($name, $value='', $path=DATA_DIR){
+function F($name, $value='', $path=DATA_DIR)
+{
+    return fileRW($name, $value, $path);
+}
+
+
+
+/**
+ * 文件数据读写(简单数据类型、数组、字符串等)
+ * 
+ * @param string $name
+ * @param string $value
+ * @param string $path
+ */
+function fileRW($name, $value='', $path=DATA_DIR)
+{
 	static $f_cache = array();
 	$fileName = $path.$name.'.php';
-	if($value !== ''){
+	if($value !== '')
+	{
 		if(is_null($value)) return File::del($fileName); // 如果传递的值置为null，将删除文件缓存。
 		$dir = dirname($fileName);
 		if(!is_dir($dir)) mk_dir($dir);
 		return File::write($fileName, "<?php\nreturn ".var_export($value,true).";\n?>", File::WRITE);
-	}elseif(isset($f_cache[$name])){
+	}
+	elseif(isset($f_cache[$name]))
+	{
 		$value = $f_cache[$name];
-	}elseif(is_file($fileName)){
+	}
+	elseif(is_file($fileName))
+	{
 		$value = include $fileName;
 		$f_cache[$name] = $value;
- 	}else{
+ 	}
+ 	else
+ 	{
  		$value = false;
  	}
 	return $value;	
 }
 
 
-
 /**
- * 缓存数据读取和设置
+ * 缓存数据读取和设置，cache函数别名
+ * 
  * @param string $name
  * @param string $value
  * @param int $expire
  * @param string $type
+ * @return mixed
  */
-function H($name, $value='', $expire='', $type=''){
+function H($name, $value='', $expire='', $type='')
+{
+    return cache($name, $value, $expire, $type);
+}
+
+
+/**
+ * 缓存数据读取和设置
+ * 
+ * @param string $name
+ * @param string $value
+ * @param int $expire
+ * @param string $type
+ * @return mixed
+ */
+function cache($name, $value='', $expire='', $type='')
+{
     static $_cache = array();
     $flag = "{$type}_{$name}";
     $cache = Cache::getInstance($type, array('expire'=>$expire));
-    if(!empty($value)){
-        if(is_null($value)){
+    if(!empty($value))
+    {
+        if(is_null($value))
+        {
              $result = $cache->remove($name); // 删除缓存  
-             if($result){ unset($_cache[$flag]); }
+             if($result) unset($_cache[$flag]);
              return $result;
         }
         $cache->set($name, $value, $expire);
         $_cache[$flag] = $value;
         return true;
     }
-    if(isset($_cache[$flag])){
+    if(isset($_cache[$flag]))
+    {
         return $_cache[$flag];
-    }else{
+    }
+    else
+    {
         return $_cache[$flag] = $cache->get($name);
     }
 }
@@ -196,8 +357,11 @@ function H($name, $value='', $expire='', $type=''){
 
 /**
  * 获取客户端IP
+ * 
+ * @return string
  */
-function get_client_ip() {
+function get_client_ip() 
+{
 	if (getenv ('HTTP_CLIENT_IP') && strcasecmp ( getenv ('HTTP_CLIENT_IP'), 'unknown' ))
 		$ip = getenv ( 'HTTP_CLIENT_IP' );
 	else if (getenv ('HTTP_X_FORWARDED_FOR') && strcasecmp ( getenv ('HTTP_X_FORWARDED_FOR'), 'unknown'))
@@ -212,11 +376,14 @@ function get_client_ip() {
 
 /**
  * 获取上传文件地址
+ * 
+ * @return string
  */
 function getUploadAddr()
 {
     $absolutePath = realpath(PUB_DIR.'share/upload/');
-    if($absolutePath === false){
+    if($absolutePath === false)
+    {
     	$absolutePath = realpath(PUB_DIR.__UPLOAD__);
     	if($absolutePath === false)
     	{
@@ -230,6 +397,8 @@ function getUploadAddr()
 
 /**
  * 截取utf8字符串
+ * 
+ * @return string
  */
 function utf8Substr($str,$from,$len) 
 { 
@@ -239,21 +408,30 @@ function utf8Substr($str,$from,$len)
 
 /**
  * 抛出异常
+ * 
+ * @return Exception
  */
-function throw_exception($message, $code=0, $type='TraceException'){
+function throw_exception($message, $code=0, $type='TraceException')
+{
 	throw new $type($message, $code, true);
 }
 
 
 /**
  * 输出信息，程序终止退出
+ * 
+ * @return void
  */
-function halt($data, $attach=null){
+function halt($data, $attach=null)
+{
 	$data = (is_array($data)) ? implode('<br/>', $data) : $data;
-	if(HttpRequest::isAjaxRequest()){
+	if(HttpRequest::isAjaxRequest())
+	{
 		ob_end_flush();
 		$output = json_encode(array('statusCode'=>300, 'message'=>$data, 'attach'=>$attach));
-	}else{
+	}
+	else
+	{
 		$output = template($data, 'Error Info');	
 	} 
 	exit($output);
@@ -262,8 +440,11 @@ function halt($data, $attach=null){
 
 /**
  * 自动释放来自客户端的连接
+ * 
+ * @return void
  */
-function abortConnect(){
+function abortConnect()
+{
     set_time_limit(0); 
     ignore_user_abort(true);     
     $size = ob_get_length();     
@@ -278,7 +459,10 @@ function abortConnect(){
 
 
 /**
- * 循环创建目录
+ *  循环创建目录
+ *  
+ * @param string $dir
+ * @param string $mode
  */
 function mk_dir($dir, $mode = 0777)
 {
@@ -291,40 +475,45 @@ function mk_dir($dir, $mode = 0777)
 
 /**
  * 递归删除目录
+ * 
+ * @param string $dir
+ * @return void
  */
-function rm_dir($dir) { 
-   if (is_dir($dir)) { 
-     $objects = scandir($dir); 
-     foreach ($objects as $object) { 
-       if ($object != '.' && $object != '..') { 
-       	 $file = $dir.'/'.$object;
-         if (filetype($file) == "dir"){
-         	rm_dir($file);	
-         }else{
-         	unlink($file); 
-         }
-       } 
-     } 
-     reset($objects); 
-     rmdir($dir); 
-   } 
+function rm_dir($dir) 
+{ 
+    if (is_dir($dir)) 
+    { 
+        $objects = scandir($dir); 
+        foreach ($objects as $object) { 
+            if ($object != '.' && $object != '..') 
+            { 
+                $file = $dir.'/'.$object;
+                if (filetype($file) == 'dir') rm_dir($file);	
+                else unlink($file); 
+            } 
+        } 
+        reset($objects); 
+        rmdir($dir); 
+    } 
 }
 
 
 /**
  * 支持按字段对数组进行排序
+ * 
  * @param array $list 要排序的数组
  * @param string $field 排序的字段名
- * @param array $sortby 排序类型
- * asc正向排序 desc逆向排序 nat自然排序
+ * @param array $sortby 排序类型  asc正向排序 desc逆向排序 nat自然排序
  * @return array
  */
-function list_sort_by($list,$field, $sortby='asc') {
-   if(is_array($list)){
+function list_sort_by($list,$field, $sortby='asc') 
+{
+   if(is_array($list))
+   {
        $refer = $resultSet = array();
-       foreach ($list as $i => $data)
-           $refer[$i] = &$data[$field];
-       switch ($sortby) {
+       foreach ($list as $i => $data) $refer[$i] = &$data[$field];
+       switch ($sortby) 
+       {
            case 'asc': // 正向排序
                 asort($refer);
                 break;
@@ -335,8 +524,7 @@ function list_sort_by($list,$field, $sortby='asc') {
                 natcasesort($refer);
                 break;
        }
-       foreach ( $refer as $key=> $val)
-           $resultSet[] = &$list[$key];
+       foreach ( $refer as $key=> $val) $resultSet[] = &$list[$key];
        return $resultSet;
    }
    return false;
@@ -346,42 +534,63 @@ function list_sort_by($list,$field, $sortby='asc') {
 
 /**
  * 自动转换字符集 支持数组转换
+ * 
+ * @param string $fContents
+ * @param string $from
+ * @param string $to
+ * @return string
  */
-function auto_charset($fContents,$from='gbk',$to='utf-8'){
+function auto_charset($fContents,$from='gbk',$to='utf-8')
+{
     $from   =  strtoupper($from)=='UTF8'? 'utf-8':$from;
     $to       =  strtoupper($to)=='UTF8'? 'utf-8':$to;
-    if( strtoupper($from) === strtoupper($to) || empty($fContents) || (is_scalar($fContents) && !is_string($fContents)) ){
+    if( strtoupper($from) === strtoupper($to) || empty($fContents) || (is_scalar($fContents) && !is_string($fContents)) )
+    {
         //如果编码相同或者非字符串标量则不转换
         return $fContents;
     }
-    if(is_string($fContents) ) {
-        if(function_exists('mb_convert_encoding')){
+    if(is_string($fContents) ) 
+    {
+        if(function_exists('mb_convert_encoding'))
+        {
             return mb_convert_encoding ($fContents, $to, $from);
-        }elseif(function_exists('iconv')){
+        }
+        elseif(function_exists('iconv'))
+        {
             return iconv($from,$to,$fContents);
-        }else{
+        }
+        else
+        {
             return $fContents;
         }
     }
-    elseif(is_array($fContents)){
-        foreach ( $fContents as $key => $val ) {
-            $_key =     auto_charset($key,$from,$to);
+    elseif(is_array($fContents))
+    {
+        foreach ( $fContents as $key => $val ) 
+        {
+            $_key = auto_charset($key,$from,$to);
             $fContents[$_key] = auto_charset($val,$from,$to);
-            if($key != $_key )
-                unset($fContents[$key]);
+            if($key != $_key ) unset($fContents[$key]);
         }
         return $fContents;
     }
-    else{
+    else
+    {
         return $fContents;
     }
 }
 
 
 /**
- * CURL请求
- * @param String $url 请求地址
- * @param Array $data 请求数据
+ * CURL发送请求
+ * 
+ * @param string $url
+ * @param mixed $data
+ * @param string $method
+ * @param string $cookieFile
+ * @param array $headers
+ * @param int $connectTimeout
+ * @param int $readTimeout
  */
 function curlRequest($url,$data='',$method='POST',$cookieFile='',$headers='',$connectTimeout = 10,$readTimeout = 5)
 {
@@ -428,7 +637,14 @@ function curlRequest($url,$data='',$method='POST',$cookieFile='',$headers='',$co
 
 
 /**
- * http post
+ * socket发送请求
+ * 
+ * @param string $url
+ * @param string $post_string
+ * @param string $method
+ * @param int $connectTimeout
+ * @param int $readTimeout
+ * @return string
  */
 function socketRequest($url, $post_string, $method='POST', $connectTimeout = 10, $readTimeout = 5)
 {
@@ -444,9 +660,7 @@ function socketRequest($url, $post_string, $method='POST', $connectTimeout = 10,
 		(empty($urlInfo["fragment"]) ? "" : "#" . $urlInfo["fragment"]);
 
 	$fsock = fsockopen($hostIp, $urlInfo["port"], $errno, $errstr, $connectTimeout);
-	if (false == $fsock) {
-		return false;
-	}
+	if (false == $fsock) return false;
 	
 	$request = $urlInfo["request"];
 	if($method == 'GET' && $post_string) $request .= '?'.$post_string;
@@ -462,7 +676,8 @@ function socketRequest($url, $post_string, $method='POST', $connectTimeout = 10,
 	$in .= $post_string . "\r\n\r\n";
     
 	stream_set_timeout($fsock, $readTimeout);
-	if (!fwrite($fsock, $in, strlen($in))) {
+	if (!fwrite($fsock, $in, strlen($in))) 
+	{
 		fclose($fsock);
 		return false;
 	}
@@ -470,9 +685,8 @@ function socketRequest($url, $post_string, $method='POST', $connectTimeout = 10,
 
 	//process response
 	$out = "";
-	while ($buff = fgets($fsock, 2048)) {
-		$out .= $buff;
-	}
+	while ($buff = fgets($fsock, 2048)) $out .= $buff;
+	
 	//finish socket
 	fclose($fsock);
 	$pos = strpos($out, "\r\n\r\n");
@@ -480,19 +694,16 @@ function socketRequest($url, $post_string, $method='POST', $connectTimeout = 10,
 	$status = substr($head, 0, strpos($head, "\r\n"));		//http status line
 	$body = substr($out, $pos + 4, strlen($out) - ($pos + 4));		//page body
 
-	if (preg_match("/^HTTP\/\d\.\d\s([\d]+)\s.*$/", $status, $matches)) {
-		if (intval($matches[1]) / 100 == 2) {//return http get body
-			return $body;
-		} else {
-			return false;
-		}
-	} else {
-		return false;
+	if (preg_match("/^HTTP\/\d\.\d\s([\d]+)\s.*$/", $status, $matches)) 
+	{
+		if (intval($matches[1]) / 100 == 2) return $body;
 	}
+	return false;
 }
 
 /**
  * 把返回的数据集转换成Tree
+ * 
  * @access public
  * @param array $list 要转换的数据集
  * @param string $pid parent标记字段
@@ -503,19 +714,26 @@ function list_to_tree($list, $pk='id',$pid = 'pid',$child = '_child',$root=0)
 {
     // 创建Tree
     $tree = array();
-    if(is_array($list)) {
+    if(is_array($list)) 
+    {
         // 创建基于主键的数组引用
         $refer = array();
-        foreach ($list as $key => $data) {
+        foreach ($list as $key => $data) 
+        {
             $refer[$data[$pk]] =& $list[$key];
         }
-        foreach ($list as $key => $data) {
+        foreach ($list as $key => $data) 
+        {
             // 判断是否存在parent
             $parentId = $data[$pid];
-            if ($root == $parentId) {
+            if ($root == $parentId) 
+            {
                 $tree[] =& $list[$key];
-            }else{
-                if (isset($refer[$parentId])) {
+            }
+            else
+            {
+                if (isset($refer[$parentId])) 
+                {
                     $parent =& $refer[$parentId];
                     $parent[$child][] =& $list[$key];
                 }
@@ -527,37 +745,47 @@ function list_to_tree($list, $pk='id',$pid = 'pid',$child = '_child',$root=0)
 
 /**
  * 在数据列表中搜索
+ * 
  * @access public
  * @param array $list 数据列表
  * @param mixed $condition 查询条件
  * 支持 array('name'=>$value) 或者 name=$value
  * @return array
  */
-function list_search($list,$condition) {
+function list_search($list,$condition) 
+{
     if(is_string($condition))
         parse_str($condition,$condition);
     // 返回的结果集合
     $resultSet = array();
-    foreach ($list as $key=>$data){
+    foreach ($list as $key=>$data)
+    {
         $find   =   false;
-        foreach ($condition as $field=>$value){
-            if(isset($data[$field])) {
-                if(0 === strpos($value,'/')) {
+        foreach ($condition as $field=>$value)
+        {
+            if(isset($data[$field])) 
+            {
+                if(0 === strpos($value,'/')) 
+                {
                     $find   =   preg_match($value,$data[$field]);
-                }elseif($data[$field]==$value){
+                }
+                elseif($data[$field]==$value)
+                {
                     $find = true;
                 }
             }
         }
-        if($find)
-            $resultSet[]     =   &$list[$key];
+        if($find) $resultSet[] = &$list[$key];
     }
     return $resultSet;
 }
 
+
 /**
  * 检查文件或目录大小
- * @param string $indir
+ * 
+ * @param string $path
+ * @return string
  */
 function checkFileSize($path)
 {
@@ -578,7 +806,9 @@ function checkFileSize($path)
 
 /**
  * 单位自动转换函数
+ * 
  * @param float $size
+ * @return string
  */
 function getFileSize($size)
 { 
@@ -617,29 +847,15 @@ function getCfgVar($varname = null)
    static $config = null;
    if(!$config)
    {
-        $config = import('Config.SysInfo', false, DATA_DIR);
+        $config = import('Config.System', false, DATA_DIR);
    }
    return ($varname != null && isset($config[$varname])) ? $config[$varname] : $config;
 }
 
 
 /**
- * 获取某个星期的日期范围
- * @param string $gdate
- * @param int $first
- */
-function getWeek($gdate = '', $first = 0)
-{
-    if (!$gdate) $gdate = date('Y-m-d');
-    $w  = date('w', strtotime($gdate));
-    $dn = $w ? $w - $first : 6;
-    $st = date('Y-m-d', strtotime("$gdate-$dn days"));
-    $en = date('Y-m-d', strtotime("$st +6 days"));
-    return array($st, $en);
-}
-
-/**
  * 发送邮件函数
+ * 
  * @param string $to 收件人邮箱，多个收件人用逗号分隔
  * @param string $subject 主题
  * @param string $message 消息
@@ -650,7 +866,8 @@ function getWeek($gdate = '', $first = 0)
  * @param string $port 端口
  * @return bool
  */
-function sendMail($to, $subject, $message, $attach='', $username='', $password='', $host='', $port=''){
+function sendMail($to, $subject, $message, $attach='', $username='', $password='', $host='', $port='')
+{
      if(!$to || !$message) return false;
      $mailer = new Mailer();
      $mailer->IsSMTP();
@@ -662,51 +879,72 @@ function sendMail($to, $subject, $message, $attach='', $username='', $password='
      $mailer->Username = ($username ? $username : getCfgVar('cfg_smtp_usermail'));
      $mailer->Password = ($password ? $password : getCfgVar('cfg_smtp_password'));
      $to_arr = explode(',', $to);
-     foreach($to_arr as $email){
-         $mailer->AddAddress($email);
-     }
-     if(!empty($attach)){
+     
+     foreach($to_arr as $email) $mailer->AddAddress($email);
+     if(!empty($attach))
+     {
          $attach_arr = explode(',', $attach);
-         foreach ($attach_arr as $att){
+         foreach ($attach_arr as $att)
+         {
               $mailer->AddAttachment($att);
          }
      }
-     if($username){
+     
+     if($username)
+     {
          $name_arr = explode('@', $username);
          $name = $name_arr[0];
-     }else{
+     }
+     else
+     {
          $name = getCfgVar('cfg_smtp_user');
      }
+     
      $mailer->SetFrom($mailer->Username, $name);
      $mailer->Subject = $subject;
      $mailer->MsgHTML($message);
      return $mailer->Send();
 }
 
+
 /**
  * 执行系统命令
+ * 
  * @param string $commond
+ * @return string
  */
-function execute($commond) {
+function execute($commond) 
+{
 	$result = null;
-	if ($commond) {
-		if(function_exists('system')) {
+	if ($commond) 
+	{
+		if(function_exists('system')) 
+		{
 			@ob_start();
 			@system($commond);
 			$result = @ob_get_contents();
 			@ob_end_clean();
-		} elseif(function_exists('passthru')) {
+		} 
+		elseif(function_exists('passthru')) 
+		{
 			@ob_start();
 			@passthru($commond);
 			$result = @ob_get_contents();
 			@ob_end_clean();
-		} elseif(function_exists('shell_exec')) {
+		} 
+		elseif(function_exists('shell_exec')) 
+		{
 			$result = @shell_exec($commond);
-		} elseif(function_exists('exec')) {
+		} 
+		elseif(function_exists('exec')) 
+		{
 			@exec($commond, $result);
 			$result = join("\n", $result);
-		} elseif(@is_resource($fop = @popen($commond, "r"))) {
-			while(!@feof($fop)) {
+		} 
+		elseif(@is_resource($fop = @popen($commond, "r"))) 
+		{
+			while(!@feof($fop)) 
+			{
 				$result .= @fread($fop, 1024); 
 			}
 			@pclose($fop);
@@ -715,11 +953,28 @@ function execute($commond) {
 	return $result;
 }
 
+
 /**
- * 获取语言文本
+ * 获取语言文本，language函数别名
+ * 
  * @param string $key
+ * @param array $params
+ * @return string
  */
 function L($key, $params = array())
+{
+    return language($key, $params);
+}
+
+      
+/**
+ * 获取语言文本
+ * 
+ * @param string $key
+ * @param array $params
+ * @return string
+ */
+function language($key, $params = array())
 {
     return I18n::getMessage($key, $params);
 }
@@ -731,7 +986,8 @@ function L($key, $params = array())
  * @param 2 : 维数(2维)
  * @param 3 : 取其中的某字段/也可以是取其中两个作为key和value关系array('id'=>'name')
  */
-function arr2one($arr,$num=0,$field='') {
+function arr2one($arr,$num=0,$field='') 
+{
 	if(!is_array($arr)) return false;
 	if($field=='') return false;
 	elseif(is_array($field)) { $kkkkk=$field[0]; $vvvvv=$field[1]; }

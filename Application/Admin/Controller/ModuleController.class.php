@@ -12,7 +12,7 @@ class ModuleController extends CommonController{
 	private $module_model, $levels, $targets;
 	
     public function __construct() {
-    	$this->module_model = M('module');
+    	$this->module_model = model('module');
     	$this->levels = array(0=>'链接', 1=>'按钮');
 		$this->targets = array('navTab'=>'navTab', 'dialog'=>'dialog', 'ajaxTodo'=>'ajaxTodo', '_blank'=>'_blank', '_self'=>'_self');
     }
@@ -55,9 +55,9 @@ class ModuleController extends CommonController{
 	 * 添加模块
 	 */
 	public function addAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 			$_POST['create_time'] = date('Y-m-d H:i:s');
-			$_POST['parent'] = (int)$_POST['orgLookup_id'];
+			$_POST['parent'] = (int)$this->post('orgLookup_id');
 			if($this->module_model->add()){
 				$this->ajaxReturn(200, '添加成功', '', 'closeCurrent');
 			}else{
@@ -74,9 +74,9 @@ class ModuleController extends CommonController{
 	 * 修改模块
 	 */
 	public function updateAction(){
-		$id = (int)$_REQUEST['id'];
-		if(count($_POST) > 0){
-			$_POST['parent'] = (int)$_POST['orgLookup_id'];
+		$id = (int)$this->request('id');
+		if($this->isPost()){
+			$_POST['parent'] = (int)$this->post('orgLookup_id');
 			if($this->module_model->save()){
 				$this->ajaxReturn(200, '修改成功', '', 'closeCurrent');
 			}else{
@@ -97,7 +97,7 @@ class ModuleController extends CommonController{
 	 * 删除模块
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		if(!empty($ids) && $this->module_model->where("id IN($ids)")->delete()){
 			$this->ajaxReturn(200, '删除成功');
 		}else{

@@ -101,11 +101,11 @@ class Pinyin
         if(!self::$pinyinArr)
         {
             $file = DATA_DIR.'Pinyin/pinyin.php';
-            if(!file_exists($file)) throw_exception(L('SYSTEM:file.not.exists', array('pinyin')));
+            if(!file_exists($file)) throw_exception(language('SYSTEM:file.not.exists', array('pinyin')));
             $pinyinData = file_get_contents($file);
             $data = substr($pinyinData, 20, -3);
             if(function_exists('gzuncompress')) self::$pinyinArr = unserialize(gzuncompress($data));
-            else throw_exception(L('SYSTEM:function.not.exists', array('gzuncompress')));
+            else throw_exception(language('SYSTEM:function.not.exists', array('gzuncompress')));
         }
     }
     

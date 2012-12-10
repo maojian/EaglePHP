@@ -4,27 +4,31 @@
  * 加载系统所需资源
  * 
  * @author maojianlw@139.com
- * @since 1.6 - 2011-6-8
+ * @link http://www.eaglephp.com
+ * @since 2012-11-28
  */
 
-include 'Main.inc.php';
+//header('Content-Type:text/html; charset=utf-8');
+//error_reporting(E_ALL &~ E_STRICT &~ E_NOTICE);
+//ini_set('display_errors', 1);
+
 include 'Function.php';
 include 'AutoLoader.class.php';
+include dirname(dirname(__FILE__)).'\Config\Constants.php';
 
-AutoLoader :: init();
+AutoLoader::init();
 
-Date :: timeZone('PRC');
+Date::timeZone('PRC');
 
-Application :: init();
+Application::init();
 
-Controller :: init();
+Controller::init();
 
-TraceException :: init();
+TraceException::init();
 
-RunTime :: init();
+RunTime::init();
 
-Filter :: init();
+Log::init();
 
-Log :: init();
+Session::init();
 
-Session :: init();

@@ -1,20 +1,26 @@
 <?php
-
 /**
  * Sqlite 数据库驱动器
+ * 
  * @author maojianlw@139.com
  * @since 2012-08-27
  */
 
 class DbSqlite extends Db implements DbInterface
 {
+
     
-    
+    /**
+     * 初始化
+     * 
+     * @param array $config
+     * @return void
+     */
     public function __construct($config)
     {
         if(!extension_loaded('sqlite'))
         {
-            throw_exception(L('SYSTEM:module.not.loaded', array('sqlite')));
+            throw_exception(language('SYSTEM:module.not.loaded', array('sqlite')));
         }
         if(!isset($config['mode']))
         {
@@ -22,7 +28,7 @@ class DbSqlite extends Db implements DbInterface
         }
         $this->config = $config;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::connect()
@@ -38,8 +44,8 @@ class DbSqlite extends Db implements DbInterface
         }
         return $this->linkID;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::selectDb()
@@ -48,14 +54,15 @@ class DbSqlite extends Db implements DbInterface
     {
         return;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::query()
      */
     public function query($sql)
     {
+        $this->checkContent();
         if(!$this->linkID) return false;
         $this->queryStr = $sql;
         if($this->queryID) $this->free();
@@ -71,14 +78,15 @@ class DbSqlite extends Db implements DbInterface
             return $this->fetchAll();
         }
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::execute()
      */
     public function execute($sql)
     {
+        $this->checkContent();
         if(!$this->linkID) return false;
         $this->queryStr = $sql;
         if($this->queryID) $this->free();
@@ -95,9 +103,8 @@ class DbSqlite extends Db implements DbInterface
             return $this->numRows;
         }
     }
-    
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::fetchAll()
@@ -115,8 +122,8 @@ class DbSqlite extends Db implements DbInterface
         }
         return $data;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::insertID()
@@ -125,8 +132,8 @@ class DbSqlite extends Db implements DbInterface
     {
         return $this->insertID;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::affectedRows()
@@ -135,8 +142,8 @@ class DbSqlite extends Db implements DbInterface
     {
         return $this->numRows;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::errno()
@@ -145,8 +152,8 @@ class DbSqlite extends Db implements DbInterface
     {
         return $this->erron = sqlite_last_error($this->linkID);
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::error()
@@ -154,13 +161,11 @@ class DbSqlite extends Db implements DbInterface
     public function error()
     {
         $this->error = sqlite_error_string($this->errno());
-   		if($this->queryStr != ''){
-   			$this->error .= "[SQL]:{$this->queryStr}";
-   		}
-   		Log::sql($this->error);
+        if($this->queryStr != '') $this->error .= "[SQL]:{$this->queryStr}";
+        Log::sql($this->error);
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::close()
@@ -173,8 +178,8 @@ class DbSqlite extends Db implements DbInterface
         }
         $this->linkID = 0;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::fields()
@@ -182,22 +187,23 @@ class DbSqlite extends Db implements DbInterface
     public function fields($tabeleName)
     {
         $fileds = array();
-		if($list = $this->query("PRAGMA TABLE_INFO({$tabeleName})")){
-			foreach($list as $k=>$field){
-				$fileds[$field['name']] = array(
-					'name' => $field['name'],
-					'type' => preg_replace('/\(\d+\)/', '', $field['type']),
-					'notnull' => (bool)$field['notnull'],
-					'default' => $field['dflt_value'],
-					'primary' => $field['pk'],
-					'autoinc' => $field['pk']
-				);
-			}
-		}
-		return $fileds;
+        if($list = $this->query("PRAGMA TABLE_INFO({$tabeleName})")){
+            foreach($list as $k=>$field)
+            {
+                $fileds[$field['name']] = array(
+    					'name' => $field['name'],
+    					'type' => preg_replace('/\(\d+\)/', '', $field['type']),
+    					'notnull' => (bool)$field['notnull'],
+    					'default' => $field['dflt_value'],
+    					'primary' => $field['pk'],
+    					'autoinc' => $field['pk']
+                );
+            }
+        }
+        return $fileds;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::tables()
@@ -212,13 +218,14 @@ class DbSqlite extends Db implements DbInterface
         }
         return $tables;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::startTrans()
      */
     public function startTrans()
     {
+        $this->checkContent();
         if(!$this->linkID) return false;
         if($this->transTimes == 0)
         {
@@ -227,8 +234,8 @@ class DbSqlite extends Db implements DbInterface
         $this->transTimes++;
         return;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::commit()
@@ -245,7 +252,7 @@ class DbSqlite extends Db implements DbInterface
         }
         return;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::rollback()
@@ -262,8 +269,8 @@ class DbSqlite extends Db implements DbInterface
         }
         return;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see DbInterface::free()
@@ -272,29 +279,29 @@ class DbSqlite extends Db implements DbInterface
     {
         $this->queryID = 0;
     }
-    
-    
+
+
     /**
      * (non-PHPdoc)
      * @see Db::setLimit()
      */
     public function setLimit($options) {
-	    $limit = $options['limit'];
-	    $limitStr = null;
-	    if($limit)
-	    {
-	        $limit = explode(',', $limit);
-	        if(count($limit) > 1)
-	        {
-	            $limitStr = " LIMIT {$limit[1]} OFFSET {$limit[0]}";
-	        }
-	        else
-	        {
-	            $limitStr = " LIMIT {$limit[0]}";
-	        }
-	    }
-	    return $limitStr;
-	}
+        $limit = $options['limit'];
+        $limitStr = null;
+        if($limit)
+        {
+            $limit = explode(',', $limit);
+            if(count($limit) > 1)
+            {
+                $limitStr = " LIMIT {$limit[1]} OFFSET {$limit[0]}";
+            }
+            else
+            {
+                $limitStr = " LIMIT {$limit[0]}";
+            }
+        }
+        return $limitStr;
+    }
 
-    
+
 }

@@ -45,14 +45,11 @@ class GenController extends Controller{
     	set_time_limit(0);
     	spl_autoload_register(array($this, 'classAutoLoader'));
     	$this->cur_dir = dirname($_SERVER['SCRIPT_FILENAME']);
-    	import('util.Reflect');
-    	if(is_dir($this->manual_dir)){
+    	if(is_dir($this->manual_dir))
+    	{
     		rm_dir($this->manual_dir);
-    		mk_dir($this->manual_dir);
     	}
-    	
-    	// 此处只针对EaglePHP
-    	import('Db.DbInterface', '.iterface.php');
+    	mk_dir($this->manual_dir);
     }
     
     
@@ -60,10 +57,11 @@ class GenController extends Controller{
      * 首页
      */
     public function indexAction(){
-    	if($_POST){
-    		$hhc = $_POST['hhc'];
-    		$project_dir = $_POST['project_dir'];
-    		$project_name = $_POST['project_name'];
+        $hhc = $project_dir = $project_name = null;
+    	if($this->isPost()){
+    		$hhc = $this->post('hhc');
+    		$project_dir = $this->post('project_dir');
+    		$project_name = $this->post('project_name');
     		
     		if($hhc == '' || $project_dir == '' || $project_name == ''){
     			$this->assign('err_msg', '请填写完整。');
@@ -126,6 +124,7 @@ class GenController extends Controller{
     	$cur_dir = $this->cur_dir.'/'.$this->manual_dir;
     	$hhp_file = $cur_dir.$this->hhp_file;
     	$hhp_file = str_replace('/', '\\', $hhp_file);
+    	$return_str = $default_topic = null;
     	if(file_exists($hhp_file)){
     		$return_arr = array();
     		$return_var = 0;
@@ -204,7 +203,7 @@ class GenController extends Controller{
  	
  	public function methodsAction(){
  		try{
- 			$name = $_GET['name'];
+ 			$name = $this->post('name');
 	    	$this->reflect_cls = new Reflect('filter',  file('D:\www\Hi\Lib\filter.class.php'));
 	    	
 	    	$class = $this->reflect_cls->getDocComment($this->reflect_cls->reflect);
@@ -292,7 +291,7 @@ class GenController extends Controller{
     	$GLOBALS['curObj'] = $this;
     	function createTree($class_arr){
     		global $curObj;
-    		$tree .= '<UL>';
+    		$tree = '<UL>';
     		$size = count($class_arr);
     		foreach($class_arr as $k=>$class){
 	    		if(is_array($class)){

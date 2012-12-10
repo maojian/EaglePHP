@@ -11,11 +11,11 @@ class DatabaseController extends CommonController{
  
     public function __construct(){
         $this->data_dir = DATA_DIR.getCfgVar('cfg_backup_dir').__DS__;
-        $this->cur_model = M('db');
+        $this->cur_model = model('db');
     }
     
     public function indexAction(){
-        $type = $this->getParameter('type');
+        $type = $this->get('type');
         if(method_exists($this, $type)){
             $this->$type();
         }else{
@@ -28,10 +28,10 @@ class DatabaseController extends CommonController{
 	 * 删除备份文件
      */
     private function delBak(){
-        $ids = $this->getParameter('ids');
+        $ids = $this->request('ids');
         $i = 0;
         if($ids){
-             $date = $this->getParameter('date');
+             $date = $this->request('date');
              $tables = explode(',', $ids);
              foreach ($tables as $table){
                  if(unlink($this->data_dir.$date.__DS__.$table)) $i++;
@@ -44,7 +44,7 @@ class DatabaseController extends CommonController{
      * 优化表
      */
     private function optimize(){
-        $table = $this->getParameter('id');
+        $table = $this->request('id');
         if($this->cur_model->execute("OPTIMIZE TABLE `{$table}` ")){
              $this->ajaxReturn(200, "执行优化表： $table  OK！");
         }else{
@@ -56,7 +56,7 @@ class DatabaseController extends CommonController{
      * 优化所有表
      */
     private function optimizeAll(){
-        $ids = $this->getParameter('ids');
+        $ids = $this->request('ids');
         $i = 0;
         if($ids){
              $tables = explode(',', $ids);
@@ -71,7 +71,7 @@ class DatabaseController extends CommonController{
      * 修复所有表
      */
     private function repairAll(){
-        $ids = $this->getParameter('ids');
+        $ids = $this->request('ids');
         $i = 0;
         if($ids){
              $tables = explode(',', $ids);
@@ -86,7 +86,7 @@ class DatabaseController extends CommonController{
      * 修复表
      */
     private function repair(){
-        $table = $this->getParameter('id');
+        $table = $this->request('id');
         if($this->cur_model->execute("REPAIR TABLE `{$table}` ")){
              $this->ajaxReturn(200, "修复表： $table  OK！");
         }else{
@@ -98,7 +98,7 @@ class DatabaseController extends CommonController{
      * 表结构
      */
     private function show(){
-         $table = $this->getParameter('id');
+         $table = $this->get('id');
          $info = $this->cur_model->query("SHOW CREATE TABLE `{$table}` ");
          $this->assign('info', $info[0]['Create Table']);
          $this->display('Database/show');
@@ -120,7 +120,7 @@ class DatabaseController extends CommonController{
      * 数据库备份
      */
     private function bak(){
-         $ids = $this->getParameter('ids');
+         $ids = $this->post('ids');
          if($ids){
              $tables = explode(',', $ids);
              $data_dir = $this->data_dir.date('Y-m-d').__DS__;
@@ -140,7 +140,7 @@ class DatabaseController extends CommonController{
                  $field_str = '`'.implode('`, `', $field_arr).'`';
                  
                  $insert = "INSERT INTO `$t`({$field_str}) VALUES \r\n";
-                 $list = M($t)->select();
+                 $list = model($t)->select();
  
                  if(is_array($list)){
                      $z = 0;
@@ -189,10 +189,10 @@ class DatabaseController extends CommonController{
      * 数据库还原
      */
     public function doneAction(){
-        $ids = $this->getParameter('ids');
+        $ids = $this->get('ids');
         if($ids){
              // 正式对表数据还原
-             $date = $this->getParameter('date');
+             $date = $this->get('date');
              $table_arr = explode(',', $ids);
              foreach ($table_arr as $k=>$table){
                  $data = file_get_contents($this->data_dir.$date.__DS__.$table);
@@ -223,7 +223,10 @@ class DatabaseController extends CommonController{
         
         // 读取备份文件
         //$date = ($_POST['date'] ? $_POST['date'] : ($date ? $_POST['date']=$date : ''));
-        $date = $_POST['date'] = $this->getParameter('date', 'post', $date);
+        $postDate = $this->post('date');
+        $date = $postDate ? $postDate : $date;
+        $this->post('date', $date);
+        
         $data_dir = $this->data_dir.$date.__DS__;
         $dir = opendir($data_dir);
         $list = array();

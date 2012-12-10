@@ -9,7 +9,7 @@ class CaseController extends CommonController{
     private $cur_model;   
  
     public function __construct(){
-        $this->cur_model = M('case');
+        $this->cur_model = model('case');
     }
     
     public function indexAction(){

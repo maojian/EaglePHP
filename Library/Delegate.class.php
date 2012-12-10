@@ -6,24 +6,30 @@
  * @since 1.6 - 2011-6-10
  */
 
-class Delegate {
+class Delegate 
+{
    
    private static $instances;
    
-   public static function addObject($object){
+   public static function addObject($object)
+   {
    		self::$instances[] = $object;
    }
    
-   public function __call($method, $args){
+   public function __call($method, $args)
+   {
 		$instances = self::$instances;
-   		if(is_array($instances)){
-   			foreach($instances as $key => $object){
-   				if(method_exists($object, $method)){
+   		if(is_array($instances))
+   		{
+   			foreach($instances as $key => $object)
+   			{
+   				if(method_exists($object, $method))
+   				{
    					return call_user_func_array(array($object, $method), $args);
    				}
    			}
    		}
-   		throw_exception(L('SYSTEM:method.not.exists', array($method, get_class($object))));
+   		throw_exception(language('SYSTEM:method.not.exists', array($method, get_class($object))));
    }
     
 }

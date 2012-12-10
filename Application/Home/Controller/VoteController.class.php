@@ -9,14 +9,14 @@ class VoteController extends CommonController{
     private $cur_model;   
  
     public function __construct(){
-        $this->cur_model = M('vote');
+        $this->cur_model = model('vote');
     }
     
     /**
      * 查看投票结果
      */
     public function viewAction(){
-        $id = (int)$_GET['id'];
+        $id = (int)$this->get('id');
         $info = $this->cur_model->where("id=$id")->find();
         $data = unserialize($info['content']);
         $totalCount = $info['total_count'];
@@ -38,11 +38,11 @@ class VoteController extends CommonController{
      */
     public function addAction()
     {
-        $id = (int)$_POST['id'];
+        $id = (int)$this->request('id');
         $link = __URL__.'view/id/'.$id;
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        if($this->isPost())
         {
-            $voteitem = $_POST['voteitem'];
+            $voteitem = $this->post('voteitem');
             $info = $this->cur_model->where("id=$id")->find();
             $data = unserialize($info['content']);
             $nowTime = time();

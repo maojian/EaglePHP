@@ -25,12 +25,12 @@ class SystemController extends CommonController{
      * 更新表映射
      */
     public function updateTableMappendAction(){
-    	if($dbArr = import('Config.DbConfig', false, ROOT_DIR)){
+    	if($dbArr = import('Database', false, CONF_DIR)){
     	    // 在更新ORM映射关系前清空所有的配置文件
     	    rm_dir(DATA_DIR.getCfgVar('cfg_orm_dir').__DS__);
     	    $dbStr = null;
     		foreach($dbArr as $key=>$val){
-    		    $ormM = M('ORM', $key);
+    		    $ormM = model('ORM', $key);
     			$dbStr .= $val['dbname'].',';
     			if($tables = $ormM->getDb()->tables()){
     				foreach($tables as $table){
@@ -74,19 +74,19 @@ class SystemController extends CommonController{
      * @param array $data
      */
     private function updateCfg(){
-       $list = M('sys_config')->field('varname,value')->order('id ASC')->select();
+       $list = model('sys_config')->field('varname,value')->order('id ASC')->select();
        if(is_array($list)){
         foreach ($list as $val){
              $data[$val['varname']] = $val['value'];
         }
        }
-       return F('SysInfo', $data, DATA_DIR.'Config/');
+       return fileRW('System', $data, DATA_DIR.'Config/');
     }
     
     private function addParam(){
-        if($_POST){
-           $scModel = M('sys_config');
-           if($scModel->getbyVarname($_POST['varname'])){
+        if($this->isPost()){
+           $scModel = model('sys_config');
+           if($scModel->getbyVarname($this->post('varname'))){
              $this->ajaxReturn(300, '该变量名已经存在！');
            }
            if($scModel->add()){
@@ -104,7 +104,7 @@ class SystemController extends CommonController{
     
     private function saveParam(){
         if($_POST){
-            $scModel = M('sys_config');
+            $scModel = model('sys_config');
             foreach ($_POST as $k=>$v){
                $scModel->where("varname='{$k}'")->save(array('value'=>$v));
             }
@@ -120,15 +120,14 @@ class SystemController extends CommonController{
      * 参数设置
      */
     public function paramAction(){
-        if(isset($_GET['groupid'])){
-            $groupid = (int)$_GET['groupid'];
-            $list = M('sys_config')->field('varname,value,info,type')->order('id ASC')->where("groupid=$groupid")->select();
+        if($groupid = (int)$this->get('groupid')){
+            $list = model('sys_config')->field('varname,value,info,type')->order('id ASC')->where("groupid=$groupid")->select();
             $this->assign('boolArr', array(1=>'是', 0=>'否'));
             $this->assign('list', $list);
             $this->display('System/sys_info');
-        }elseif($this->getParameter('action') == 'add'){
+        }elseif($this->get('action') == 'add'){
             $this->addParam();
-        }elseif($this->getParameter('action') == 'save'){
+        }elseif($this->get('action') == 'save'){
             $this->saveParam();
         }else{
             $this->assign('list', $this->getParamGroup());
@@ -140,9 +139,9 @@ class SystemController extends CommonController{
      * 水印设置
      */
     public function markAction(){
-         $mark_info = F('Mark/watermark');
-         if(count($_POST)){
-              if(!empty($_FILES['file']['tmp_name'])){
+         $mark_info = fileRW('Mark/watermark');
+         if($this->isPost()){
+              if(!$this->file('file')){
        		        $upload_boj = new Upload();
        		        $upload_boj->uploadReplace = true;
                     $upload_boj->saveRule = 'mark';
@@ -154,9 +153,9 @@ class SystemController extends CommonController{
             		$file_info = $upload_boj->getUploadFileInfo();
             		$_POST['img'] = $file_info[0]['savename'];
               }
-              F('Mark/watermark',$_POST);
+              fileRW('Mark/watermark',$this->post());
               $this->ajaxReturn(200, '修改成功！');
-         }elseif($this->getParameter('target') == 'showImg'){
+         }elseif($this->get('target') == 'showImg'){
               $file = DATA_DIR.'Mark/'.$mark_info['img'];
               $image_info = Image::getImageInfo($file);
               header('Content-type:'.$image_info['mime']);

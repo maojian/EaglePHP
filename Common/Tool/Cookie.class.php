@@ -11,8 +11,8 @@ class Cookie{
      * 
      * @param string $name cookie名称
      * @param string $value cookie值
-     * @param string|int $expire 过期时间，默认为空即会话cookie，随着会话结束失效
      * @param bool $encode 是否编码
+     * @param string|int $expire 过期时间，默认为空即会话cookie，随着会话结束失效
      * @param string $path cookie保存路径
      * @param string $domain cookie所属域
      * @param bool $secure	是否采用安全连接
@@ -30,13 +30,15 @@ class Cookie{
      * 获取cookie
      * @param string $name cookie名称
      * @param bool $decode 是否对cookie值解码
+     * @param bool $filter 是否清除XSS脚本攻击代码
      */
-    public static function get($name, $decode = false) 
+    public static function get($name, $decode = false, $filter = true) 
     {
         if (self::exists($name)) 
         {
             $value = $_COOKIE[$name];
             $value && $decode && $value = unserialize(base64_decode($value));
+            $value = $filter ? Filter::runMagicQuote($value) : $value;
             return $value;
         }
         return false;
@@ -81,11 +83,13 @@ class Cookie{
     
 	/**
 	 * 获取所有cookie
+	 * 
+	 * @param bool $filter 是否清除XSS脚本攻击代码
 	 * @return array
 	 */
-	public static function getAll()
+	public static function getAll($filter = true)
 	{
-	    return $_COOKIE;
+	    return $filter ? Filter::runMagicQuote($_COOKIE) : $_COOKIE;
 	}
     
     

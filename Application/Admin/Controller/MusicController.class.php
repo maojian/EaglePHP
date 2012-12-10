@@ -13,7 +13,7 @@ class MusicController extends CommonController{
     
     public function __construct(){
         $this->state_arr = array(0=>'开启', 1=>'关闭');
-		$this->cur_model = M('music');
+		$this->cur_model = model('music');
 	}
 	
 	public function indexAction(){
@@ -49,7 +49,7 @@ class MusicController extends CommonController{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->cur_model->where("id=$id")->find();
 			$this->assign('info', $info);
 			$this->assign('state_arr', $this->state_arr);
@@ -58,7 +58,7 @@ class MusicController extends CommonController{
 	}
 
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		if(!empty($ids) && $this->cur_model->where("id IN($ids)")->delete()){
 			$this->ajaxReturn(200, '删除成功');
 		}else{

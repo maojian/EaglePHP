@@ -68,7 +68,7 @@ class ModuleModel extends Model{
     * 根据角色找到相应的模块
     */
    public function findModuleByRoleID($role_id){
-   		if($modules = M('role')->field('module_ids')->where("roleid=$role_id")->select()){
+   		if($modules = model('role')->field('module_ids')->where("roleid=$role_id")->select()){
    			foreach($modules as $module){
    				$data[$module['moduleid']] = '';
    			}
@@ -120,7 +120,7 @@ class ModuleModel extends Model{
 			return $_SESSION[SESSION_USER_NAME]['module_tree'];
 		}
 		
-		$module_model = M('module');
+		$module_model = model('module');
 		$role_id = (int)$_SESSION[SESSION_USER_NAME]['role_id'];
 		$module_ids = '';
 		if($role_id == 1){
@@ -131,7 +131,7 @@ class ModuleModel extends Model{
 		       }
 		    }
 		}else{
-		    $role = M('role')->field('module_ids')->where("id=$role_id")->find();
+		    $role = model('role')->field('module_ids')->where("id=$role_id")->find();
 		    $module_ids = $role['module_ids'];
 		}
 		
@@ -142,34 +142,36 @@ class ModuleModel extends Model{
 		$modules = $module_model->buildTree($modules, 0, 1);
 		$modules = list_sort_by($modules,'number','asc');
 	
-		function getChildNode($childs){
-			if($childs == null){
-				return null;
-			}
-			
-			$tree = '';
-			foreach($childs as $child){
-				$url = $child['url'];
-				if($url){
-					$urls = explode('/', $url);
-					$rel = ucfirst($urls[0]);
-					$href = (strpos($url, 'http://') !== false) ? "href=$url" : "href=".ucfirst(__ROOT__.$url);
-				}else{
-					$href = 'href="javascript:"';
+		if(!function_exists('getChildNode')){
+			function getChildNode($childs){
+				if($childs == null){
+					return null;
 				}
-				if(isset($child['childs'])){
-					$tree .= "<li><a>{$child['name']}</a><ul>";
-					$tree .= getChildNode($child['childs']);
-					$tree .= '</ul></li>';
-				}else{
-					if($child['level'] == 0){
-						$target = $child['target'];
-						$tree .= "<li><a $href target=\"{$target}\" rel=\"$rel\" ".(($target == 'dialog') ? " width='{$child['width']}' height='{$child['height']}' " : '').">{$child['name']}</a></li>";
+				
+				$tree = '';
+				foreach($childs as $child){
+					$url = $child['url'];
+					if($url){
+						$urls = explode('/', $url);
+						$rel = ucfirst($urls[0]);
+						$href = (strpos($url, 'http://') !== false) ? "href=$url" : "href=".ucfirst(__ROOT__.$url);
+					}else{
+						$href = 'href="javascript:"';
 					}
-						
-				} 
+					if(isset($child['childs'])){
+						$tree .= "<li><a>{$child['name']}</a><ul>";
+						$tree .= getChildNode($child['childs']);
+						$tree .= '</ul></li>';
+					}else{
+						if($child['level'] == 0){
+							$target = $child['target'];
+							$tree .= "<li><a $href target=\"{$target}\" rel=\"$rel\" ".(($target == 'dialog') ? " width='{$child['width']}' height='{$child['height']}' " : '').">{$child['name']}</a></li>";
+						}
+							
+					} 
+				}
+				return $tree;
 			}
-			return $tree;
 		}
 		
 		$tree = null;

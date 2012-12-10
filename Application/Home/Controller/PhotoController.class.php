@@ -4,12 +4,12 @@ class PhotoController extends Controller{
     private $cur_model;   
  
     public function __construct(){
-        $this->cur_model = M('photo');
+        $this->cur_model = model('photo');
     }
     
     public function showAction(){
         $album_id = (int)$_GET['album'];
-        $album_info = M('album')->field('title')->getbyId($album_id);
+        $album_info = model('album')->field('title')->getbyId($album_id);
 		$this->assign('rssFeed', urlencode(__URL__."flashXML/album/$album_id"));
 		$this->assign('title', $album_info['title'].' - 图片秀');
         $this->display();

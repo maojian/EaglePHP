@@ -4,7 +4,7 @@ class NoteController extends CommonController{
     private $cur_model;   
  
     public function __construct(){
-        $this->cur_model = M('note');
+        $this->cur_model = model('note');
     }
     
     public function indexAction(){  	

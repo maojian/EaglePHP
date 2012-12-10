@@ -12,7 +12,7 @@ class CacheApc extends Cache{
     {
         if(!extension_loaded('apc'))
         {
-            throw_exception(L('SYSTEM:module.not.loaded', array('apc')));
+            throw_exception(language('SYSTEM:module.not.loaded', array('apc')));
         }
         if($options) $this->options = $options;
         $this->options['expire'] = $this->options['expire'] ? $this->options['expire'] : getCfgVar('cfg_cache_time');

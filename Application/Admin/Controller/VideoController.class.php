@@ -11,7 +11,7 @@ class VideoController extends CommonController{
     
     public function __construct(){
         $this->state_arr = array(0=>'开启', 1=>'关闭');
-		$this->cur_model = M('video');
+		$this->cur_model = model('video');
 	}
     
 	public function indexAction(){
@@ -34,15 +34,15 @@ class VideoController extends CommonController{
 	private function uploadPhoto(){
 		$uploadObj = new Upload();
 	    $uploadDir = getUploadAddr();
-	    $url = $_POST['url'];
+	    $url = $this->post('url');
 	    if($url && strpos($url, 'http://') === false){
 	        $this->ajaxReturn(300, '链接输入错误，正确链接如：http://www.eaglephp.com');
 	    }
 	    $uploadObj->allowTypes = array('image/gif','image/jpg','image/jpeg', 'image/pjpeg','image/bmp','image/x-png');
-	    if(!empty($_FILES['img']['tmp_name'])){
+	    if(($img = $this->file('img')) && $img['name']!=''){
 	         $case_dir = getCfgVar('cfg_video_dir');
 	         $upload_dir = $uploadDir.$case_dir;
-	         $file_info = $uploadObj->uploadOne($_FILES['img'], $upload_dir);
+	         $file_info = $uploadObj->uploadOne($this->file('img'), $upload_dir);
 	         if($file_info !== false){
 	             $file_name = $file_info[0]['savename'];			
 				 Image::thumb($upload_dir.$file_name, $upload_dir.$file_name, '', 300, 200); 
@@ -54,10 +54,10 @@ class VideoController extends CommonController{
 	}
 
 	public function addAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 			$_POST['create_time'] = date('Y-m-d H:i:s');
 			$this->uploadPhoto();
-			if(empty($_POST['img'])){
+			if(!$this->post('img')){
 				$this->ajaxReturn(300, '图片不能为空');
 			}
 			if($this->cur_model->add()){
@@ -73,9 +73,9 @@ class VideoController extends CommonController{
 	
 
 	public function updateAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 			$this->uploadPhoto();
-		    if(!$_POST['img']){
+		    if(!$this->post('img')){
 		    	unset($_POST['img']);
 		    }
 			if($this->cur_model->save()){	
@@ -84,7 +84,7 @@ class VideoController extends CommonController{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->cur_model->where("id=$id")->find();
 			$this->assign('info', $info);
 			$this->assign('state_arr', $this->state_arr);
@@ -93,7 +93,7 @@ class VideoController extends CommonController{
 	}
 
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		$sql = "id IN($ids)";
 		$list = $this->cur_model->field('img')->where($sql)->select();
 		foreach($list as $v){

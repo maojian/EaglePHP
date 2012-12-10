@@ -23,7 +23,7 @@ class CommonController extends Controller {
 	 */
 	public function _initialize()
 	{
-	    self::$adminUser = Session::get(SESSION_USER_NAME);
+	    self::$adminUser = $this->session(SESSION_USER_NAME);
 	    //Session::checkClientCookie();
 		$this->checkLogin();
 		$this->checkAuth();
@@ -35,7 +35,7 @@ class CommonController extends Controller {
 	 */
 	public function checkLogin()
 	{
-		if(!isset(self::$adminUser)){
+		if(empty(self::$adminUser)){
 			// 如果为Ajax请求，则返回json数据
 			if(HttpRequest::isAjaxRequest()){
 				$this->ajaxReturn(301, '会话已超时，请重新登录');
@@ -59,11 +59,11 @@ class CommonController extends Controller {
 		$role_modules = self::$adminUser['role_modules'];
 		
 		if(empty($role_modules)){
-			M('module')->getMenuTree();
+			model('module')->getMenuTree();
 			$role_modules = self::$adminUser['role_modules'];
 		}
 		
-		$isAccess = M('role')->authRoleAccess($url, $role_modules);
+		$isAccess = model('role')->authRoleAccess($url, $role_modules);
 		if(!$isAccess){
 			$message = '对不起，你没有权限执行此操作！';
 			if(HttpRequest::isAjaxRequest()){
@@ -112,8 +112,11 @@ class CommonController extends Controller {
 	{
 		// 当前页
 		$page_num = (int)HttpRequest::getPost('pageNum');
-		$order_field = HttpRequest::getPost('orderField', $order_field);
-        $order_direction = HttpRequest::getPost('orderDirection', $order_direction);
+		
+		$postOrderFiled = HttpRequest::getPost('orderField');
+		$order_field = $postOrderFiled ? $postOrderFiled : $order_field;
+        $postOrderDirection = HttpRequest::getPost('orderDirection');
+        $order_direction = $postOrderDirection ? $postOrderDirection : $order_direction;
         
 		$page_num = (empty ($page_num)) ? 0 : $page_num;
 		$num_per_page = (int)HttpRequest::getPost('numPerPage'); // 每页条数
@@ -131,6 +134,18 @@ class CommonController extends Controller {
 		);
 		return $page;
 	}
+	
+	
+	/**
+	 * 判断客户端是否post方式提交
+	 * 
+	 * @return void
+	 */
+	public function isPost()
+	{
+	    return (HttpRequest::getRequestMethod() == 'POST' && count($_POST));
+	}
+	
 	
 
 }

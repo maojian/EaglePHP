@@ -12,7 +12,7 @@ class ManagerController extends CommonController {
 	private $manager_model, $roles, $status;
 	
 	public function __construct(){
-		$this->manager_model = M('manager');
+		$this->manager_model = model('manager');
 		$this->roles = $this->getRoles();
 		$this->status = array('U'=>'可用', 'D'=>'锁定');
 	}
@@ -22,7 +22,7 @@ class ManagerController extends CommonController {
 	 * 获取角色
 	 */
 	protected function getRoles(){
-		if($roles = M('role')->field('id,name')->select()){
+		if($roles = model('role')->field('id,name')->select()){
 			foreach($roles as $v){
 				$data[$v['id']] = $v['name'];
 			}
@@ -37,7 +37,7 @@ class ManagerController extends CommonController {
 	protected function getChannelBox($channelIds='')
 	{
 	    if($channelIds) $channelArr = explode(',', $channelIds);
-	    $list = M('helper')->getNewsTypeList();
+	    $list = model('helper')->getNewsTypeList();
 	    foreach ($list as $k=>$v)
 	    {
 	        $box .= "<option value='{$k}' ".(in_array($k, $channelArr) ? 'selected="true"' : '').">{$v}</option>";
@@ -71,10 +71,14 @@ class ManagerController extends CommonController {
 	 * 验证表单提交的值是否符合条件
 	 */
 	private function checkValidate($flag='add'){
-		$sql = "username='{$_POST['username']}'";
-		$sql .= ($flag == 'update') ? " AND uid!={$_POST['uid']}" : '';
-		$password = $_POST['password'];
-	    $channel_ids = $_POST['channel_ids'];
+	    $username = $this->post('username');
+	    $uid = $this->post('uid');
+		
+	    $sql = "username='{$username}'";
+		$sql .= ($flag == 'update') ? " AND uid!={$uid}" : '';
+		
+		$password = $this->post('password');
+	    $channel_ids = $this->post('channel_ids');
 		$pwd_len = strlen($password);
 		if($this->manager_model->where($sql)->count() > 0){
 			$this->ajaxReturn(300, '用户名已经存在');
@@ -125,7 +129,7 @@ class ManagerController extends CommonController {
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$uid = (int)$_REQUEST['uid'];
+			$uid = (int)$this->get('uid');
 			$user_info = $this->manager_model->where("uid=$uid")->find();
 			$this->assign('user_info', $user_info);
 			$this->assign('roles', $this->roles);
@@ -139,7 +143,7 @@ class ManagerController extends CommonController {
 	 * 删除用户
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		
 		if(!$ids){
 			$this->ajaxReturn(300, '编号错误');
@@ -182,11 +186,11 @@ class ManagerController extends CommonController {
 	 * 修改密码
 	 */
 	public function setPwdAction(){
-		$username = $_SESSION[SESSION_USER_NAME]['username']; 
-		if(count($_POST) > 0){
-			$old_password = md5($_POST['old_password']);
-			$new_password = $_POST['new_password'];
-			$new_password2 = $_POST['new_password2'];
+		$username = self::$adminUser['username']; 
+		if($this->isPost()){
+			$old_password = md5($this->post('old_password'));
+			$new_password = $this->post('new_password');
+			$new_password2 = $this->post('new_password2');
 			
 			$pwd_len = strlen($new_password);
 			if($new_password != $new_password2){

@@ -14,7 +14,7 @@ class SessionTable {
     
     public function init()
     {
-        self::$handler = M('session');
+        self::$handler = model('session');
         Session::module('user');
         Session::setSaveHandler(
             	array('SessionTable', 'open'),

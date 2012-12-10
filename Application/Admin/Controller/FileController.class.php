@@ -13,7 +13,7 @@ class FileController extends CommonController{
      }
      
      public function indexAction(){
-          $active_path = $_REQUEST['active_path'];
+          $active_path = $this->request('active_path');
           if(empty($active_path)){
               $active_path = '/'.basename(ROOT_DIR);
           }
@@ -86,10 +86,10 @@ class FileController extends CommonController{
       * 编辑文件
       */
      public function editAction(){
-          $file = $this->base_dir.$_REQUEST['file'];
-          if(isset($_POST['content'])){
+          $file = $this->base_dir.$this->request('file');
+          if($content = $this->request('content', self::_NO_CHANGE_VAL_, false)){
               if(!is_writable($file)) $this->ajaxReturn(300, '文件无法写入！');
-              file_put_contents($file, $_REQUEST['content']);
+              file_put_contents($file, $content);
               $this->ajaxReturn(200, '文件编辑成功！');
           }
           if(!file_exists($file)) $this->ajaxReturn(300, '文件不存在！');
@@ -103,7 +103,7 @@ class FileController extends CommonController{
       * 删除文件
       */
      public function deleteAction(){
-          $file = $this->base_dir.$_REQUEST['file'];
+          $file = $this->base_dir.$this->request('file');
           if(is_file($file)){
               if(@unlink($file)) $this->ajaxReturn(200, '文件已删除成功！');
           }elseif(is_dir($file)){
@@ -117,16 +117,16 @@ class FileController extends CommonController{
       * 创建文件或文件夹
       */
      public function createAction(){
-          $type = $_REQUEST['type'];
-          $file = $this->base_dir.$_REQUEST['file'];
-          $file_name = $_POST['file_name'];
-          if($_POST){
+          $type = $this->request('type');
+          $file = $this->base_dir.$this->request('file');
+          $file_name = $this->request('file_name');
+          if($this->isPost()){
               $path = $file.'/'.$file_name;
               if($type == 'file'){
                    if(file_exists($path)){
                        $this->ajaxReturn(300, '文件已经存在！');
                    }
-                   if(file_put_contents($path, $_POST['content'])){
+                   if(file_put_contents($path, $this->post('content', self::_NO_CHANGE_VAL_, false))){
                         $this->ajaxReturn(200, '文件创建成功！');
                    }else{
                         $this->ajaxReturn(300, '文件创建失败！');
@@ -150,9 +150,9 @@ class FileController extends CommonController{
       * 改名
       */
      public function renameAction(){
-          $file = $this->base_dir.$_REQUEST['file'];
-          if(isset($_POST['new_name'])){
-              $new_name = dirname($file).'/'.$_POST['new_name'];
+          $file = $this->base_dir.$this->request('file');
+          if($new_name = $this->request('new_name')){
+              $new_name = dirname($file).'/'.$new_name;
               if(is_writable($file) && $new_name!=$file){
                   if(rename($file, $new_name)){
                       $this->ajaxReturn(200, '文件重命名成功！');
@@ -168,13 +168,14 @@ class FileController extends CommonController{
      * 移动
      */
      public function moveAction(){
-          $file = $this->base_dir.$_REQUEST['file'];
-          if(isset($_POST['new_dir'])){
-              $new_dir = rtrim(ltrim($_POST['new_dir'], '/'), '/');
-              if($new_dir == '' || preg_match('#\.\.#', $new_dir)){
+          $file = $this->base_dir.$this->request('file');
+          if($news_dir = $this->request('new_dir', self::_NO_CHANGE_VAL_, false)){
+              $new_dir = rtrim(ltrim($news_dir, '/'), '/');
+              if($new_dir == '' || preg_match('#\.\.#', $new_dir))
+              {
                   $this->ajaxReturn(300, '路径不合法，请再重新输入！');
               }
-              $new_dir = $this->base_dir.$_POST['cur_dir'].'/'.$new_dir.'/';
+              $new_dir = $this->request('cur_dir', self::_NO_CHANGE_VAL_, false).'/'.$new_dir.'/';
               if(!is_dir($new_dir)){
                   mk_dir($new_dir);
               }
@@ -187,7 +188,7 @@ class FileController extends CommonController{
               $this->ajaxReturn(300, '文件移动失败！');
           }
           $this->assign('move_name', basename($file));
-          $this->assign('cur_dir', dirname($_REQUEST['file']));
+          $this->assign('cur_dir', dirname($file));
           $this->display();
      }
      
@@ -196,7 +197,7 @@ class FileController extends CommonController{
      * 空间大小
      */
      public function spaceAction(){
-          $file = $_REQUEST['file'];
+          $file = $this->request('file');
           $size = getFileSize(checkFileSize($this->base_dir.$file));
           echo "<br/><i>目录 <b>{$file}</b> 的使用状况：{$size}</i>";
      }
@@ -205,15 +206,15 @@ class FileController extends CommonController{
       * 上传文件
       */
      public function uploadAction(){
-          $path = $this->base_dir.$_REQUEST['file'];
-          if(count($_POST) > 0 && count($_FILES) > 0){
+          $path = $this->base_dir.$this->request('file');
+          if($this->isPost() && count($this->file()) > 0){
 		     $upload_boj = new Upload();
              $upload_boj->saveRule = '';
              $upload_boj->allowTypes = '';
              $upload_boj->upload($path.'/');
     	  }else{
              $this->assign('PHPSESSID', session_id());
-             $this->assign('cur_dir', $_REQUEST['file']);
+             $this->assign('cur_dir', $this->request('file'));
              $this->display();
     	  }
      }

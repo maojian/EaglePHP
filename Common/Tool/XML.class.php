@@ -63,26 +63,29 @@ class XMLHelper{
 	var $last_opened_tag; #keeps track of the last tag opened.
 
 	function XMLHelper(){
- 		$this->parser = &xml_parser_create();
+ 		$this->parser = xml_parser_create();
 		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
 		xml_set_object($this->parser, $this);
 		xml_set_element_handler($this->parser, 'open','close');
 		xml_set_character_data_handler($this->parser, 'data');
 	}
+	
 	function destruct(){ xml_parser_free($this->parser); }
-	function & parse(&$data){
+	
+	function parse($data){
 		$this->document = array();
 		$this->stack    = array();
 		$this->parent   = &$this->document;
 		return xml_parse($this->parser, $data, true) ? $this->document : NULL;
 	}
+	
 	function open(&$parser, $tag, $attributes){
 		$this->data = ''; #stores temporary cdata
 		$this->last_opened_tag = $tag;
 		if(is_array($this->parent) and array_key_exists($tag,$this->parent)){ #if you've seen this tag before
 			if(is_array($this->parent[$tag]) and array_key_exists(0,$this->parent[$tag])){ #if the keys are numeric
 				#this is the third or later instance of $tag we've come across
-				$key = count_numeric_items($this->parent[$tag]);
+				$key = self::count_numeric_items($this->parent[$tag]);
 			}else{
 				#this is the second instance of $tag that we've seen. shift around
 				if(array_key_exists("$tag attr",$this->parent)){

@@ -12,7 +12,7 @@ class CacheRedis extends Cache{
     {
         if(!extension_loaded('redis'))
         {
-            throw_exception(L('SYSTEM:module.not.loaded', array('redis')));
+            throw_exception(language('SYSTEM:module.not.loaded', array('redis')));
         }
 
         if(!isset($options['host'])) $options['host'] = getCfgVar('cfg_redis_host') ? getCfgVar('cfg_redis_host') : '127.0.0.1';

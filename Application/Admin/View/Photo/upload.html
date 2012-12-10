@@ -59,7 +59,7 @@
 		upload_url: "{{$smarty.const.__URL__}}upload",
 		post_params: {"PHPSESSID" : "{{$PHPSESSID}}"},
 		file_size_limit : "10 MB",
-		file_types : "*.jpg;*.gif;*.jpeg;*.png",
+		file_types : "*.jpg;*.gif;*.jpeg;*.png;",
 		file_types_description : "图片文件",
 		file_upload_limit : 50,
 		file_queue_limit : 0,
@@ -102,7 +102,7 @@
 	//}});
 	
 	function submitUpload(){                             
-		var albumid = $("input[name=albumid]", navTab.getCurrentPanel()).val();
+		var albumid = $("#albumid", navTab.getCurrentPanel()).val();
 		var width = parseInt($("#width").val());
 		var height = parseInt($("#height").val());
 		

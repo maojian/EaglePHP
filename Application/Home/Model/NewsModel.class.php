@@ -13,9 +13,9 @@ class NewsModel extends Model{
     private function getChildType($id){
          static $list = array();
          if(count($list) == 0){
-              $list = M('news_type')->field('id,title,parent')->select(array('cache'=>true));
+              $list = model('news_type')->field('id,title,parent')->select(array('cache'=>true));
          }
-         $arr = M('helper')->getChild($id, $list, true);
+         $arr = model('helper')->getChild($id, $list, true);
          return is_array($arr) ? implode(',', array_keys($arr)) : 0;
     }
     
@@ -37,8 +37,8 @@ class NewsModel extends Model{
       * 获取新闻列表
       */
      public function getList($perpage = 15){	
-      	  $type_id = isset($_GET['type']) ? (int) $_GET['type'] : '';
-      	  $content = isset($_REQUEST['content']) ? $_REQUEST['content'] : '';
+      	  $type_id = HttpRequest::getRequest('type');
+      	  $content = HttpRequest::getRequest('content');
       	  
 		  $sql = $url = '';
       	  if($type_id){
@@ -55,10 +55,10 @@ class NewsModel extends Model{
   		  $news_list = $this->field('id,title,type,description,img,create_time')->where($sql)->order('rank ASC,create_time DESC')->limit("{$page->offset},{$perpage}")->select(array('cache'=>true));
 
   		  if($news_list){
-             $news_type_m = M('news_type');
+             $news_type_m = model('news_type');
              foreach ($news_list as &$val){
                 $type_info = $news_type_m->field('title')->getbyId($val['type']);
-                $val['type_name'] = $type_info['title'];
+                if($type_info) $val['type_name'] = $type_info['title'];
                 $val['link'] = $this->getHtmlLink($val);
              }
           }
@@ -85,7 +85,7 @@ class NewsModel extends Model{
       * 获得热点文章
       */
      public function getHot($count=5){
-          $type_list = M('news_type')->field('id,title')->where('parent=0')->limit(4)->order('id ASC')->select();
+          $type_list = model('news_type')->field('id,title')->where('parent=0')->limit(4)->order('id ASC')->select();
           if(is_array($type_list)){
               foreach ($type_list as $type){
                   $type_id = $type['id'];
@@ -111,7 +111,7 @@ class NewsModel extends Model{
           $sql = 'img!=""';
           if(!empty($type_id)) $sql .= " AND type=$type_id";
           $recom_info = $this->field('id,title,img,description,create_time')->where($sql)->order('id DESC')->find();
-          $type_list = M('news_type')->field('id AS type_id,title AS type_name')->where('id!=1')->order('id ASC')->select(array('cache'=>true));
+          $type_list = model('news_type')->field('id AS type_id,title AS type_name')->where('id!=1')->order('id ASC')->select(array('cache'=>true));
           if(is_array($type_list)){
               foreach ($type_list as $type){
                   $type_id = $type['type_id'];

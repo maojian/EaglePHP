@@ -8,7 +8,7 @@ class ApiCommonController extends Controller{
 	 * 初始化
 	 */
 	public function _initialize(){
-		self::$api_codes = C('api_error_code');
+		self::$api_codes = config('api_error_code');
 	}
 	
     /**
@@ -23,7 +23,7 @@ class ApiCommonController extends Controller{
      */
     public function xmlReturn($data){
     	$data = array('root'=>$data);
-    	header('Content-Type:text/xml;charset=utf-8');
+    	HttpResponse::sendContentHeader('Content-Type:text/xml;charset=utf-8');
     	exit(XML::XML_serialize($data));
     }
     
@@ -32,11 +32,11 @@ class ApiCommonController extends Controller{
      */
     public function formatReturn($code, $list=''){
     	$message = self::$api_codes[$code];
-    	$data = array('statusCode'=>$code, 'message'=>$message, 'sessionId'=>session_id());
+    	$data = array('statusCode'=>$code, 'message'=>$message);
     	if(!empty($list)){
     		$data['data'] = $list;
     	}
-    	if($this->getParameter('format') == 'xml'){
+    	if($this->request('format') === 'xml'){
     		$this->xmlReturn($data);
     	}else{
     		$this->jsonReturn($data);

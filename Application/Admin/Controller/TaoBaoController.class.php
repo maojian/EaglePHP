@@ -15,8 +15,8 @@ class TaoBaoController extends CommonController{
     
     
     public function indexAction(){
-        $pageNum = (int)$_REQUEST['pageNum'];
-        $data = $this->taobaoClient->getTaoBaoKeItems(array('cid'=>(int)$_POST['cid'], 'keyword'=>$_POST['keyword'], 'page'=>$pageNum, 'page_size'=>20));
+        $pageNum = (int)$this->post('pageNum');
+        $data = $this->taobaoClient->getTaoBaoKeItems(array('cid'=>(int)$this->post('cid'), 'keyword'=>$this->post('keyword'), 'page'=>$pageNum, 'page_size'=>20));
         $page = $this->page($data['count']);
         $this->assign('cats', $this->taobaoClient->getItemCates());
         $this->assign('list', $data['list']);

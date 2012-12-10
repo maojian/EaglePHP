@@ -11,7 +11,7 @@ class AccountController extends CommonController{
     private $curModel;
 	
 	public function __construct(){
-		$this->curModel = M('account');
+		$this->curModel = model('account');
 	}
 	
 	
@@ -19,9 +19,9 @@ class AccountController extends CommonController{
 	 * 列表页
 	 */
 	public function indexAction(){
-	    $remark = $this->getParameter('remark');
-	    $startTime = $this->getParameter('startTime');
-	    $endTime = $this->getParameter('endTime');
+	    $remark = $this->request('remark');
+	    $startTime = $this->request('startTime');
+	    $endTime = $this->request('endTime');
 	    $sql = null;
 	    if($remark){
 	        $sql[] = "remark LIKE '%{$remark}%'";
@@ -50,7 +50,7 @@ class AccountController extends CommonController{
 	 * 添加
 	 */
 	public function addAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 			if($this->curModel->add()){
 				$this->ajaxReturn(200, '添加成功');
 			}else{
@@ -65,14 +65,14 @@ class AccountController extends CommonController{
 	 * 修改
 	 */
 	public function updateAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 			if($this->curModel->save()){
 				$this->ajaxReturn(200, '修改成功');
 			}else{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->curModel->where("id=$id")->find();
 			$this->assign('info',$info);
 			$this->display();
@@ -83,7 +83,7 @@ class AccountController extends CommonController{
 	 * 删除
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		if(!empty($ids) && $this->curModel->where("id IN($ids)")->delete()){
 			$this->ajaxReturn(200, '删除成功');
 		}else{

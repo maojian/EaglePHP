@@ -11,16 +11,16 @@ class ManagerController extends ApiCommonController{
 	private $user_model = null;
 	
 	public function __construct(){
-		$this->user_model = M('manager');
+		$this->user_model = model('manager');
 	}
 	
 	/**
 	 * 登录接口
 	 */
     public function loginAction(){
-    	$username = $_POST['username'];
-    	$password = $_POST['password'];
-    	$verify = $_POST['verify'];
+    	$username = $this->post('username');
+    	$password = $this->post('password');
+    	$verify = $this->post('verify');
     	if(empty($username)){
     		$this->formatReturn(201);
     	}else if(empty($password)){
@@ -36,7 +36,7 @@ class ManagerController extends ApiCommonController{
     				$this->formatReturn(203);
     			}else{
     			    Session::delete('verify');
-    				$role_info = M('role')->field('name')->where("id={$manager_info['role_id']}")->find();
+    				$role_info = model('role')->field('name')->where("id={$manager_info['role_id']}")->find();
     				$manager_info['role_name'] = $role_info['name'];
     				Session::set(SESSION_USER_NAME, $manager_info);
     				$login_ip = get_client_ip();
@@ -59,7 +59,7 @@ class ManagerController extends ApiCommonController{
      * 返回角色配置XML文档
      */
     public function roleConfigAction(){
-    	$role_id = (int)$_REQUEST['role_id'];
+    	$role_id = (int)$this->get('role_id');
     	if(empty($role_id)){
     	    $userInfo = Session::get(SESSION_USER_NAME);
     		$role_id = (int)$userInfo['role_id'];
@@ -67,7 +67,7 @@ class ManagerController extends ApiCommonController{
     	
     	if($role_id){
     		// 读取角色配置文件
-	    	$role_info = M('role')->field('config')->where("id=$role_id")->find();
+	    	$role_info = model('role')->field('config')->where("id=$role_id")->find();
 	    	$config = trim($role_info['config']);
 	    	if($config){
 	    		header('Content-Type:text/xml;charset=utf-8');
@@ -81,7 +81,7 @@ class ManagerController extends ApiCommonController{
      * 根据用户会话key获取值
      */
     public function getSessionAction(){
-    	$key = $_REQUEST['key'];
+    	$key = $this->get('key');
     	$manager_info = Session::get(SESSION_USER_NAME);
     	if(!empty($key) && $manager_info){
     		$keys = explode('|', $key);

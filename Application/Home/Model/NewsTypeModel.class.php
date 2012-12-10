@@ -6,7 +6,7 @@ class NewsTypeModel extends Model{
        }
        
        public function getNewsTypeList(){
-            $list = M('news_type')->field('id,title,parent')->where('state=0')->order('rank DESC')->select(array('cache'=>true));
+            $list = model('news_type')->field('id,title,parent')->where('state=0')->order('rank DESC')->select(array('cache'=>true));
             return $this->getTree(0, $list);
        }
        

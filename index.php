@@ -6,6 +6,7 @@
 * @author maojianlw@139.com
 */
 
+
 if(!file_exists('Data/Install/INSTALL.LOCK'))
 {
     header('Location: ./Public/install/index.php/step/');

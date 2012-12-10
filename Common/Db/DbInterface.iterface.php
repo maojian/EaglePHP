@@ -1,12 +1,13 @@
 <?php
-
 /**
  * 数据库接口，后续扩展其他数据库以此接口规范为准。
+ * 
  * @author maojianlw@139.com
  * @since 2012-2-1
  */
 
-interface DbInterface{
+interface DbInterface
+{
    
    /**
     * 连接数据库

@@ -10,7 +10,7 @@ class LinksController extends CommonController{
     
     public function __construct(){
         $this->state_arr = array(0=>'开启', 1=>'关闭');
-		$this->cur_model = M('links');
+		$this->cur_model = model('links');
 	}
     
 	public function indexAction(){
@@ -45,10 +45,10 @@ class LinksController extends CommonController{
 	}
 
 	public function addAction(){
-		if(count($_POST) > 0){
-			$_POST['create_time'] = date('Y-m-d H:i:s');
+		if($this->isPost()){
+			$_POST['create_time'] = Date::format();
 			$this->uploadPhoto();
-			if(empty($_POST['img'])){
+			if(!$this->post('img')){
 				$this->ajaxReturn(300, '图片不能为空');
 			}
 			if($this->cur_model->add()){
@@ -64,9 +64,9 @@ class LinksController extends CommonController{
 	
 
 	public function updateAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 			$this->uploadPhoto();
-		    if(!$_POST['img']){
+		    if(!$this->post('img')){
 		    	unset($_POST['img']);
 		    }
 			if($this->cur_model->save()){	
@@ -75,7 +75,7 @@ class LinksController extends CommonController{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->cur_model->where("id=$id")->find();
 			$this->assign('info', $info);
 			$this->assign('state_arr', $this->state_arr);
@@ -84,7 +84,7 @@ class LinksController extends CommonController{
 	}
 
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		$sql = "id IN($ids)";
 		$list = $this->cur_model->field('img')->where($sql)->select();
 		foreach($list as $v){

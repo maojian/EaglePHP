@@ -9,113 +9,269 @@
 class HttpRequest
 {
 
-    protected static $_hostInfo; // server host信息
+    /**
+     * server host信息
+     * 
+     * @var string
+     */
+    protected static $_hostInfo;
     
-    protected static $_langauge; // client 浏览器语言
+    
+    /**
+     * client 浏览器语言
+     * 
+     * @var string
+     */
+    protected static $_langauge;
+    
     
     
     /**
      * 获取GET方式请求的数据
      * @param string $name 变量名
-     * @param string $defaultVal 默认值
+     * @param mixed $defaultVal 默认值
+     * @param bool $filter 是否清除XSS
      * @return mixed
      */
-    public static function getGet($name = null, $defaultVal = null)
+    public static function getGet($name = null, $defaultVal=null, $filter = true)
     {
-        if($name === null) return $_GET;
-        return isset($_GET[$name]) ? $_GET[$name] : $defaultVal;
+        if($name === null) $value = $_GET;
+        elseif(isset($_GET[$name])) $value = $_GET[$name];
+        else $value = $defaultVal;
+        return $filter ? Filter::runMagicQuote($value) : $value;
     }
+    
+    
+    /**
+     * 设置get方法中的变量
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    public static function setGet($name=null, $value=null)
+    {
+        if($name === null)
+        {
+            $_GET = $value;
+        }
+        else
+        {
+            if($value === null) unset($_GET[$name]);
+            else $_GET[$name] = $value;
+        }
+        return true;
+    }
+    
+    
     
     /**
      * 获取POST方式请求的数据
      * @param string $name 变量名
-     * @param mix $defaultVal 默认值
+     * @param mixed $defaultVal 默认值
+     * @param bool $filter 是否清除XSS
      * @return mixed
      */
-    public static function getPost($name = null, $defaultVal = null)
+    public static function getPost($name = null, $defaultVal=null, $filter = true)
     {
-        if($name === null) return $_POST;
-        return isset($_POST[$name]) ? $_POST[$name] : $defaultVal;
+        if($name === null) $value = $_POST;
+        elseif(isset($_POST[$name])) $value = $_POST[$name];
+        else $value = $defaultVal;
+        return $filter ? Filter::runMagicQuote($value) : $value;
+    }
+    
+    
+    /**
+     * 设置post变量
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    public static function setPost($name=null, $value=null)
+    {
+        if($name === null)
+        {
+            $_POST = $value;
+        }
+        else
+        {
+            if($value === null) unset($_POST[$name]);
+            else $_POST[$name] = $value;
+        }
+        return true;
     }
     
     
     /**
      * 获取客户端请求的数据
      * @param string $name 变量名
-     * @param mix $defaultVal 默认值
+     * @param mixed $defaultVal
+     * @param bool $filter 是否清除XSS
      * @return mixed
      */
-    public static function getRequest($name = null, $defaultVal = null)
+    public static function getRequest($name = null, $defaultVal=null, $filter = true)
     {
-        if($name === null) return array_merge($_GET, $_POST);
-        if(isset($_GET[$name])) return $_GET[$name];
-        if(isset($_POST[$name])) return $_POST[$name];
-        return $defaultVal;
+        if($name === null) $value = $_REQUEST;
+        elseif(isset($_REQUEST[$name])) $value = $_REQUEST[$name];
+        else $value = $defaultVal;
+        return $filter ? Filter::runMagicQuote($value) : $value;
     }
+    
+    
+    /**
+     * 设置request中的变量
+     * 
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    public static function setRequest($name=null, $value=null)
+    {
+        if($name === null)
+        {
+            $_REQUEST = $value;
+        }
+        else
+        {
+            if($value === null) unset($_REQUEST[$name]);
+            else $_REQUEST[$name] = $value;
+        }
+        return true;
+    }
+    
+    
+    
+	/**
+     * 获取客户端cookie数据
+     * @param string $name 变量名
+     * @param mixed $defaultVal 默认值
+     * @return mixed
+     */
+    public static function getCookie($name = null, $defaultVal=null, $filter = true)
+    {
+        if($name === null) return Cookie::getAll($filter);
+        return Cookie::exists($name) ? Cookie::get($name, $filter) : $defaultVal;
+    }
+    
+    
+    /**
+     * 设置cookie中的变量
+     * @param string $name
+     * @param string $value
+     * @return
+     */
+    public static function setCookie($name, $value = null)
+    {
+        if($value === null) Cookie::delete($name);
+        else Cookie::set($name, $value);
+        return true;
+    }
+    
     
     
 	/**
      * 获取客户端上传的文件数据
      * @param string $name 变量名
-     * @param mix $defaultVal 默认值
+     * @param mixed $defaultVal 默认值
      * @return mixed
      */
-    public static function getFile($name = null, $defaultVal = null)
+    public static function getFile($name = null)
     {
         if($name === null) return $_FILES;
-        return isset($_FILES[$name]) ? $_FILES[$name] : $defaultVal;
-    }
-    
-    
-    /**
-     * 获取客户端cookie数据
-     * @param string $name 变量名
-     * @param mix $defaultVal 默认值
-     * @return mixed
-     */
-    public static function getCookie($name = null, $defaultVal = null)
-    {
-        if($name === null) return $_COOKIE;
-        return isset($_COOKIE[$name]) ? $_COOKIE[$name] : $defaultVal;
+        return isset($_FILES[$name]) ? $_FILES[$name] : null;
     }
     
     
 	/**
      * 获取客户端产生的会话数据
      * @param string $name 变量名
-     * @param mix $defaultVal 默认值
+     * @param mixed $defaultVal 默认值
      * @return mixed
      */
-    public static function getSession($name = null, $defaultVal = null)
+    public static function getSession($name = null, $defaultVal=null)
     {
-        if($name === null) return $_SESSION;
-        return isset($_SESSION[$name]) ? $_SESSION[$name] : $defaultVal;
+        if($name === null) return Session::getAll();
+        return Session::exists($name) ? Session::get($name) : $defaultVal;
+    }
+    
+    
+	/**
+     * 设置session中的变量
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
+     */
+    public static function setSession($name, $value=null)
+    {
+        return Session::set($name, $value);
     }
     
     
 	/**
      * 获取Server数据
      * @param string $name 变量名
-     * @param mix $defaultVal 默认值
+     * @param mixed $defaultVal 默认值
      * @return mixed
      */
-    public static function getServer($name = null, $defaultVal = null)
+    public static function getServer($name = null, $defaultVal=null)
     {
         if($name === null) return $_SERVER;
         return isset($_SERVER[$name]) ? $_SERVER[$name] : $defaultVal;
     }
     
     
+    /**
+     * 设置server中的变量
+     * @param string $name
+     * @param mixed $value
+     * @return mixed
+     */
+    public static function setServer($name=null, $value = null)
+    {
+        if($name === null)
+        {
+            $_SERVER = $value;
+        }
+        else
+        {
+            if($value === null) unset($_SERVER[$name]);
+            else $_SERVER[$name] = $value;
+        }
+        return true;
+    }
+    
+    
+    
 	/**
      * 获取Env数据
      * @param string $name 变量名
-     * @param mix $defaultVal 默认值
+     * @param mixed $defaultVal 默认值
      * @return mixed
      */
-    public static function getEnv($name = null, $defaultVal = null)
+    public static function getEnv($name = null, $defaultVal=null)
     {
         if($name === null) return $_ENV;
         return isset($_ENV[$name]) ? $_ENV[$name] : $defaultVal;
+    }
+    
+    
+    /**
+     * 设置env中的变量
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    public static function setEnv($name=null, $value=null)
+    {
+        if($name === null)
+        {
+            $_ENV = $value;
+        }
+        else
+        {
+            if($value === null) unset($_ENV[$name]);
+            else $_ENV[$name] = $value;
+        }
+        return true;
     }
     
     
@@ -353,5 +509,19 @@ class HttpRequest
         return self::$_hostInfo;
     }
     
+    
+	/**
+     * 获取Apache请求的头信息
+     * 
+     * @return array
+     */
+    public static function getApacheRequestHeader()
+    {
+        if(function_exists('apache_request_headers'))
+        {
+            return apache_request_headers();
+        }
+        return false;
+    }
     
 }

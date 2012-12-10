@@ -173,19 +173,29 @@ class Image
                 $thumbImg = imagecreatetruecolor($width, $height);
             else
                 $thumbImg = imagecreate($width, $height);
-
+            
+            if('gif'==$type || 'png'==$type) {
+                imagealphablending($thumbImg, false);//取消默认的混色模式
+                imagesavealpha($thumbImg,true);//设定保存完整的 alpha 通道信息
+                $background_color  =  imagecolorallocate($thumbImg,  0,255,0);  //  指派一个绿色
+                imagecolortransparent($thumbImg,$background_color);  //  设置为透明色，若注释掉该行则输出绿色的图
+            }
+                
             // 复制图片
             if(function_exists('ImageCopyResampled'))
-                imagecopyresampled($thumbImg, $srcImg, 0, 0, $x, $y, $width, $height, $srcWidth,$srcHeight);
+                imagecopyresampled($thumbImg, $srcImg, 0, 0, 0, 0, $width, $height, $srcWidth,$srcHeight);
             else
-                imagecopyresized($thumbImg, $srcImg, 0, 0, $x, $y, $width, $height,  $srcWidth,$srcHeight);
+                imagecopyresized($thumbImg, $srcImg, 0, 0, 0, 0, $width, $height,  $srcWidth,$srcHeight);
+            
+                /*
             if('gif'==$type || 'png'==$type) {
                 //imagealphablending($thumbImg, false);//取消默认的混色模式
                 //imagesavealpha($thumbImg,true);//设定保存完整的 alpha 通道信息
                 $background_color  =  imagecolorallocate($thumbImg,  0,255,0);  //  指派一个绿色
 				imagecolortransparent($thumbImg,$background_color);  //  设置为透明色，若注释掉该行则输出绿色的图
             }
-
+			*/
+                
             // 对jpeg图形设置隔行扫描
             if('jpg'==$type || 'jpeg'==$type) 	imageinterlace($thumbImg,$interlace);
 
@@ -574,7 +584,7 @@ class Image
                 break;
          }//为空则匹配类型的函数不存在
          
-         $mark_arr = F('Mark/watermark');
+         $mark_arr = fileRW('Mark/watermark');
          $mark_type = $mark_arr['type'];
          $mark_pos = $mark_arr['position'];
          if(empty($mark_pos)) $mark_pos = rand(1, 9);

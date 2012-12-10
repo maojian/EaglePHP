@@ -87,7 +87,7 @@ class HelperModel extends Model{
     
     public function getNewsTypeList($typeIds='', &$return=array())
     {
-        $list = M('news_type')->field('id,title,parent')->where('state=0')->select();
+        $list = model('news_type')->field('id,title,parent')->where('state=0')->select();
         $childArr = $this->getChildList($typeIds, $list);
         $return = is_array($childArr) ? array_keys($childArr) : null;
         return $this->getTree(0, $list, '', $childArr);

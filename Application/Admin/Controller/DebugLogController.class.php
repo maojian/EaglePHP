@@ -16,7 +16,7 @@ class DebugLogController extends CommonController{
     public function __construct() {
     	$this->logDir = dirname(LOG_DIR);
     	$this->logDirArr = $this->getLogDir();
-    	$this->cur_model = M('debug_log');
+    	$this->cur_model = model('debug_log');
     }
     
     
@@ -113,7 +113,7 @@ class DebugLogController extends CommonController{
      * 报表
      */
     public function reportAction(){
-    	$flag = $this->getParameter('flag');
+    	$flag = $this->get('flag');
     	if($flag == 'set'){
     		$this->getSet();
     	}else if($flag == 'data'){

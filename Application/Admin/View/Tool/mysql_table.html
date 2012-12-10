@@ -77,8 +77,11 @@ $("#sava_file_cho").each(function(){
           var file_save = $("#file_save").attr("checked");
           var file_path = $("#file_path").val();
           var url = "{{$smarty.const.__ACTION__}}go/export/?url_param={{$url_param}}";
-       	  $("input[name=ids][class=choose_table][checked=true]").each(function(){
-       			table_arr[table_arr.length] = $(this).val();
+       	  $("input[name='ids']").each(function(){
+    	  	if($(this).attr("checked"))
+    	  	{
+    			table_arr[table_arr.length] = $(this).val();
+    		} 
        	  });
 
        	  if(table_arr.length == 0){

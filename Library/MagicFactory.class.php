@@ -21,7 +21,7 @@ class MagicFactory {
 		if (method_exists($obj, $method)) {
 			return call_user_func_array(array ($obj,$method), $args);
 		}else{
-			throw_exception(L('SYSTEM:method.not.exists', array($method, get_class($obj))));
+			throw_exception(language('SYSTEM:method.not.exists', array($method, get_class($obj))));
 		}
 		
 	}
@@ -47,7 +47,7 @@ class MagicFactory {
 			if (class_exists($class_name)) {
 				eval ("self::\$history[\$class_name] = new \$class_name($args_str);");
 			} else {
-				throw_exception(L('SYSTEM:class.not.exists', array($class_name, ACTION_NAME)));
+				throw_exception(language('SYSTEM:class.not.exists', array($class_name, ACTION_NAME)));
 			}
 		}
 		

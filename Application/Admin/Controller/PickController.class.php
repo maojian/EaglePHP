@@ -13,7 +13,7 @@ class PickController extends CommonController{
     private $lang_arr;
     
     public function __construct(){
-		$this->cur_model = M('pick');
+		$this->cur_model = model('pick');
 		$this->lang_arr = array('gb2312'=>'GB2312/GBK', 'utf-8'=>'UTF-8');
 	}
 	
@@ -34,9 +34,9 @@ class PickController extends CommonController{
 	 * 添加新闻类型
 	 */
 	public function addAction(){
-		if(count($_POST) > 0){
-			$_POST['create_time'] = date('Y-m-d H:i:s');
-			$_POST['rule'] = $_REQUEST['rule'];
+		if($this->isPost()){
+			$_POST['create_time'] = Date::format();
+			$_POST['rule'] = $this->post('rule');
 			if($this->cur_model->add()){
 				$this->ajaxReturn(200, '添加成功', '', 'closeCurrent');
 			}else{
@@ -52,15 +52,15 @@ class PickController extends CommonController{
 	 * 修改新闻类型
 	 */
 	public function updateAction(){
-		if(count($_POST) > 0){
-		    $_POST['rule'] = $_REQUEST['rule'];
+		if($this->isPost()){
+		    $_POST['rule'] = $this->post('rule');
 			if($this->cur_model->save()){
 				$this->ajaxReturn(200, '修改成功', '', 'closeCurrent');
 			}else{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->cur_model->where("id=$id")->find();
 			$this->assign('info', $info);
 			$this->assign('lang_arr', $this->lang_arr);
@@ -72,7 +72,7 @@ class PickController extends CommonController{
 	 * 删除新闻类型
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		if(!empty($ids) && $this->cur_model->where("id IN($ids)")->delete()){
 			$this->ajaxReturn(200, '删除成功');
 		}else{

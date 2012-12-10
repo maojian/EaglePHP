@@ -5,7 +5,7 @@ class MessageController extends CommonController{
      
      
      public function __construct(){
-          $this->cur_model = M('message');
+          $this->cur_model = model('message');
      }
      
      public function indexAction(){ 	
@@ -13,7 +13,7 @@ class MessageController extends CommonController{
       	  $total =  $this->cur_model->where(true)->count();
       	  $page = new Page(array ('total' =>$total, 'perpage' =>$perpage, 'url' => __ACTION__));
   		  $list = $this->cur_model->where(true)->order('create_time DESC')->limit("{$page->offset},{$perpage}")->select();
-          $helper = M('helper');
+          $helper = model('helper');
   		  foreach ($list as &$v){
               $v['img'] = $helper->getGravatarByEmail($v['email'], $v['id']);
               $v['ip'] = $v['ip'].' '.HttpRequest::getIpLocation($v['ip']);
@@ -25,11 +25,11 @@ class MessageController extends CommonController{
     }
     
     public function feedbackAction(){
-          if(count($_POST) > 0){
+          if($this->isPost()){
 			 //$this->ajaxReturn(300, '很抱歉，五一假期留言功能将暂时关闭，谢谢关注！');
-             $yzm = $_POST['yzm'];
-             $content = $_POST['content'];
-             if(Session::get('verify') != md5($_POST['yzm'])){
+             $yzm = $this->post('yzm');
+             $content = $this->post('content');
+             if(Session::get('verify') != md5($yzm)){
                  $this->ajaxReturn(300, '验证码错误，请重新输入！');
              }
              if(preg_match('#('.getCfgVar('cfg_filter_word').')#i', $content)){

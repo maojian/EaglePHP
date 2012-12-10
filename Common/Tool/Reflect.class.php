@@ -54,11 +54,14 @@ class Reflect{
 	public function getDocComment($obj, $isClass = true, $isFun = false){
 		$comment = $obj->getDocComment();
 		$comment_arr['name'] = $obj->name;
+		$comment_params = array();
 		
 		if(!empty($comment)){
 			$comment = str_replace(chr(10), '', $comment);
 			$comments = array_unique(explode('*', $comment));
 			$size = count($comments);
+			
+			$remark = null;
 			
 			if($isClass){ // 对象类
 				foreach($comments as $val){
@@ -73,14 +76,13 @@ class Reflect{
 				}
 				$comment_arr['comment'] = $remark;
 			}else{  // 类方法或者函数
-				$comment_params = array();
 				foreach($comments as $k=>$val){
 					$val = trim($val);
 					if(!empty($val) && $val!='/'){
 						if(strpos($val, '@param') === 0){
 							$param_arr = explode(' ', $val);
-							$param_name = str_replace('$', '', $param_arr[2]);
-							$desc = $param_arr[3];
+							$param_name = str_replace('$', '', isset($param_arr[2]) ? $param_arr[2] : '');
+							$desc = isset($param_arr[3]) ? $param_arr[3] : '';
 							$size = count($param_arr);
 							
 							if($size > 4){
@@ -90,10 +92,10 @@ class Reflect{
 								$desc = htmlspecialchars($desc);
 							}
 							
-							$comment_params[$param_name] = array('type'=>$param_arr[1], 'desc'=>$desc);
+							$comment_params[$param_name] = array('type'=>isset($param_arr[1]) ? $param_arr[1] : '', 'desc'=>$desc);
 						}else if(strpos($val, '@return') === 0){
 							$return_arr = explode(' ', $val);
-							$comment_arr['return'] = array('type'=>strtolower($return_arr[1]), 'desc'=>$return_arr[2]);
+							$comment_arr['return'] = array('type'=>strtolower(isset($return_arr[1]) ? $return_arr[1] : ''), 'desc'=>isset($return_arr[2]) ? $return_arr[2] : '');
 						}else{
 							$remark .= "{$val}, ";
 						}
@@ -143,6 +145,7 @@ class Reflect{
 			 * 属性列表
 			 */
 			$properties = $obj->getProperties();
+			$proper_arr = array();
 			if(is_array($properties)){
 				foreach($properties as $p){
 					$declaring_class = $p->getDeclaringClass();
@@ -173,7 +176,7 @@ class Reflect{
 			 * 获取父类
 			 */
 			$parent_class = $obj->getParentClass();
-			$comment_arr['parent'] = $parent_class->name;
+			$comment_arr['parent'] = isset($parent_class->name) ? $parent_class->name : '';
 			
 			/**
 			 * 预定义常量列表
@@ -188,10 +191,11 @@ class Reflect{
 	/**
 	 * 获得高亮显示的字符串
 	 */
-	protected function getHighLightStr($start_line, $end_line, $file_arr){
+	protected function getHighLightStr($start_line=0, $end_line=0, $file_arr){
 		
+	    $source = null;
 		for($i=$start_line; $i<=$end_line; $i++){
-			$source .= $file_arr[$i];
+			$source .= isset($file_arr[$i]) ? $file_arr[$i] : '';
 		}
 		
 		// 获取类方法源码

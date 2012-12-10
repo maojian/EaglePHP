@@ -1,6 +1,9 @@
-﻿
+﻿欢迎使用EaglePHP框架！
 
-欢迎使用EaglePHP框架！
+开源中国主办的"#2012年最受欢迎的中国开源软件#"评选开始了, 
+快来为#EaglePHP#投上一票！你们的每一份支持就是我们前进的一股动力! 
+http://www.oschina.net/project/top_cn_2012
+
 
 EaglePHP，是一款开源、高效、面向对象的PHP MVC开发框架，完全基于PHP5可用于开发WEB程序和服务，借鉴国外优秀框架的设计思路，分层的设计思想使独立开发成为可能，建立模型推动代码的重用，有助于促进快速软件开发(RAD)和创建更稳定的程序，节约了开发者的时间，并减少重复编写代码的劳动。 
 
@@ -43,9 +46,9 @@ EaglePHP，是一款开源、高效、面向对象的PHP MVC开发框架，完�
 
 二、系统相关配置说明：
 
-1、数据库配置文件：EaglePHP/Config/DbConfig.php
+1、数据库配置文件：EaglePHP/Config/Database.php
 
-2、session会话保存方式：修改  Library/Main.inc.php 中的 SESSION_SAVE_TYPE 常量，共有三种方式可供选择（memcache 、 table 、file），默认为file保存。
+2、session会话保存方式：修改  Config/Constants.php 中的 SESSION_SAVE_TYPE 常量，共有三种方式可供选择（memcache 、 table 、file），默认为file保存。
   
 3、后续如有数据库表结构更新，请登录后台执行更新ORM缓存操作，ORM为对象关系映射，其作用是自动将表结构与模型对象进行绑定关联。ORM缓存文件夹默认为EaglePHP/Data/Field。
 
@@ -58,8 +61,7 @@ EaglePHP，是一款开源、高效、面向对象的PHP MVC开发框架，完�
 
 2、凡是对数据库表结构的修改，需到应用中心->系统管理->缓存更新位置选择更新表映射ORM。
 
-3、新增加公共类文件时，需手动配置Config下的AutoloadConfig.php文件，指定类文件的路径，这样有利于实现自动加载类文件，否则会出现类找不到的情况。
-       另外新增类文件，也可以把Config下的AutoloadConfig.php文件删除，框架会自动重生生成AutoloadConfig.php文件。
+3、新增加公共类文件时，需删除或手动配置EaglePHP/Data/Config下的Autoload.php文件，指定类文件的路径，这样有利于实现自动加载类文件，否则会出现类找不到的情况。
 
 
 /******************* 架构说明  ******************/
@@ -84,6 +86,7 @@ Common	系统公共包
 Config    框架配置文件夹
 
 Data    系统数据文件夹
+	Config  系统生成的配置文件
 	Dict    数据词典
 	I18n    国际化语言包
 	Mark    图片水印包

@@ -2,6 +2,10 @@
 EaglePHP官网：www.eaglephp.com
 EaglePHP下载：eaglephp.googlecode.com
 
+开源中国主办的"#2012年最受欢迎的中国开源软件#"评选开始了, 
+快来为#EaglePHP#投上一票！你们的每一份支持就是我们前进的一股动力! 
+http://www.oschina.net/project/top_cn_2012
+
 Author:maojian
 Email:maojianlw@139.com
 QQ:408865477    
@@ -10,7 +14,7 @@ QQ群：244174426
 
 --------------------------------------------------------------------------------------------
 
-EaglePHP V2.3
+EaglePHP V2.3  2012年12月10日
 
 CHANGES：
 
@@ -18,17 +22,29 @@ CHANGES：
 
 1、修复Model基类自动封装where语句出现表单提交值为零被过滤的bug。
 
-2、对框架底层抛出的Strict Standards及Notice信息进行完善修正，增强代码的健壮性。
+2、修复框架底层抛出的Strict Standards、Notice信息，增强代码的健壮性。
 
 3、框架底层增加客户端HttpRequest对象，封装对get、post、put、request、cookie、session等数据获取方式。
 
-4、修改控制器中获取客户端提交的数据方式为：$this->getParameter('inputName');
+4、框架底层增加服务器端HttpResponse对象，封装所有http状态码，发送响应的头信息等。
 
-5、升级Smarty模版引擎至最新版v3.1.12，性能更快，功能更丰富。
+5、修改控制器中获取客户端提交的数据方式:$this->get(name);$this->post(name);$this->cookie(name)等。
 
-6、修改Model基类对象以支持获取其他应用下面的模型对象，调用方式：M('appName.modelName')。
+6、升级Smarty模版引擎至最新版v3.1.12，性能更快，功能更丰富。
 
-7、自动载入类配置文件及系统信息配置文件更换目录至Data/Config下面。
+7、修改Model基类对象以支持获取其他应用下面的模型对象，调用方式：model('appName.modelName')。
+
+8、自动载入类配置文件及系统信息配置文件更换目录至Data/Config下面。
+
+9、修改当访问控制器、方法不存在时跳转至系统404错误页面。
+
+10、系统函数库增加显示404错误页面函数、删除不可见字符函数、html特殊字符转码函数。
+
+11、将Library下的Main.inc.php移动至Config下，改名为Constants.php。
+
+12、增加系统Security安全类，用来对客户端提交的数据进行XSS安全过滤替换。
+
+13、解决缓存中的DB对象因查询数太多导致连接失效的bug。
 
 
 CMS:
@@ -43,6 +59,9 @@ CMS:
 
 5、后台文章评论、留言反馈管理员回复增加邮件发送回复通知功能，及留言者IP位置显示。
 
+6、解决后台角色设置由于DWZ UI升级后导致菜单复选框全选的bug。
+
+7、修复后台照片管理上传照片选择相册提示为未选择的bug。
 
 
 --------------------------------------------------------------------------------------------

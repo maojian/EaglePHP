@@ -15,9 +15,9 @@ class ToolController extends CommonController{
       * 端口扫描
       */
      public function portscanAction(){
-           if(count($_POST) > 0){
-                $ip = $_POST['ip'];
-                $port = $_POST['port'];
+           if($this->isPost()){
+                $ip = $this->post('ip');
+                $port = $this->post('port');
                 if($port=='' || $ip==''){
                     $this->ajaxReturn(300, 'IP或端口请填写完整');
                 }
@@ -42,7 +42,7 @@ class ToolController extends CommonController{
       * PHP环境
       */
      public function phpenvAction(){
-           $param = $_POST['param'];
+           $param = $this->request('param');
            if($param){
                 $this->assign('value', $this->getCfg($param));
            }
@@ -199,25 +199,25 @@ class ToolController extends CommonController{
      * mysql管理
      */
     public function mysqlAction(){
-         if($url_param = $this->getParameter('url_param')){
+         if($url_param = $this->request('url_param')){
               parse_str(base64_decode(urldecode($url_param)), $param_arr);
               $_REQUEST = $_GET = array_merge($_REQUEST, $param_arr);
          }
-         if(isset($_REQUEST['dbhost'])){    
-              $dbhost = $this->getParameter('dbhost');
-              $dbuser = $this->getParameter('dbuser');
-              $dbname = $this->getParameter('dbname');
-              $go = $this->getParameter('go');
+         if($this->request('dbhost')){    
+              $dbhost = $this->request('dbhost');
+              $dbuser = $this->request('dbuser');
+              $dbname = $this->request('dbname');
+              $go = $this->request('go');
               
               $config = array(
                      'dbdriver' => 'mysql',
                      'dbtype' => 'mysql',
                      'dbhost' => $dbhost,
-                     'dbport' => $this->getParameter('dbport'),
+                     'dbport' => $this->request('dbport'),
                      'dbuser' => $dbuser,
-                     'dbpwd' => $this->getParameter('dbpwd'),
+                     'dbpwd' => $this->request('dbpwd'),
                      'dbname' => $dbname,
-                     'dbcharset' => $this->getParameter('dbcharset')
+                     'dbcharset' => $this->request('dbcharset')
               );
               
               $this->assign('url_param', urlencode(base64_encode(http_build_query($config))));
@@ -243,9 +243,9 @@ class ToolController extends CommonController{
               }
               
               // 当前表
-              $table = $this->getParameter('table');
+              $table = $this->request('table');
               $this->assign('table', $table);
-
+              
               switch ($go){
                   case 'record': // 查看表记录
                        $this->assign('field_arr', $this->getFieldInfo($table));
@@ -281,8 +281,8 @@ class ToolController extends CommonController{
                        break;
                   default:
                        // 文本框SQL命令执行
-                       if(!empty($_POST['query'])){
-                           $this->assign('list', $this->querySql($_REQUEST['query']));
+                       if($this->request('query')){
+                           $this->assign('list', $this->querySql($this->request('query')));
                            $_REQUEST['go'] = 'query';
                        }elseif($dbname){
                            $data = $this->getTableState();
@@ -408,7 +408,7 @@ class ToolController extends CommonController{
      * @param string $table
      */
     private function addData($table){
-         if(count($_POST) > 0){
+         if($this->isPost()){
               $key_str = null;
               $val_str = null;
               foreach($_POST as $k=>$v){
@@ -433,8 +433,8 @@ class ToolController extends CommonController{
      * @param string $table
      */
     private function updateData($table){
-         $where = base64_decode($_REQUEST['eg_base64_where']);
-         if(count($_POST) > 0){
+         $where = base64_decode($this->request('eg_base64_where'));
+         if($this->isPost()){
               unset($_POST['eg_base64_where']);
               foreach($_POST as $k=>$v){
                   $sql .= "$k='{$v}',";
@@ -464,7 +464,7 @@ class ToolController extends CommonController{
      * @param string $table
      */
     private function deleteData($table){
-         $where = base64_decode($_REQUEST['eg_base64_where']);
+         $where = base64_decode($this->request('eg_base64_where'));
          if($where){
               if($this->dbObj->execute("DELETE FROM `$table` WHERE 1=1 $where LIMIT 1")){
                   $this->ajaxReturn(200, '删除成功');
@@ -546,9 +546,9 @@ class ToolController extends CommonController{
      * 导出已选表
      */
     private function exportTable(){
-         $file_save = $_POST['file_save'];
-         $file_path = $_POST['file_path'];
-         $ids = $_REQUEST['ids'];
+         $file_save = $this->request('file_save');
+         $file_path = $this->request('file_path');
+         $ids = $this->request('ids');
          
          if($file_save == 'true'){
              $dir = dirname($file_path);
@@ -612,15 +612,15 @@ class ToolController extends CommonController{
                  $i++;
              }
              
-             if($file_save == 'true'){
+             if($file_save == 'checked'){
                  if(file_put_contents($file_path, $bak_str)){
                      $this->ajaxReturn(200, "已成功备份 {$i} 张表！");
                  }else{
                      $this->ajaxReturn(300, '备份失败');
                  }
              }else{
-                 header("Content-Type: text; charset=utf-8");
-                 header("Content-Disposition: inline; filename=\"" . ($file_name ? $file_name : $_REQUEST['dbname'].'_'.date('Ymd')) . ".sql\"");
+                 header("Content-Type: application/text; charset=utf-8");
+                 header("Content-Disposition: inline; filename=\"" . ($file_name ? $file_name : $this->request('dbname').'_'.Date::format('Ymd')) . ".sql\"");
                  exit($bak_str);
              }
          }

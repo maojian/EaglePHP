@@ -12,7 +12,7 @@ class RoleController extends CommonController{
     private $role_model;
     
     public function __construct(){
-		$this->role_model = M('role');
+		$this->role_model = molde('role');
 	}
 	
 	/**
@@ -33,8 +33,8 @@ class RoleController extends CommonController{
 	 * 获取条件SQL
 	 */
 	private function getWhereSql(){
-		$name = $_REQUEST['name'];
-		$create_time = $_REQUEST['create_time'];
+		$name = $this->post('name');
+		$create_time = $this->post('create_time');
 		
 		if($name) 
 			$sql[] = " name LIKE '%{$name}%' ";
@@ -48,10 +48,10 @@ class RoleController extends CommonController{
 	 * 添加角色
 	 */
 	public function addAction(){
-		if(count($_POST) > 0){
-			$module_ids = $_POST['module_ids'];
-			$_POST['create_time'] = date('Y-m-d H:i:s');
-			if(!empty($_POST['module_ids'])){
+		if($this->isPost()){
+			$module_ids = $this->post('module_ids');
+			$_POST['create_time'] = Date::format();
+			if(!empty($module_ids)){
 				sort($module_ids);
 				$module_ids = implode(',', $module_ids);
 				$_POST['module_ids'] = $module_ids;	
@@ -61,7 +61,7 @@ class RoleController extends CommonController{
 				
 			if($this->role_model->add()){
 			    // 自动刷新权限
-			    M('module')->getMenuTree(true);
+			    model('module')->getMenuTree(true);
 				$this->ajaxReturn(200, '添加成功');
 			}else{
 				$this->ajaxReturn(300, '添加失败');
@@ -76,9 +76,10 @@ class RoleController extends CommonController{
 	 * 修改角色
 	 */
 	public function updateAction(){
-		if(count($_POST) > 0){
-			$module_ids = $_POST['module_ids'];
-			if(!empty($_POST['module_ids'])){
+		if($this->isPost()){
+			$module_ids = $this->post('module_ids');
+			
+			if(!empty($module_ids)){
 				sort($module_ids);
 				$module_ids = implode(',', $module_ids);
 				$_POST['module_ids'] = $module_ids;	
@@ -87,13 +88,13 @@ class RoleController extends CommonController{
 			}
 			if($this->role_model->save()){
 			    // 自动刷新权限
-			    M('module')->getMenuTree(true);
+			    model('module')->getMenuTree(true);
 				$this->ajaxReturn(200, '修改成功');
 			}else{
 				$this->ajaxReturn(300, '修改失败', '');
 			}
 		}else{
-			$role_id = (int)$_REQUEST['id'];
+			$role_id = (int)$this->get('id');
 			$role_info = $this->role_model->where("id=$role_id")->find();
 			$this->assign('trees', $this->getTree($role_info['module_ids']));
 			$this->assign('role_info', $role_info);
@@ -107,7 +108,7 @@ class RoleController extends CommonController{
 	 * 删除角色
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		
 		if(!$ids){
 			$this->ajaxReturn(300, '编号错误');
@@ -136,13 +137,13 @@ class RoleController extends CommonController{
 		
     	function getChildNode($modules, $role_modules){
     		if(is_array($modules)){
-    		    $role_id = (int)$_REQUEST['id'];
+    		    $role_id = (int)HttpRequest::getGet('id');
 	    		foreach($modules as $module){
 	    			$module_id = $module['id'];
 	    			if($role_id == 1){
 	    			    $isCheck = 'checked=true';
 	    			}else{
-	    			    $isCheck = ($role_modules && in_array($module_id, $role_modules) ? 'checked=true' : 'checked=false');
+	    			    $isCheck = ($role_modules && in_array($module_id, $role_modules) ? 'checked=true' : '');
 	    			}
 	    			
 	    			$tree .= "<li><a tname=\"module_ids[]\" tvalue=\"{$module_id}\" {$isCheck}>{$module['name']}</a>";
@@ -157,7 +158,7 @@ class RoleController extends CommonController{
 	    	return $tree;
     	}
     	
-    	return getChildNode(M('module')->getModule(), $role_modules);
+    	return getChildNode(model('module')->getModule(), $role_modules);
     }
 
     

@@ -1,17 +1,15 @@
 <?php
-
 /**
  * 淘宝客户端API
  * @author maojianlw@139.com
  * @since 2012-7-24
  */
-
 import('Sdk.taobao.TopClient', false);
 import('Sdk.taobao.Logger', false);
 import('Sdk.taobao.RequestCheckUtil', false);
 
-
-class ClientApi{
+class ClientApi
+{
     
     private static $pid = null;
     private static $client = null;
@@ -51,8 +49,8 @@ class ClientApi{
         $req->setRealDescribe('true');
         $object = self::$client->execute($req);
         $data = array();
-        $data['list'] = isset($object->taobaoke_items) ? $object->taobaoke_items->taobaoke_item : '';
-        $data['count'] = $object->total_results;
+        $data['list'] = isset($object->taobaoke_items) ? $object->taobaoke_items->taobaoke_item : null;
+        $data['count'] = isset($object->total_results) ? $object->total_results : 0;
         return $data;
     } 
     
@@ -74,21 +72,16 @@ class ClientApi{
      */
     public static function getItemCates(){
         $key = 'taobao_cat_cache';
-        $data = H($key);
+        $data = cache($key);
         if(!$data){
             $cats = self::getItemCateList();
             if(is_array($cats))
             foreach ($cats as $val){
                 $data[$val->cid] = $val->name;
             }
-            H($key, $data, 86400);
+            cache($key, $data, 86400);
         }
         return $data;
     }
     
-    
-} 
-
-?>
- 
-
+}

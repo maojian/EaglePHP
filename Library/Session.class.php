@@ -271,7 +271,7 @@ class Session {
       */
      public static function init(){
           $session_name = self::name();
-          $session_id = isset($_REQUEST[$session_name]) ? $_REQUEST[$session_name] : '';
+          $session_id = HttpRequest::getRequest($session_name);
           if(in_array($type=SESSION_SAVE_TYPE, array('table', 'memcache', 'file')))
           {
                if($type == 'file')
@@ -290,7 +290,7 @@ class Session {
           }
           else
           {
-               throw_exception(L('SYSTEM:session.type.not.exists', array($type)));
+               throw_exception(language('SYSTEM:session.type.not.exists', array($type)));
           }
           
           // 利用链接传递session_id
@@ -333,8 +333,8 @@ class Session {
           $name = 'cookie_verification_key';
           
           $key = md5(//$_SERVER['HTTP_USER_AGENT'].
-                     $_SERVER['HTTP_COOKIE'].
-                     $_SERVER['REMOTE_ADDR']
+                     HttpRequest::getServer('HTTP_COOKIE').
+                     HttpRequest::getServer('REMOTE_ADDR')
                     );
       
           $value = self::get($name);

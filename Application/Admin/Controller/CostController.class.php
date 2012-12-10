@@ -11,7 +11,7 @@ class CostController extends CommonController{
     private $curModel;
 	
 	public function __construct(){
-		$this->curModel = M('cost');
+		$this->curModel = model('cost');
 	}
 	
 	
@@ -19,7 +19,7 @@ class CostController extends CommonController{
 	 * 列表页
 	 */
 	public function indexAction(){
-		$flag = $this->getParameter('flag');
+		$flag = $this->request('flag');
 		if($flag == 'set'){
 			$this->getFlashSetting();
 		}elseif($flag == 'data'){
@@ -27,9 +27,9 @@ class CostController extends CommonController{
 		}elseif($flag == 'page'){
 			$this->flashPage();
 		}else{
-		    $remark =$this->getParameter('remark');
-		    $startTime = $this->getParameter('startTime');
-		    $endTime = $this->getParameter('endTime');
+		    $remark =$this->request('remark');
+		    $startTime = $this->request('startTime');
+		    $endTime = $this->request('endTime');
 		    $sql = null;
 		    if($remark){
 		         $sql[] = "remark LIKE '%{$remark}%'";
@@ -60,7 +60,7 @@ class CostController extends CommonController{
 	 * 添加
 	 */
 	public function addAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 			if($this->curModel->add()){
 				$this->ajaxReturn(200, '添加成功');
 			}else{
@@ -75,14 +75,14 @@ class CostController extends CommonController{
 	 * 修改
 	 */
 	public function updateAction(){
-		if(count($_POST) > 0){
+		if($this->isPost()){
 			if($this->curModel->save()){
 				$this->ajaxReturn(200, '修改成功');
 			}else{
 				$this->ajaxReturn(300, '修改失败');
 			}
 		}else{
-			$id = (int)$_REQUEST['id'];
+			$id = (int)$this->get('id');
 			$info = $this->curModel->where("id=$id")->find();
 			$this->assign('info',$info);
 			$this->display();
@@ -93,7 +93,7 @@ class CostController extends CommonController{
 	 * 删除
 	 */
 	public function deleteAction(){
-		$ids = $_REQUEST['ids'];
+		$ids = $this->request('ids');
 		if(!empty($ids) && $this->curModel->where("id IN($ids)")->delete()){
 			$this->ajaxReturn(200, '删除成功');
 		}else{
@@ -107,7 +107,7 @@ class CostController extends CommonController{
 	 */
 	 public function reportAction(){
 	 	
-	 	$particularDate = $this->getParameter('particularDate');
+	 	$particularDate = $this->request('particularDate');
 	 	if($particularDate){ // 查看月消费明细
 	 		$list = $this->curModel->field('remark,money,usetime')->order('usetime DESC')->where("DATE_FORMAT(usetime,'%Y-%m')='{$particularDate}'")->select();
 			if($list)
@@ -122,11 +122,11 @@ class CostController extends CommonController{
 	 		exit;
 	 	}
 	 	
-	 	$startDate = $this->getParameter('startDate');
-	 	$endDate = $this->getParameter('endDate');
+	 	$startDate = $this->post('startDate');
+	 	$endDate = $this->post('endDate');
 	 	
 	 	if(!$startDate || !$endDate){
-	 		$startDate = date('Y-m', strtotime('-10 month'));
+	 		$startDate = date('Y-m', strtotime('-11 month'));
 	 		$endDate = date('Y-m');
 	 		
 	 		$_POST['startDate'] = $startDate;
@@ -148,8 +148,8 @@ class CostController extends CommonController{
 	 	if($startDate && $endDate)
 			getDateRange($startDate, $endDate, 0, $dateArr);
 		
-		$incomeM = M('income');
-		$accountM = M('account');
+		$incomeM = model('income');
+		$accountM = model('account');
 		$info = array('incomeTotal'=>0, 'accountTotal'=>0, 'costTotal'=>0);
 		if(is_array($dateArr)){
 			foreach($dateArr as $k=>$date){
@@ -192,8 +192,8 @@ class CostController extends CommonController{
 	 * 获得flash数据
 	 */
 	protected function getFlashData(){
-		$startDate = $_POST['startDate'];
-	 	$endDate = $_POST['endDate'];
+		$startDate = $this->post('startDate');
+	 	$endDate = $this->post('endDate');
 	 	
 	 	if(!$startDate && !$endDate){
 	 		$startDate = date('Y-m-d', strtotime('-30 DAY'));

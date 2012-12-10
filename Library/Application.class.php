@@ -6,8 +6,14 @@
  * @since 2012-08-03
  */
 
-class Application {
+class Application 
+{
     
+    /**
+     * 初始化路由方式
+     * 
+     * @return void
+     */
     public static function init()
     {
         if (URL_MODEL == 1 && !(__CLI__)) 
@@ -21,14 +27,23 @@ class Application {
 		Behavior::checkRefresh();
     }
  
+    
 	/**
 	 * 执行控制器的方法
+	 * 
+	 * @return void
 	 */
 	public function run() 
 	{
 		$controller = CONTROLLER_NAME . 'Controller';
 		$action = ACTION_NAME . 'Action';
 		
+	    // 检测控制器、方法是否存在，否则跳转至404页面
+		if(!class_exists($controller) || !method_exists($controller, $action))
+		{
+		   show_404();
+		}
+
 		$cls_parent = class_parents($controller);
 		if($cls_parent !== false)
 		{
@@ -37,15 +52,19 @@ class Application {
     		$method = '_initialize';
     		if (method_exists($parent_obj, $method)) $parent_obj-> $method (); // 执行父类的初始化方法
 		}
+      
 		$controller_obj = MagicFactory :: getInstance($controller);
-		$controller_obj-> $action ();
+		$controller_obj->$action();
 	}
+	
 
 	/**
 	 * 定义常量
 	 * 
 	 * @param string $controller
 	 * @param string $action
+	 * 
+	 * @return void
 	 */
 	private static function defineConst($controller, $action) 
 	{
@@ -132,6 +151,8 @@ class Application {
 
 	/**
 	 * 普通URL模式
+	 * 
+	 * @return void
 	 */
 	private static function usuallyURL() 
 	{
@@ -143,14 +164,16 @@ class Application {
 		} 
 		else 
 		{
-			$controller = $_REQUEST['c'];
-			$action = $_REQUEST['a'];
+			$controller = HttpRequest::getRequest('c');
+			$action = HttpRequest::getRequest('a');
 		}
 		self::defineConst($controller, $action);
 	}
 
 	/**
 	 * pathinfo URL模式
+	 * 
+	 * @return void
 	 */
 	private static function pathinfoURL() 
 	{

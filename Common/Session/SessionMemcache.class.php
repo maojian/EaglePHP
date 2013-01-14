@@ -11,7 +11,7 @@ class SessionMemcache {
 
     private static $handler = null;
     
-    public function init()
+    public static function init()
     {
         self::$handler = Cache::getInstance('memcache', array('expire'=>SESSION_LIFE_TIME));
         Session::module('user');
@@ -29,7 +29,7 @@ class SessionMemcache {
     /**
     * 打开session
     */
-    public function open($save_path, $session_name)
+    public static function open($save_path, $session_name)
     {
         return true;
     }
@@ -37,7 +37,7 @@ class SessionMemcache {
     /**
     * 关闭session
     */
-    public function close()
+    public static function close()
     {
         return true;
     }
@@ -46,7 +46,7 @@ class SessionMemcache {
     /**
     * 读取session
     */
-    public function read($session_id)
+    public static function read($session_id)
     {
         $data = self::$handler->get($session_id);
         if(!empty($data)){
@@ -61,7 +61,7 @@ class SessionMemcache {
     /**
     * 写入session
     */
-    public  function write($session_id='', $data='')
+    public static function write($session_id='', $data='')
     {
         self::$handler->replace($session_id, $data);
         return true;
@@ -71,7 +71,7 @@ class SessionMemcache {
     /**
     * 销毁session
     */
-    public function destroy($session_id)
+    public static function destroy($session_id)
     {
         self::write($session_id);
         return true;
@@ -82,7 +82,7 @@ class SessionMemcache {
     * 垃圾回收
     * 无需额外回收，memcache有自己的过期回收机制
     */
-    public  function gc($maxlifetime=null)
+    public static function gc($maxlifetime=null)
     {
         return true;
     }

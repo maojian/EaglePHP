@@ -1,5 +1,5 @@
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__URL__}}add" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="{{$smarty.const.__URL__&a=add|url}}" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 			<div class="unit">
 				<a href="#" onclick="openPickBox()">●&nbsp;输入网址采集单个网页>></a><br/>
@@ -11,7 +11,7 @@
                    		<a class="button" href="#" onclick="pick()"><span>抓取</span></a>
                    </div> 
                    <div style="float:left;">
-                   		<a class="button" href="{{$smarty.const.__ROOT__}}pick" target="navTab"  rel="Pick"><span>规则管理</span></a>
+                   		<a class="button" href="{{$smarty.const.__ROOT__?c=pick|url}}" target="navTab"  rel="Pick"><span>规则管理</span></a>
                    </div>                
 				</dd>
 			</dl>
@@ -100,7 +100,7 @@
 				<dd>
 					<input type="hidden" name="orgLookup.id" value=""/>
 					<input type="text" class="textInput" name="orgLookup.orgName" size="60" value="" readonly="readonly"/>
-					<a class="btnLook" href="{{$smarty.const.__ROOT__}}vote/lookup" lookupGroup="orgLookup" lookupName="orgLookup" maxable="false" resizable="false" title="插入投票"><hi:text key="查找带回"/></a>
+					<a class="btnLook" href="{{$smarty.const.__ROOT__?c=vote&a=lookup|url}}" lookupGroup="orgLookup" lookupName="orgLookup" maxable="false" resizable="false" title="插入投票"><hi:text key="查找带回"/></a>
 				</dd>
 			</dl>
 		</div>

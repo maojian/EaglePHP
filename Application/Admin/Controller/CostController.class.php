@@ -126,7 +126,7 @@ class CostController extends CommonController{
 	 	$endDate = $this->post('endDate');
 	 	
 	 	if(!$startDate || !$endDate){
-	 		$startDate = date('Y-m', strtotime('-11 month'));
+	 		$startDate = date('Y-m', strtotime('-12 month'));
 	 		$endDate = date('Y-m');
 	 		
 	 		$_POST['startDate'] = $startDate;
@@ -185,6 +185,8 @@ class CostController extends CommonController{
 	 
 	
 	protected function flashPage(){
+	    $this->assign('settings_file', url(__ACTION__.'&flag=set', true));
+    	$this->assign('data_file', url(__ACTION__.'&flag=data', true));
 		$this->display('Cost/flash');
 	}
 	

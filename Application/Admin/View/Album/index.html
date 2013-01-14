@@ -1,4 +1,4 @@
-<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}">
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__|url}}">
 	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
 	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
 	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
@@ -8,7 +8,7 @@
 </form>
 
 <div class="pageHeader">
-	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}" method="post">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__|url}}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -35,9 +35,9 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="{{$smarty.const.__URL__}}add" target="navTab"><span>添加</span></a></li>
-			<li><a class="edit" href="{{$smarty.const.__URL__}}update/id/{id}" target="navTab"><span>修改</span></a></li>
-			<li><a class="delete" href="{{$smarty.const.__URL__}}delete" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
+			<li><a class="add" href="{{$smarty.const.__URL__&a=add|url}}" target="navTab"><span>添加</span></a></li>
+			<li><a class="edit" href="{{$smarty.const.__URL__&a=update&id={id}|url}}" target="navTab"><span>修改</span></a></li>
+			<li><a class="delete" href="{{$smarty.const.__URL__&a=delete|url}}" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="114">
@@ -58,9 +58,9 @@
 				<td>{{$list[loop].title}}</td>
 				<td>{{$list[loop].createtime}}</td>
 				<td>
-					<a target="ajaxTodo" href="{{$smarty.const.__URL__}}delete/ids/{{$list[loop].id}}" class="btnDel" title="确定要删除吗?">删除</a>
-					<a target="navTab" href="{{$smarty.const.__URL__}}update/id/{{$list[loop].id}}" class="btnEdit">编辑</a>
-					<a target="navTab" href="{{$smarty.const.__ROOT__}}photo/upload/albumid/{{$list[loop].id}}" class="btnAttach" title="上传照片">上传照片</a>
+					<a target="ajaxTodo" href="{{$smarty.const.__URL__&a=delete&ids=$list[loop].id|url}}" class="btnDel" title="确定要删除吗?">删除</a>
+					<a target="navTab" href="{{$smarty.const.__URL__&a=update&id=$list[loop].id|url}}" class="btnEdit">编辑</a>
+					<a target="navTab" href="{{$smarty.const.__ROOT__?c=photo&a=upload&albumid=$list[loop].id|url}}" class="btnAttach" title="上传照片">上传照片</a>
 				</td>
 			</tr>
 		    {{/section}}  

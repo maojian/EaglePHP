@@ -14,7 +14,7 @@
 
 include 'Function.php';
 include 'AutoLoader.class.php';
-include dirname(dirname(__FILE__)).'\Config\Constants.php';
+include dirname(dirname(__FILE__)).'/Config/Constants.php';
 
 AutoLoader::init();
 

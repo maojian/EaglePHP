@@ -105,7 +105,7 @@ class DebugLogController extends CommonController{
     	}
     	
     	$data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><chart><series>{$series}</series><graphs>{$graph}</graphs></chart>";
-		exit($data);
+    	exit($data);
     }
     
     
@@ -119,6 +119,8 @@ class DebugLogController extends CommonController{
     	}else if($flag == 'data'){
     		$this->getXMLData();
     	}
+    	$this->assign('settings_file', url(__ACTION__.'&flag=set', true));
+    	$this->assign('data_file', url(__ACTION__.'&flag=data', true));
     	$this->display();
     }
     

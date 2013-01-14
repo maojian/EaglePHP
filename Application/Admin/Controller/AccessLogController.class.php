@@ -118,6 +118,8 @@ class AccessLogController extends CommonController{
     	}else if($flag == 'data'){
     		$this->getXMLData();
     	}
+    	$this->assign('settings_file', url(__ACTION__.'&flag=set', true));
+    	$this->assign('data_file', url(__ACTION__.'&flag=data', true));
     	$this->display();
     }
     

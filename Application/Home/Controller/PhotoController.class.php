@@ -8,18 +8,19 @@ class PhotoController extends Controller{
     }
     
     public function showAction(){
-        $album_id = (int)$_GET['album'];
+        $album_id = (int)$this->get('album');
         $album_info = model('album')->field('title')->getbyId($album_id);
-		$this->assign('rssFeed', urlencode(__URL__."flashXML/album/$album_id"));
+		$this->assign('rssFeed', url(__URL__."&a=flashXML&album=$album_id", true));
 		$this->assign('title', $album_info['title'].' - 图片秀');
         $this->display();
     }
     
     
     public function flashXMLAction(){
-        $album_id = (int)$_GET['album'];
-		$list = $this->cur_model->field('title,thumbnail,middle,original')->where("albumid=$album_id")->order('id DESC')->select(array('cache'=>true));
-		foreach($list as &$v){
+        $album_id = (int)$this->get('album');
+		$list = $this->cur_model->field('title,thumbnail,middle,original')->where("albumid=$album_id")->order('id DESC')->cache()->select();
+		$items = null;
+		foreach($list as $k=>&$v){
 		    $thumbnail = __UPLOAD__.$v['thumbnail'];
 		    $middle = __UPLOAD__.$v['middle'];
 		    $original = __UPLOAD__.$v['original'];

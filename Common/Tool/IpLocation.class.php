@@ -124,8 +124,8 @@ class IpLocation {
             $location['area'] = '';
         }
         
-        $location['country'] = iconv('gbk', 'utf-8', $location['country']);
-        $location['area'] = iconv('gbk', 'utf-8', $location['area']);
+        $location['country'] = trim(iconv('gbk', 'utf-8',$location['country']));
+        $location['area'] = trim(iconv('gbk', 'utf-8', $location['area']));
         
         return ($isReturnArr) ? $location : $location['country'].' '.$location['area'];
     }

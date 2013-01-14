@@ -4,19 +4,19 @@
     <title>最新文章 - {{'cfg_webname'|getCfgVar}}</title>
     <image>
       <title>最新文章 - {{'cfg_webname'|getCfgVar}}</title>
-      <link>http://{{$smarty.server.HTTP_HOST}}</link>
+      <link>{{$host}}</link>
       <url>{{$smarty.const.__APP_RESOURCE__}}imgs/logo.png</url>
     </image>
     <description>{{'cfg_description'|getCfgVar}}</description>
-    <link>http://{{$smarty.server.HTTP_HOST}}</link>
+    <link>{{$host}}</link>
     <copyright>{{'cfg_powerby'|getCfgVar}}</copyright>
     <language>zh-cn</language>
     <generator>{{'cfg_basehost'|getCfgVar}}</generator>
     {{section name=loop loop=$list}}
     <item>
       <title><![CDATA[{{$list[loop].title}}]]></title>
-      <link>http://{{$smarty.server.HTTP_HOST}}{{$list[loop].link}}</link>
-      <author>{{$smarty.server.HTTP_HOST}}</author>
+      <link><![CDATA[{{$host}}{{$list[loop].link}}]]></link>
+      <author>{{$host}}</author>
       <category/>
       <pubDate>{{$list[loop].create_time}}</pubDate>
       <comments/>

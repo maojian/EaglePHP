@@ -1,0 +1,22 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__ACTION__}}" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+		<input type="hidden" name="id" value="{{$info.id}}">
+		<div class="pageFormContent" layoutH="56">
+			<p>
+				<label>缓存目录：</label>
+				<select name="table[]" multiple="multiple" style="width: 200px;height: 250px" size="10">
+					{{html_options options=$dirArr}}
+				</select>&nbsp;<span>(按 Ctrl 可以进行多选)</span>
+			</p>
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">清空</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

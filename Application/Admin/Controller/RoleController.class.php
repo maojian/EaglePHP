@@ -12,7 +12,7 @@ class RoleController extends CommonController{
     private $role_model;
     
     public function __construct(){
-		$this->role_model = molde('role');
+		$this->role_model = model('role');
 	}
 	
 	/**

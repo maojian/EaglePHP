@@ -12,7 +12,7 @@ class SessionTable {
     private static $handler = null;
     
     
-    public function init()
+    public static function init()
     {
         self::$handler = model('session');
         Session::module('user');
@@ -30,7 +30,7 @@ class SessionTable {
     /**
     * 打开session
     */
-    public function open($save_path, $session_name)
+    public static function open($save_path, $session_name)
     {
         return true;
     }
@@ -38,7 +38,7 @@ class SessionTable {
     /**
     * 关闭session
     */
-    public function close()
+    public static function close()
     {
         return true;
     }
@@ -47,17 +47,17 @@ class SessionTable {
     /**
     * 读取session
     */
-    public function read($session_id)
+    public static function read($session_id)
     {
         $session_info = self::$handler->field('data')->where("sid='{$session_id}' AND expiry>=".time())->find();
-        return $session_info['data'];
+        return $session_info ? $session_info['data'] : '';
     }
     
     
     /**
     * 写入session
     */
-    public function write($session_id, $data)
+    public static function write($session_id, $data)
     {
         $expiry = time() + SESSION_LIFE_TIME;
         $sql = "REPLACE INTO session (sid, expiry, data) VALUES('$session_id', $expiry, '{$data}')";
@@ -69,7 +69,7 @@ class SessionTable {
     /**
     * 销毁session
     */
-    public function destroy($session_id)
+    public static function destroy($session_id)
     {
         self::$handler->where("sid='{$session_id}'")->delete();
         return true;
@@ -79,7 +79,7 @@ class SessionTable {
     /**
     * 垃圾回收
     */
-    public function gc($maxlifetime=null)
+    public static function gc($maxlifetime=null)
     {
         self::$handler->where('expiry<'.time())->delete();
         // 由于经常对session表进行删除操作，容易产生碎片，所以在垃圾回收中对该表进行优化。

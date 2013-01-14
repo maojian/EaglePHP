@@ -1,6 +1,6 @@
 
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__URL__}}update" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="{{$smarty.const.__URL__&a=update|url}}" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<input type="hidden" name="id" value="{{$info.id}}">
 		<div class="pageFormContent" layoutH="56">
 			<dl>
@@ -13,7 +13,7 @@
 				<dd>
 					<img src="{{$smarty.const.__UPLOAD__}}{{$info.thumbnail}}"/>
 					<br/>
-					<a class="buttonActive" href="{{$smarty.const.__URL__}}cut/id/{{$info.id}}" target="dialog" width="800" height="600"><span>图片裁剪</span></a>
+					<a class="buttonActive" href="{{$smarty.const.__URL__&a=cut&id=$info.id|url}}" target="dialog" width="800" height="600"><span>图片裁剪</span></a>
 				</dd>
 			</dl>
 

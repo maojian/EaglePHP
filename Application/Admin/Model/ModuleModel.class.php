@@ -154,7 +154,8 @@ class ModuleModel extends Model{
 					if($url){
 						$urls = explode('/', $url);
 						$rel = ucfirst($urls[0]);
-						$href = (strpos($url, 'http://') !== false) ? "href=$url" : "href=".ucfirst(__ROOT__.$url);
+						$url = __ROOT__.'?c='.$urls[0].'&a='.(isset($urls[1]) ? $urls[1] : 'index');
+						$href = (strpos($url, 'http://') !== false) ? "href=$url" : "href=".url($url);
 					}else{
 						$href = 'href="javascript:"';
 					}

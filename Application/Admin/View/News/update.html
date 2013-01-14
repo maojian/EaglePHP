@@ -1,6 +1,6 @@
 
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__URL__}}update" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="{{$smarty.const.__URL__&a=update|url}}" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 			<input type="hidden" name="id" value="{{$news_info.id}}">
 			<dl>
@@ -86,7 +86,7 @@
 				<dd>
 					<input type="hidden" name="orgLookup.id" value=""/>
 					<input type="text" class="textInput" name="orgLookup.orgName" size="60" value="" readonly="readonly"/>
-					<a class="btnLook" href="{{$smarty.const.__ROOT__}}vote/lookup" lookupGroup="orgLookup" lookupName="orgLookup" maxable="false" resizable="false" title="插入投票"><hi:text key="查找带回"/></a>
+					<a class="btnLook" href="{{$smarty.const.__ROOT__?c=vote&a=lookup|url}}" lookupGroup="orgLookup" lookupName="orgLookup" maxable="false" resizable="false" title="插入投票"><hi:text key="查找带回"/></a>
 				</dd>
 			</dl>
 		</div>

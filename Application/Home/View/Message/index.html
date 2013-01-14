@@ -41,7 +41,7 @@ $('#hotRankSlide').cycle({
 <div class="subContent">
 
 <div id="indexSearch" class="module">
-<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<form action="{{$smarty.const.__ROOT__?c=news|url}}" method='post'>
 <input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
 <input type="submit" class="button" value="搜索" />
 </form>
@@ -81,7 +81,7 @@ $('#hotRankSlide').cycle({
 <fieldset style="margin:0;padding:0;border:none;display:block;" id="fs_nologin">
 <div><label for="cname">姓　名</label><input class="textField" id="cname" name="name" type="text"></div>
 <div><label for="cemail">E-Mail</label><input class="textField" id="cemail" name="email" type="text"></div>
-<div><div style="float: left;"><label for="cname">验证码</label><input class="textField" id="yzm" name="yzm" type="text" style="width: 120px">&nbsp;&nbsp;</div><div style="float: left;"><img src="{{$smarty.const.__ROOT__}}message/verifyCode/" id="verifyCode" onclick="this.src+='?' + Math.random();" style="cursor: pointer;"/></div></div>
+<div><div style="float: left;"><label for="cname">验证码</label><input class="textField" id="yzm" name="yzm" type="text" style="width: 120px">&nbsp;&nbsp;</div><div style="float: left;"><img src="{{$smarty.const.__ROOT__?c=message&a=verifyCode|url}}" id="verifyCode" onclick="this.src+='?' + Math.random();" style="cursor: pointer;"/></div></div>
 </fieldset>
 <div><textarea id="content" rows="8" tabindex="3"></textarea></div>
 <div class="submit">
@@ -121,14 +121,14 @@ function feedback(){
 		return false;
 	}
 
-	$.post("{{$smarty.const.__URL__}}feedback",
+	$.post("{{$smarty.const.__URL__&a=feedback|url}}",
        { name: name, email: email, content: content, yzm: yzm },
        function(data){
           var obj = {};
           eval("obj="+data);
           if(obj.statusCode == 200){
 				alert(obj.message);
-				window.location = "{{$smarty.const.__URL__}}";
+				window.location = "{{$smarty.const.__URL__|url}}";
           }else{
 				alert(obj.message);
           }

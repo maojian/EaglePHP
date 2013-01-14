@@ -1,0 +1,90 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>许愿墙</title>
+<meta name="keywords" content="爱情许愿墙,纸条,爱情纸条,爱墙,爱情,生日,圣诞,情人节,新年,春节,祝福,礼物,许愿,愿望,幸福,许愿墙,wish" />
+<meta name="description" content="爱情许愿墙，幸福的港湾，幸福让我们聚在了一起！" />
+<link href="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/css.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<script>
+function isDate(s) {
+    if (!(/^\d{4,4}-\d{2,2}-\d{2,2}$/.test(s))) { return false; }
+    var a = s.split("-");
+    var d = new Date(a[0], Number(a[1])-1, a[2]);
+    d = [d.getFullYear().toString(), (d.getMonth()+1).toString(), d.getDate().toString()];
+    if (!d[0].length || !d[1].length || !d[2].length) { return false; }
+    if (d[1].length == 1) { d[1] = "0"+d[1]; }
+    if (d[2].length == 1) { d[2] = "0"+d[2]; }
+    return a[0] == d[0] && a[1] == d[1] && a[2] == d[2];
+}
+function isNumber(s) {
+    if (s.length && s.charAt(0) == "-") { return isNumber(s.substr(1)); }
+    if (!(/^[\d.]+$/.test(s))) { return false; }
+    if (s.indexOf(".") != -1 && (s.indexOf(".") != s.lastIndexOf("."))) { return false; }
+    if (s.charAt(0) == ".") { return false; }
+    if (s.length >= 2 && s.charAt(0) == "0" && s.charAt(1) != ".") { return false; }
+    return !isNaN(s);
+}
+function isInt(s) {
+    if (isNumber(s) && s.charAt(0)!="-" && s.indexOf(".")==-1) return true;
+    else return false;
+}
+function checkForm(){
+	
+	var keyword = document.form1.keyword.value;
+	if (keyword == ""){
+		alert('请输入查询内容');
+		return false;
+	}
+	if (document.form1.searchType[0].checked){
+		if (!isInt(keyword)){
+			alert('请正确输入编号');
+			return false;
+		}
+	}else {
+		if (!isDate(keyword)){
+			alert('请输入正确的日期格式\n比如:2008-01-01');
+			return false;
+		}
+	}
+	return true;
+}
+</script>
+
+<table width="960" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="326" valign="bottom" background="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/img_top.jpg">
+	<table width="900" border="0" align="center" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">
+      <tr>
+        <td width="691">
+		<table cellspacing="0" cellpadding="0" border="0">
+		<form action="{{$smarty.const.__ROOT__?c=wish|url}}" name="form1" method="post" onsubmit="return checkForm()">
+                      <tr>
+                        <td><strong>愿望搜索：</strong>
+                          <input id="byNo" tabindex="5" type="radio" {{if $smarty.post.searchType == 0}}checked="checked"{{/if}} value="0" name="searchType" />
+                          <label for="byNo">按编号</label>
+                            <input id="byDate" tabindex="6" type="radio" value="1" name="searchType" {{if $smarty.post.searchType == 1}}checked="checked"{{/if}} />
+                          <label for="byDate">按日期（比如：2010-01-01）</label>
+                        <br /></td>
+                      </tr>
+                      <tr>
+                        <td height="39" style="background:url({{$smarty.const.__APP_RESOURCE__}}imgs/wish/ss.gif) center left no-repeat; padding-left:75px;"><input tabindex="7" name="keyword" value="{{$smarty.post.keyword}}" style="width:196px; height:20px;" />
+                        <input name="image" type="image" tabindex="8" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/search.jpg" align="absmiddle" width="52" height="26" /></td>
+                      </tr>
+		</form>
+          </table>
+		  </td>
+		<td width="209" align="center">
+		{{if $smarty.const.ACTION_NAME neq 'index'}}
+		<a href="{{$smarty.const.__ROOT__?c=wish|url}}"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/btn1.gif" width="70" height="25" border="0" /></a>
+		{{else}}
+		<a href="{{$smarty.const.__ROOT__?c=wish&a=write|url}}"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/btn2.gif" width="70" height="25" border="0" /></a></td>
+      	{{/if}}
+      </tr>
+    </table></td>
+  </tr>
+</table>

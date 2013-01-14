@@ -25,7 +25,7 @@
     </tr>
 </table>
 <div style="padding:20px 0 10px 0;text-align:center;">
-    <input type="button" value="上一步" onclick="document.location='{{$smarty.const.__URL__}}two';"/>
-	<input type="button" value="下一步" onclick="document.location='{{$smarty.const.__URL__}}four';"/>
+    <input type="button" value="上一步" onclick="document.location='{{$smarty.const.__URL__&a=two|url}}';"/>
+	<input type="button" value="下一步" onclick="document.location='{{$smarty.const.__URL__&a=four|url}}';"/>
 </div>
 </div> {{include file="Include/foot.html"}}

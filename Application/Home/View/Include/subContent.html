@@ -6,7 +6,7 @@
 <div class="tabs">
 <ul id="hotRankNavi">
 	{{section name=loop loop=$hot_news.type_list}}
-	<li class="actived"><a href="{{$smarty.const.__ROOT__}}news/index/type/{{$hot_news.type_list[loop].id}}" target="_blank">{{$hot_news.type_list[loop].title}}</a></li>
+	<li class="actived"><a href="{{$smarty.const.__ROOT__?c=news&a=index&type=$hot_news.type_list[loop].id|url}}" target="_blank">{{$hot_news.type_list[loop].title}}</a></li>
 	{{/section}}
 </ul>
 </div>
@@ -28,7 +28,7 @@
 </div>
 
 <div id="kanfa" class="module">
-<h3><strong>案例</strong><span class="more"><a href="{{$smarty.const.__ROOT__}}case" target="_blank">更多</a></span></h3>
+<h3><strong>案例</strong><span class="more"><a href="{{$smarty.const.__ROOT__?c=case|url}}" target="_blank">更多</a></span></h3>
 <div class="pre"><a href="#">&laquo;</a></div>
 <div class="kimageBar">
    <ul>
@@ -41,10 +41,10 @@
 </div>
  
 <div id="siteTag" class="module">
-<h3><strong>站内热门</strong><span class="more"><a href="{{$smarty.const.__ROOT__}}">更多</a></span></h3>
+<h3><strong>站内热门</strong><span class="more"><a href="{{$smarty.const.__ROOT__|url}}">更多</a></span></h3>
 <ul>
     {{section name=loop loop=$keywords_arr}}
-	<li class="tag{{$smarty.section.loop.index}}"><a href="{{$smarty.const.__ROOT__}}news/index/content/{{$keywords_arr[loop]}}/" target="_blank">{{$keywords_arr[loop]}}</a></li>
+	<li class="tag{{$smarty.section.loop.index}}"><a href="{{$smarty.const.__ROOT__?c=news&a=index&content=$keywords_arr[loop]|url}}" target="_blank">{{$keywords_arr[loop]}}</a></li>
 	{{/section}}
 </ul>
 </div>
@@ -67,7 +67,7 @@
 <ol>
 	{{section name=loop loop=$recommend.news_list}}
 	<li><span class="tags">
-	<a href="{{$smarty.const.__ROOT__}}news/index/type/{{$recommend.news_list[loop].type_id}}" target="_blank">[{{$recommend.news_list[loop].type_name}}]</a></span> 
+	<a href="{{$smarty.const.__ROOT__?c=news&a=index&type=$recommend.news_list[loop].type_id|url}}" target="_blank">[{{$recommend.news_list[loop].type_name}}]</a></span> 
 	<a href="{{$recommend.news_list[loop].link}}" title="{{$recommend.news_list[loop].title}}" target="_blank">{{$recommend.news_list[loop].short_title}}</a></li>
 	{{/section}}
 </ol>
@@ -75,12 +75,12 @@
 
 <div id="syndication" class="module">
   <h3><strong>订阅</strong></h3>
-  <div class="subscribe"><a href="{{$smarty.const.__ROOT__}}rss/xml" target="_blank">订阅{{'cfg_webname'|getCfgVar}}RSS</a></div>
+  <div class="subscribe"><a href="{{$smarty.const.__ROOT__?c=rss&a=xml|url}}" target="_blank">订阅{{'cfg_webname'|getCfgVar}}RSS</a></div>
   <ul>
-    <li><a href="http://fusion.google.com/add?feedurl=http://{{$smarty.server.HTTP_HOST}}{{$smarty.const.__ROOT__}}rss/xml" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/google.png" width="110" height="16" alt="" /></a></li>
-    <li><a href="http://mail.qq.com/cgi-bin/feed?u=http://{{$smarty.server.HTTP_HOST}}{{$smarty.const.__ROOT__}}rss/xml" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/qqmail.png" width="110" height="16" alt="" /></a></li>
-    <li><a href="http://www.xianguo.com/subscribe.php?url=http://{{$smarty.server.HTTP_HOST}}{{$smarty.const.__ROOT__}}rss/xml" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/xianguo.png" width="110" height="16" alt="" /></a></li>
-    <li><a href="http://www.zhuaxia.com/add_channel.php?url=http://{{$smarty.server.HTTP_HOST}}{{$smarty.const.__ROOT__}}rss/xml" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/zhuaxia.png" width="110" height="16" alt="" /></a></li>
+    <li><a href="http://fusion.google.com/add?feedurl={{$host?c=rss&a=xml|url}}" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/google.png" width="110" height="16" alt="" /></a></li>
+    <li><a href="http://mail.qq.com/cgi-bin/feed?u={{$host?c=rss&a=xml|url}}" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/qqmail.png" width="110" height="16" alt="" /></a></li>
+    <li><a href="http://www.xianguo.com/subscribe.php?url={{$host?c=rss&a=xml|url}}" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/xianguo.png" width="110" height="16" alt="" /></a></li>
+    <li><a href="http://www.zhuaxia.com/add_channel.php?url={{$host?c=rss&a=xml|url}}" target="_blank"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/zhuaxia.png" width="110" height="16" alt="" /></a></li>
     <li class="clear"></li>
   </ul>
 </div>

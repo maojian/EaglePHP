@@ -1,6 +1,6 @@
 
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__URL__}}{{$smarty.const.ACTION_NAME}}" class="pageForm required-validate" onsubmit="return iframeCallback(this, dialogAjaxDone);" enctype="multipart/form-data">
+	<form method="post" action="{{$smarty.const.__URL__&a=$smarty.const.ACTION_NAME|url}}" class="pageForm required-validate" onsubmit="return iframeCallback(this, dialogAjaxDone);" enctype="multipart/form-data">
 		<input type="hidden" name="id" value="{{$info.id}}">
 		<div class="pageFormContent" layoutH="56">
 			<dl class="nowrap">

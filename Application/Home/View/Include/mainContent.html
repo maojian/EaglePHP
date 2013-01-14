@@ -8,7 +8,7 @@
 	<div style="width: 100px;height: 100px;text-align: center;position:relative;"><img src="{{if $news_list[loop].img neq ""}}{{$news_list[loop].img}}{{else}}{{$smarty.const.__APP_RESOURCE__}}imgs/no_img.jpg{{/if}}" alt="{{$news_list[loop].title}}"/></div></a>
 	<div class="desc">
 	<h4 class="channel">
-		<a href="{{$smarty.const.__ROOT__}}news/index/type/{{$news_list[loop].type}}" target="_blank">[{{$news_list[loop].type_name}}]</a> 
+		<a href="{{$smarty.const.__ROOT__?c=news&a=index&type=$news_list[loop].type|url}}" target="_blank">[{{$news_list[loop].type_name}}]</a> 
 		<a href="{{$news_list[loop].link}}" class="title" target="_blank">{{$news_list[loop].title}}</a>
 	</h4>
 	<p>{{$news_list[loop].description}}</p>

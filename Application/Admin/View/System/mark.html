@@ -1,5 +1,5 @@
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__ACTION__}}action/add" enctype="multipart/form-data" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);">
+	<form method="post" action="{{$smarty.const.__ACTION__&action=add|url}}" enctype="multipart/form-data" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 			<input type="hidden" name="img" value="{{$info.img}}"/>
 			<dl class="nowrap">

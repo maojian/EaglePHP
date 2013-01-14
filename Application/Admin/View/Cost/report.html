@@ -1,5 +1,5 @@
 <div class="pageHeader">
-	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}report" method="post">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__&a=report|url}}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -43,7 +43,7 @@
 				<td width="15%">{{$list[loop].accountSum|default:0}}</td>
 				<td width="15%">{{$list[loop].costSum|default:0}}</td>
 				<td width="15%">{{$list[loop].balanceSum|default:0}}</td>
-				<td><a href="{{$smarty.const.__ACTION__}}particularDate/{{$list[loop].date}}" target="dialog" width="600" height="600" class="btnInfo" title="查看明细">查看明细</a></td>
+				<td><a href="{{$smarty.const.__ACTION__&particularDate=$list[loop].date|url}}" target="dialog" width="600" height="600" class="btnInfo" title="查看明细">查看明细</a></td>
 			</tr>
 		    {{/section}}
 		</tbody>

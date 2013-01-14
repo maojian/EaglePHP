@@ -5,9 +5,9 @@
 			<div class="tabsHeaderContent">
 				<ul>
 					{{foreach key=k item=v from=$list}}
-					<li><a href="{{$smarty.const.__ACTION__}}groupid/{{$k}}" class="j-ajax"><span>{{$v}}</span></a></li>
+					<li><a href="{{$smarty.const.__ACTION__&groupid=$k|url}}" class="j-ajax"><span>{{$v}}</span></a></li>
 					{{/foreach}}
-					<li><a href="{{$smarty.const.__ACTION__}}action/add" target="dialog" width="800" height="400"><span>添加新变量</span></a></li>
+					<li><a href="{{$smarty.const.__ACTION__&action=add|url}}" target="dialog" width="800" height="400"><span>添加新变量</span></a></li>
 				</ul>
 			</div>
 		</div>

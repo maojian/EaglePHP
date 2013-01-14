@@ -45,7 +45,7 @@ class DbMysql extends Db implements DbInterface
         {
             $this->linkID = mysql_connect($dbhost.':'.$dbport, $dbuser, $dbpwd, true, CLIENT_MULTI_RESULTS);
         }
-        $this->query("SET NAMES $dbcharset");
+        mysql_query("SET NAMES $dbcharset");
         $this->selectDb($dbname);
         return $this->linkID;
     }
@@ -57,9 +57,17 @@ class DbMysql extends Db implements DbInterface
      */
     public function checkContent()
     {
-        if(!mysql_ping($this->linkID)){
+        $this->checkTimeOut();
+        $isResource = is_resource($this->linkID);
+        if(!$isResource || ($isResource && !mysql_ping($this->linkID)))
+        {
+            self::$connectNum++;
             $this->close();
             $this->linkID = $this->connect();
+        }
+        else
+        {
+            self::$connectNum = 0;
         }
     }
      

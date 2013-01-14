@@ -33,12 +33,13 @@ class Controller extends Delegate
 	 * @param string $url
 	 * @param int $time
 	 * @param string $message
+	 * @param bool $isConvert
 	 * @return void
 	 */
-	public function redirect($url, $time=0, $message='') 
+	public function redirect($url, $time=0, $message='', $isConvert=true) 
 	{
 		if (empty($url)) $url = CONTROLLER_NAME;
-		redirect(__ROOT__ . $url, $time, $message);
+		redirect(__ROOT__ . $url, $time, $message, $isConvert);
 	}
 	
 

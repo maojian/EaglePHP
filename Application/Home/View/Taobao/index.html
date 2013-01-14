@@ -6,7 +6,7 @@
         <h2><strong>精选商品</strong></h2>
         <div class="innerContent">
           <div style="margin-left: 15px;">
-	          <form method="post" action="{{$smarty.const.__ROOT__}}taobao">
+	          <form method="post" action="{{$smarty.const.__ROOT__?c=taobao|url}}">
 	          <input type="text" class="textfield" name="keyword" value="{{$smarty.request.keyword|default:'搜索你感兴趣的商品'}}" onfocus="if (this.value == '搜索你感兴趣的商品') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的商品';"  />
 	          <select class="selectfield" name="cid"><option value="">--商品分类--</option>{{html_options options=$cats selected=$smarty.request.cid}}</select>
 	          <select class="selectfield" name="sort"><option value="">--商品排序--</option>{{html_options options=$sorts selected=$smarty.request.sort}}</select>

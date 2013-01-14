@@ -1,6 +1,6 @@
 
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__URL__&a=move|url}}" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+	<form method="post" action="{{$smarty.const.__URL__}}move" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 			<input type="hidden" name="file" value="{{$smarty.request.file}}" />
 			<dl class="nowrap">

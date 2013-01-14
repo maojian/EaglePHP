@@ -18,7 +18,7 @@ class PublicController extends Controller {
 	 */
 	public function logoutAction() {
 		Session::destory();
-		$this->redirect('?c=public&a=login');
+		$this->redirect('public/login');
 	}
 	
 	

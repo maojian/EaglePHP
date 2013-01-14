@@ -2,9 +2,9 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="{{$smarty.const.__ACTION__&type=bak|url}}" target="selectedTodo"  rel="ids" postType="string" title="确实要备份这些表吗?"><span>批量备份数据</span></a></li>
-			<li><a class="edit" href="{{$smarty.const.__ACTION__&type=optimizeAll|url}}" target="selectedTodo"  rel="ids" postType="string" title="确实要优化这些表吗?"><span>批量优化数据</span></a></li>
-			<li><a class="icon" href="{{$smarty.const.__ACTION__&type=repairAll|url}}" target="selectedTodo"  rel="ids" postType="string" title="确实要修复这些表吗?"><span>批量修复数据</span></a></li>
+			<li><a class="add" href="{{$smarty.const.__ACTION__}}type/bak" target="selectedTodo"  rel="ids" postType="string" title="确实要备份这些表吗?"><span>批量备份数据</span></a></li>
+			<li><a class="edit" href="{{$smarty.const.__ACTION__}}type/optimizeAll" target="selectedTodo"  rel="ids" postType="string" title="确实要优化这些表吗?"><span>批量优化数据</span></a></li>
+			<li><a class="icon" href="{{$smarty.const.__ACTION__}}type/repairAll" target="selectedTodo"  rel="ids" postType="string" title="确实要修复这些表吗?"><span>批量修复数据</span></a></li>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="77">
@@ -31,9 +31,9 @@
 				<td>{{$list[loop].Data_free}}</td>
 				<td>{{$list[loop].Collation}}</td>
 				<td>
-					<a target="ajaxTodo" href="{{$smarty.const.__ACTION__&type=optimize&id=$list[loop].Name|url}}">优化</a>&nbsp;|&nbsp;
-					<a target="ajaxTodo" href="{{$smarty.const.__ACTION__&type=repair&id=$list[loop].Name|url}}">修复</a>&nbsp;|&nbsp;
-					<a target="dialog" width="800" height="600" href="{{$smarty.const.__ACTION__&type=show&id=$list[loop].Name|url}}">结构</a>
+					<a target="ajaxTodo" href="{{$smarty.const.__ACTION__}}type/optimize/id/{{$list[loop].Name}}">优化</a>&nbsp;|&nbsp;
+					<a target="ajaxTodo" href="{{$smarty.const.__ACTION__}}type/repair/id/{{$list[loop].Name}}">修复</a>&nbsp;|&nbsp;
+					<a target="dialog" width="800" height="600" href="{{$smarty.const.__ACTION__}}type/show/id/{{$list[loop].Name}}">结构</a>
 				</td>
 			</tr>
 		    {{/section}}

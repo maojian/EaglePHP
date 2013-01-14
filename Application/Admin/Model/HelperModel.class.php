@@ -56,7 +56,7 @@ class HelperModel extends Model{
               foreach($list as $val){
                   if($val['parent'] == $id){
                       $arr[$val['id']] = $val['title'];
-                      $this->getChildRecursion($val['id'], $list, $isnull);
+                      $this->getChildRecursion($val['id'], $list, $values);
                   }elseif($val['id'] == $id){
                       $arr[$id] = $val['title'];
                   }

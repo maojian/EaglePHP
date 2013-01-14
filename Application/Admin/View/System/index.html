@@ -3,30 +3,26 @@
 	function confirmMsg(msg, target){
 		alertMsg.confirm(msg, {
 			okCall: function(){
-				$.post("{{$smarty.const.__URL__&a=|url}}"+target, {}, DWZ.ajaxDone, "json");
+				$.post("{{$smarty.const.__URL__}}"+target, {}, DWZ.ajaxDone, "json");
 			}
 		});
 	}
 </script>
 
 <h2 class="contentTitle">系统设置面板</h2>
-
-<div style="margin-left: 2%">
-	<a class="button" href="javascript:;" onclick="confirmMsg('您确定要更新吗？','updateTableMappend')"><span>更新表映射ORM</span></a>
-</div>
-
-<div class="divider"></div>
-
-<div style="margin-left: 2%">
-	<a class="button" href="javascript:;" onclick="confirmMsg('您确定要清空吗？','clearFileCache')"><span>清空所有缓存数据</span></a>
-	<a class="button" style="margin-left: 5px;" href="{{$smarty.const.__URL__&a=clearFileCache|url}}" target="dialog" width="500" height="400" rel="System"><span>选择清空缓存文件</span></a>
-</div>
-
-<div class="divider"></div>
-
-<div style="margin-left: 2%">
-	<a class="button" href="javascript:;" onclick="confirmMsg('您确定要清空吗？','clearTplCache')"><span>清空模版缓存文件</span></a>
-	<a class="button" style="margin-left: 5px;" href="javascript:;" onclick="confirmMsg('您确定要清空吗？','clearTplCompile')"><span>清空模版编译文件</span></a>
-</div>
+<table>
+  <tr>
+    <td>
+    	<div style="margin-left: 10%">
+        	<a class="button" href="javascript:;" onclick="confirmMsg('您确定要更新吗？','updateTableMappend')"><span>更新表映射【ORM】</span></a>
+        </div>
+    </td>
+    <td>
+    	<div style="margin-left: 10%">
+        	<a class="button" href="javascript:;" onclick="confirmMsg('您确定要清空吗？','clearCache')"><span>清空缓存数据</span></a>
+        </div>
+    </td>
+  </tr>
+</table>
 
 				

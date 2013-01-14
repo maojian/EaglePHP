@@ -37,10 +37,9 @@ class NoteController extends CommonController{
 	 * 添加新闻类型
 	 */
 	public function addAction(){
-		if($this->isPost())
-		{
+		if(count($_POST) > 0){
 		    $this->check();
-			$_POST['create_time'] = Date::format();
+			$_POST['create_time'] = date('Y-m-d H:i:s');
 			if($this->cur_model->add()){
 				$this->ajaxReturn(200, '添加成功');
 			}else{
@@ -55,8 +54,7 @@ class NoteController extends CommonController{
 	 * 修改新闻类型
 	 */
 	public function updateAction(){
-		if($this->isPost())
-		{
+		if(count($_POST) > 0){
 		    $this->check();
 			if($this->cur_model->save()){
 				$this->ajaxReturn(200, '修改成功');

@@ -1,5 +1,5 @@
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__ACTION__&go=$smarty.get.go&table=$smarty.get.table&url_param=$url_param|url}}" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="{{$smarty.const.__ACTION__}}go/{{$smarty.get.go}}/table/{{$smarty.get.table}}/?url_param={{$url_param}}" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		{{if $smarty.get.go eq "update"}}
 		<input type="hidden" name="eg_base64_where" value="{{$smarty.get.eg_base64_where}}">
 		{{/if}}

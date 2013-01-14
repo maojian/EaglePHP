@@ -40,7 +40,7 @@ function login(){
 
 	$("#msg").css("display", "block");
 	$("#msg").html("正在登录中，请稍等...");
-	$.post("{{$smarty.const.__PUB__api/index.php?c=manager&a=login|url}}", {username: username, password: password, verify: verify},
+	$.post("{{$smarty.const.__PUB__}}api/index.php/manager/login", {username: username, password: password, verify: verify},
 		  function(responseText){
 				try{
 			  		eval("var obj="+responseText);
@@ -89,7 +89,7 @@ $(function(){
 	<li><input id="username" type="text" name="username" class="inputstyle" maxlength="50" autocomplete="off" value="admin" onfocus="if(this.value=='请输入用户名') this.value='';this.className='inputstylefocus';return true;" onblur="if(this.value=='') this.value='请输入用户名';this.className='inputstyle';return true;"></li>
 	<li><input id="password" type="password" name="passwd" class="inputstyle" maxlength="20" value="+_-_-_+" onfocus="if(this.value=='+_-_-_+') this.value='';this.className='inputstylefocus';return true;" onblur="if(this.value=='') this.value='+_-_-_+';this.className='inputstyle';return true;"></li>
 	<li style="position: relative"><input class="inputstyle" autocomplete="off" size=8 name="verify" id="verify" value="请输入验证码" onfocus="if(this.value=='请输入验证码') this.value=''; this.className='inputstylefocus';return true;" onblur="if(this.value=='') this.value='请输入验证码'; this.className='inputstyle';return true;">&nbsp;
-	<img  src="{{$smarty.const.__URL__&a=getVerifyCode|url}}" id="verifyCodeImg" onclick="this.src+='&rand=' + Math.random();" align="top" class="verifycodeimg" title="点击刷新"></li>
+	<img  src="{{$smarty.const.__URL__}}getVerifyCode/" id="verifyCodeImg" onclick="this.src+='?' + Math.random();" align="top" class="verifycodeimg" title="点击刷新"></li>
 	记住用户名：<input type="checkbox" id="save_login_name">
 	<li class="btn png"><input type="button" class="loginbtn" value=" "  onclick="login();" onmouseover="this.blur();return true;" onmousedown="this.className='loginbtnfocus';return true;"></li>
 </ul>

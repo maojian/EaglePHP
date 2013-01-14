@@ -6,7 +6,7 @@ class NewsTypeModel extends Model{
        }
        
        public function getNewsTypeList(){
-            $list = model('news_type')->field('id,title,parent')->where('state=0')->order('rank DESC')->cache()->select();
+            $list = model('news_type')->field('id,title,parent')->where('state=0')->order('rank DESC')->select(array('cache'=>true));
             return $this->getTree(0, $list);
        }
        
@@ -34,8 +34,7 @@ class NewsTypeModel extends Model{
                           if($val['parent']!=0) $title .= '&gt;&gt;';
                           $child_tree = "<div><ul>{$child_tree}</ul></div>";
                       }
-                      $link = url(__ROOT__."?c=news&a=index&type={$val['id']}");
-                      $temp .= "<li><a href=\"".$link."\">{$title}</a>{$child_tree}</li>\r\n";
+                      $temp .= "<li><a href=\"".__ROOT__."news/index/type/{$val['id']}\">{$title}</a>{$child_tree}</li>\r\n";
                       $tree .= $temp;
                 }
             }

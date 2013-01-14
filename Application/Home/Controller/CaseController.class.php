@@ -13,7 +13,7 @@ class CaseController extends CommonController{
     }
     
     public function indexAction(){
-        $this->assign('list', $this->cur_model->field('title,img,url')->where('state=0')->order('rank DESC,id DESC')->cache()->select());
+        $this->assign('list', $this->cur_model->field('title,img,url')->where('state=0')->order('rank DESC,id DESC')->select(array('cache'=>true)));
         $this->assign('title', '案例');
         $this->display();
     }

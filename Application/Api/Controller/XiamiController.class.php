@@ -49,7 +49,7 @@ class XiamiController extends ApiCommonController{
         while ($loc_7 < strlen($loc_6[0])){
             $loc_10 = 0;
             while ($loc_10 < count($loc_6)){
-                $loc_8 .= isset($loc_6[$loc_10][$loc_7]) ? $loc_6[$loc_10][$loc_7] : null;
+                $loc_8 .= $loc_6[$loc_10][$loc_7];
                 $loc_10++;
             }
             $loc_7++;

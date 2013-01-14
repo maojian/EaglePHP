@@ -12,22 +12,19 @@ class NewsModel extends Model{
      
     private function getChildType($id){
          static $list = array();
-         if(count($list) == 0)
-         {
-             $list = model('news_type')->field('id,title,parent')->cache()->select();
+         if(count($list) == 0){
+              $list = model('news_type')->field('id,title,parent')->select(array('cache'=>true));
          }
          $arr = model('helper')->getChild($id, $list, true);
          return is_array($arr) ? implode(',', array_keys($arr)) : 0;
     }
-    
-    
     
      /**
       * 获取公告
       * @param int $count
       */
      public function getAnnouncement($count=4){
-         $list = $this->field('id,title,create_time')->where('type IN('.$this->getChildType(1).')')->order('rank ASC,create_time DESC')->limit($count)->cache()->select();
+         $list = $this->field('id,title,create_time')->where('type IN('.$this->getChildType(1).')')->order('rank ASC,create_time DESC')->limit($count)->select(array('cache'=>true));
          if(is_array($list)){
              foreach($list as &$val){
                  $val['link'] = $this->getHtmlLink($val);
@@ -46,15 +43,16 @@ class NewsModel extends Model{
 		  $sql = $url = '';
       	  if($type_id){
       	       $sql = $type_id ? 'type IN('.$this->getChildType($type_id).')' : '';
-      	       $url = "&type=$type_id";
+      	       $url = "type/$type_id/";
       	  }
       	  if($content){
       	       $sql = (($sql) ? $sql." AND " : '')." (content LIKE '%{$content}%' OR title LIKE '%{$content}%') ";
-      	       $url .= "&content={$content}";
+      	       $url .= "content/{$content}/";
       	  }
+     
       	  $total =  $this->where($sql)->count();
       	  $page = new Page(array ('total' =>$total, 'perpage' =>$perpage, 'url' => __ACTION__.$url)); //clicknum,comments,
-      	  $news_list = $this->field('id,title,type,description,img,create_time')->where($sql)->order('rank ASC,create_time DESC')->limit("{$page->offset},{$perpage}")->cache()->select();
+  		  $news_list = $this->field('id,title,type,description,img,create_time')->where($sql)->order('rank ASC,create_time DESC')->limit("{$page->offset},{$perpage}")->select(array('cache'=>true));
 
   		  if($news_list){
              $news_type_m = model('news_type');
@@ -73,7 +71,7 @@ class NewsModel extends Model{
      public function getRelation($type, $exculd_id, $count=6){
          if(empty($exculd_id) || empty($type)) return false;
          $sql = $exculd_id ? 'AND id!='.$exculd_id : '';
-         $list = $this->field('id,title,create_time')->where("type=$type $sql")->order('rank ASC,id DESC')->limit($count)->cache()->select();
+         $list = $this->field('id,title,create_time')->where("type=$type $sql")->order('rank ASC,id DESC')->limit($count)->select(array('cache'=>true));
          if($list){
             foreach ($list as &$val){
                 $val['short_title'] = utf8Substr($val['title'], 0, 11);
@@ -113,7 +111,7 @@ class NewsModel extends Model{
           $sql = 'img!=""';
           if(!empty($type_id)) $sql .= " AND type=$type_id";
           $recom_info = $this->field('id,title,img,description,create_time')->where($sql)->order('id DESC')->find();
-          $type_list = model('news_type')->field('id AS type_id,title AS type_name')->where('id!=1')->order('id ASC')->cache()->select();
+          $type_list = model('news_type')->field('id AS type_id,title AS type_name')->where('id!=1')->order('id ASC')->select(array('cache'=>true));
           if(is_array($type_list)){
               foreach ($type_list as $type){
                   $type_id = $type['type_id'];
@@ -139,8 +137,7 @@ class NewsModel extends Model{
           if($this->cfg_html_make == 1){
               $link = rtrim(__PUB__,'/').$this->cfg_html_dir.'/'.date('Ymd',strtotime($news_info['create_time'])).'/'.$news_info['id'].($page ? "_{$page}" : '').'.html';
           }else{
-              $link = __ROOT__.'?c=news&a=show&id='.$news_info['id'].($page ? "&page={$page}" : '');
-              $link = url($link);
+              $link = __ROOT__.'news/show/id/'.$news_info['id'].($page ? "/page/{$page}" : '');
           }
           return $link;
      }

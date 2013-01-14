@@ -1,6 +1,6 @@
 
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__URL__&a=add|url}}" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="{{$smarty.const.__URL__}}add" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 			<dl class="nowrap">
 				<dt>名称：</dt>
@@ -23,7 +23,7 @@
 				<dd>
 					<input type="hidden" name="orgLookup.id" value=""/>
 					<input type="text" class="textInput required" name="orgLookup.orgName" value="" readonly="readonly"/>
-					<a class="btnLook" href="{{$smarty.const.__URL__&a=lookup|url}}" lookupGroup="orgLookup" lookupName="orgLookup" maxable="false" resizable="false" title="查找父菜单"><hi:text key="查找带回"/></a>
+					<a class="btnLook" href="{{$smarty.const.__URL__}}lookup" lookupGroup="orgLookup" lookupName="orgLookup" maxable="false" resizable="false" title="查找父菜单"><hi:text key="查找带回"/></a>
 				</dd>
 			</dl>
 			<dl class="nowrap">

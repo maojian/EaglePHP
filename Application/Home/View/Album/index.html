@@ -41,7 +41,7 @@ $('#hotRankSlide').cycle({
 <div class="subContent">
 
 <div id="indexSearch" class="module">
-<form action="{{$smarty.const.__ROOT__?c=news|url}}" method='post'>
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
 <input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
 <input type="submit" class="button" value="搜索" />
 </form>
@@ -67,8 +67,8 @@ td.td2{width:10%;}
 <tr>
 {{/if}}
 <td>
-  <a href="{{$smarty.const.__ROOT__?c=photo&a=show&album=$list[loop].id|url}}" target="_blank"><img src="{{$list[loop].img}}" style="max-width: 100px;max-height: 100px;"/></a><br/>
-  <div style="margin-top: 8px;"><a href="{{$smarty.const.__ROOT__?c=photo&a=show&album=$list[loop].id|url}}" target="_blank">{{$list[loop].title}}</a></div>
+  <a href="{{$smarty.const.__ROOT__}}photo/show/album/{{$list[loop].id}}" target="_blank"><img src="{{$list[loop].img}}" style="max-width: 100px;max-height: 100px;"/></a><br/>
+  <div style="margin-top: 8px;"><a href="{{$smarty.const.__ROOT__}}photo/show/album/{{$list[loop].id}}" target="_blank">{{$list[loop].title}}</a></div>
 </td>
 {{if ($smarty.section.loop.index+1) %4 eq 0 or $smarty.section.loop.last}}
 </tr>

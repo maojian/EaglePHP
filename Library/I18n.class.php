@@ -6,58 +6,18 @@
  * @copyright EaglePHP开发团队
  */
 
-class I18n
-{
+class I18n{
     
-    /**
-     * 当前语言
-     * 
-     * @var string
-     */
-    protected static $language;
-    
-    
-    /**
-     * 默认语言包
-     * 
-     * @var string
-     */
-    protected static $default;
-    
-    
-    /**
-     * 语言文件后缀
-     * 
-     * @var string
-     */
-    protected static $suffix;
-    
-    
-    /**
-     * 语言包目录
-     * 
-     * @var string
-     */
-    protected static $dir;
-    
-    
-    /**
-     * 语言包文本信息数组
-     * 
-     * @var array
-     */
-    protected static $_messages = array();
-    
+    private static $language, $default, $suffix, $dir, $_messages = array();
     
     public static function getMessage($message, $params = array())
     {
         self::_setConfig();
         $message = self::_transform($message);
-        return empty($params) ? $message : vsprintf($message, $params);
+        return empty($params) ? $message : self::sprintfStr($message, $params);
     }
     
-    
-    protected static function _transform($message)
+    private static function _transform($message)
     {
         $module = $file = $key = '';
         $_message = $message;
@@ -77,24 +37,29 @@ class I18n
         {
             return $message;
         }
-        if(!isset(self::$_messages[$path]))
-        {
+        if(!isset(self::$_messages[$path])){
             self::$_messages[$path] = require($path);
         }
         return isset(self::$_messages[$path][$key]) ? self::$_messages[$path][$key] : $message;
     }
     
     
+    private static function sprintfStr($message, $params)
+    {
+        $format = '\''.implode('\',\'', $params).'\'';
+        eval("\$message = sprintf('{$message}', {$format});");
+        return $message;
+    }
+    
     public static function getLangFile($module='')
     {
          return DATA_DIR.self::$dir.__DS__.self::$language.($module ? __DS__.strtolower($module) : '');
     }
     
-    
-    protected static function _setConfig()
+    private static function _setConfig()
     {
         self::$dir = 'I18n';
-        self::$language = strtolower(HttpRequest::getAcceptLanguage());
+        self::$language = 'zh_cn';
         self::$default = 'message';
         self::$suffix = '.lang.php';
     }

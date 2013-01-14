@@ -41,7 +41,7 @@ $('#hotRankSlide').cycle({
 <div class="subContent">
 
 <div id="indexSearch" class="module">
-<form action="{{$smarty.const.__ROOT__?c=news|url}}" method='post'>
+<form action="{{$smarty.const.__ROOT__}}news" method='post'>
 <input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
 <input type="submit" class="button" value="搜索" />
 </form>
@@ -64,7 +64,7 @@ td.td2{width:10%;}
 
 <blockquote style="text-align:left;margin:5px 0px 10px;padding-bottom:10px;padding-left:40px;padding-right:20px;padding-top:3px;line-height: 25px;color:#595959;background:  url('{{$smarty.const.__APP_RESOURCE__}}imgs/icon_quote_s.gif') #f9f9f9 no-repeat;"> 
 <p>这里列出了部分基于EaglePHP框架开发的项目案例，感谢各位网友的支持和提供！</p> 
-<p>我们长期向各位征集展示各类基于EaglePHP框架的程序<b>（展示截图，无需程序源码）</b>，希望大家踊跃参与。<a href="{{$smarty.const.__ROOT__?c=message|url}}" target="_blank">提交您的案例 &gt;&gt;</a></p> 
+<p>我们长期向各位征集展示各类基于EaglePHP框架的程序<b>（展示截图，无需程序源码）</b>，希望大家踊跃参与。<a href="{{$smarty.const.__ROOT__}}message" target="_blank">提交您的案例 &gt;&gt;</a></p> 
 </blockquote> 
 
 <table>

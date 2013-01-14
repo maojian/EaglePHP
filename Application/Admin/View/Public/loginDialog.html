@@ -1,7 +1,7 @@
 
 <div class="pageContent">
 	
-	<form method="post" action="{{$smarty.const.__PUB__api/index.php?c=manager&a=login|url}}" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
+	<form method="post" action="{{$smarty.const.__PUB__}}api/index.php/manager/login" class="pageForm" onsubmit="return validateCallback(this, dialogAjaxDone)">
 		<div class="pageFormContent" layoutH="58">
 			<div class="unit">
 				<label>用户名：</label>
@@ -14,7 +14,7 @@
 			<div class="unit">
 				<label>验证码：</label>
 				<input type="verify" name="verify" size="10" class="required"/>&nbsp;&nbsp;
-				<img src="{{$smarty.const.__URL__&a=getVerifyCode|url}}" alt="" onclick="this.src+='&' + Math.random();"/>
+				<img src="{{$smarty.const.__URL__}}getVerifyCode" alt="" onclick="this.src+='?' + Math.random();"/>
 			</div>
 		</div>
 		<div class="formBar">

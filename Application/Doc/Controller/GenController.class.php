@@ -2,14 +2,12 @@
 
 /**
  * 生成chm格式的开发帮助文档
- * 
  * @copyright Copyright @2011, MAOJIAN
  * @author maojianlw@139.com
- * @since 1.2 - 2012-12-13
+ * @since 1.2 - 2011-11-1
  */
 
-class GenController extends Controller
-{
+class GenController extends Controller{
 	
 	public  $hhw_dir = 'D:\Program Files\HTML Help Workshop\hhc.exe';	
 	

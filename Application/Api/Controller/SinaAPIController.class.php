@@ -16,7 +16,7 @@ class SinaAPIController extends ApiCommonController{
 	 */
     public function __construct() {
     	set_time_limit(0);
-    	$this->curModel = model('user');	
+    	$this->curModel = M('user');	
     }
     
 	
@@ -154,8 +154,8 @@ class SinaAPIController extends ApiCommonController{
      * 抓取新浪微博页面内容
      */
     public function swoopAction(){
-    	$username = $this->request('username');
-		$password = $this->request('password');
+    	$username = $_REQUEST['username'];
+		$password = $_REQUEST['password'];
 	
 		$this->login($username,$password);
 	

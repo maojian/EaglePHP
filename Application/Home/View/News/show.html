@@ -61,9 +61,9 @@ $('#hotRankSlide').cycle({
 <div class="mainContent">
 <div class="pageNavi">
 <ul>
-	<li><a href="{{$smarty.const.__ROOT__|url}}">首页</a></li>
+	<li><a href="{{$smarty.const.__ROOT__}}">首页</a></li>
 	{{foreach key=k item=v from=$type_arr}}
-	<li><a href="{{$smarty.const.__URL__&a=index&type=$k|url}}">{{$v}}</a></li>
+	<li><a href="{{$smarty.const.__URL__}}index/type/{{$k}}">{{$v}}</a></li>
 	{{/foreach}}
 	<li class="last">正文</li>
 </ul>
@@ -103,7 +103,7 @@ $('#hotRankSlide').cycle({
 {{if $key_arr}}
 <div class="tag"><strong>标签：</strong> 
 {{section name=loop loop=$key_arr}}
-<a href="{{$smarty.const.__URL__&a=index&content=$key_arr[loop]|url}}">{{$key_arr[loop]}}</a>
+<a href="{{$smarty.const.__URL__}}index/content/{{$key_arr[loop]}}">{{$key_arr[loop]}}</a>
 {{/section}}
 </div>
 {{/if}}
@@ -134,7 +134,7 @@ $('#hotRankSlide').cycle({
 <h3>相关阅读</h3>
 <ul>
 	{{section name=loop loop=$relation_list}}
-	<li><span class="tags"><a href="{{$smarty.const.__URL__&a=index&type=$type_info.id|url}}">[{{$type_info.title}}]</a></span>
+	<li><span class="tags"><a href="{{$smarty.const.__URL__}}index/type/{{$type_info.id}}">[{{$type_info.title}}]</a></span>
 	<a href="{{$relation_list[loop].link}}" title="{{$relation_list[loop].title}}">{{$relation_list[loop].short_title}}</a></li>
 	{{/section}}
 </ul>
@@ -178,7 +178,7 @@ $('#hotRankSlide').cycle({
 <fieldset style="margin:0;padding:0;border:none;display:block;" id="fs_nologin">
 <div><label for="cname">姓　名</label><input class="textField" id="cname" name="name" type="text"></div>
 <div><label for="cemail">E-Mail</label><input class="textField" id="cemail" name="email" type="text"></div>
-<div><div style="float: left;"><label for="cname">验证码</label><input class="textField" id="yzm" name="yzm" type="text" style="width: 120px">&nbsp;&nbsp;</div><div style="float: left;"><img src="{{$smarty.const.__ROOT__?c=message&a=verifyCode|url}}" id="verifyCode" onclick="this.src+='?' + Math.random();" style="cursor: pointer;"/></div></div>
+<div><div style="float: left;"><label for="cname">验证码</label><input class="textField" id="yzm" name="yzm" type="text" style="width: 120px">&nbsp;&nbsp;</div><div style="float: left;"><img src="{{$smarty.const.__ROOT__}}message/verifyCode/" id="verifyCode" onclick="this.src+='?' + Math.random();" style="cursor: pointer;"/></div></div>
 </fieldset>
 
 <div><textarea id="content" rows="8" tabindex="3"></textarea></div>
@@ -198,14 +198,14 @@ $('#hotRankSlide').cycle({
 <div class="subContent"><!-- 频道搜索 -->
 <div id="search" class="module">
 <h3>频道搜索</h3>
-<form id="form1" name="form1" method="post" action="{{$smarty.const.__ROOT__?c=news|url}}">
+<form id="form1" name="form1" method="post" action="{{$smarty.const.__ROOT__}}news">
 <input type="text" name="content" class="textfield" value="文章搜索..." onfocus="if (this.value=='文章搜索...') this.value=''" /> 
 <input class="button" type="submit" value="提交" />
 <div class="tag"><strong>搜索热点：</strong>
-<a href="{{$smarty.const.__ROOT__?c=news&a=index&content=PHP|url}}">PHP</a>
-<a href="{{$smarty.const.__ROOT__?c=news&a=index&content=MSQL|url}}">MSQL</a> 
-<a href="{{$smarty.const.__ROOT__?c=news&a=index&content=Linux|url}}">Linux</a> 
-<a href="{{$smarty.const.__ROOT__?c=news&a=index&content=Apache|url}}">Apache</a></div>
+<a href="{{$smarty.const.__ROOT__}}news/index/content/PHP/">PHP</a>
+<a href="{{$smarty.const.__ROOT__}}news/index/content/MSQL/">MSQL</a> 
+<a href="{{$smarty.const.__ROOT__}}news/index/content/Linux/">Linux</a> 
+<a href="{{$smarty.const.__ROOT__}}news/index/content/Apache/">Apache</a></div>
 </form>
 </div>
 </div>
@@ -216,7 +216,7 @@ $('#hotRankSlide').cycle({
 <script type="text/javascript">
 var news_id = "{{$smarty.get.id}}";
 function getData(){
-	var data = $.ajax({url: "{{$smarty.const.__URL__&a=getData&id=|url}}"+news_id, async: false}).responseText;
+	var data = $.ajax({url: "{{$smarty.const.__URL__}}getData/id/"+news_id, async: false}).responseText;
 	var obj = {};
     eval("obj="+data);
 	$("#comment_list").html(obj.data.comment_list);
@@ -248,7 +248,7 @@ function comment(){
 		return false;
 	}
 
-	$.post("{{$smarty.const.__URL__&a=comment|url}}",
+	$.post("{{$smarty.const.__URL__}}comment",
        { name: name, email: email, content: content, news_id: news_id, yzm: yzm },
        function(data){
           var obj = {};

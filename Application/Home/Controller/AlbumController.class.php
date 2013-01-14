@@ -11,7 +11,7 @@ class AlbumController extends CommonController{
     	$perpage = 10;
     	$total =  $this->cur_model->count();
     	$page = new Page(array ('total' =>$total, 'perpage' =>$perpage, 'url' => __ACTION__));
-		$list = $this->cur_model->order('id DESC')->limit("{$page->offset},{$perpage}")->cache()->select();
+		$list = $this->cur_model->order('id DESC')->limit("{$page->offset},{$perpage}")->select(array('cache'=>true));
         $photo_model = model('photo');
 		foreach($list as &$val){
              $photo_info = $photo_model->field('thumbnail')->where("albumid={$val['id']}")->order('id DESC')->find();

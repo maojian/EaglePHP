@@ -45,57 +45,12 @@ class SystemController extends CommonController{
     	}
     }
     
-    
     /**
-     * 获取文件缓存
+     * 清空缓存数据
      */
-    public function clearFileCacheAction()
-    {
-        $dir = DATA_DIR.getCfgVar('cfg_cache_dir');
-        if($this->isPost())
-        {
-            $table = $this->post('table');
-            if(is_array($table)) foreach ($table as $t) rm_dir($dir.__DS__.$t);
-            $this->ajaxReturn(200, '已成功清除 '.count($table).' 缓存目录！', '', 'closeCurrent');
-        }
-        $dirArr = Folder::read($dir, Folder::READ_DIR);
-        $data = array();
-        if(is_array($dirArr)) foreach($dirArr as $v) $data[$v] = $v;
-        $this->assign('dirArr', $data);
-        $this->display('System/file_cache');
-    }
-    
-    /**
-     * 清空所有缓存数据
-     */
-    public function clearCacheAction()
-    {
+    public function clearCacheAction(){
          rm_dir(DATA_DIR.getCfgVar('cfg_cache_dir'));
          $this->ajaxReturn(200, '已清空所有缓存文件！');
-    }
-    
-    
-    /**
-     * 清空Smarty缓存文件
-     * 
-     * @return void
-     */
-    public function clearTplCacheAction()
-    {
-        rm_dir(dirname(APP_CACHE_DIR));
-        $this->ajaxReturn(200, '已清空所有模版缓存文件！');
-    }
-    
-    
-	/**
-     * 清空Smarty编译文件
-     * 
-     * @return void
-     */
-    public function clearTplCompileAction()
-    {
-        rm_dir(dirname(APP_COMPILE_DIR));
-        $this->ajaxReturn(200, '已清空所有模版编译文件！');
     }
     
     

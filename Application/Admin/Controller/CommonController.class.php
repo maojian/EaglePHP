@@ -40,7 +40,7 @@ class CommonController extends Controller {
 			if(HttpRequest::isAjaxRequest()){
 				$this->ajaxReturn(301, '会话已超时，请重新登录');
 			}else{
-				$this->redirect('?c=public&a=login');	
+				$this->redirect('public/login');	
 			}
 		}
 	}
@@ -52,14 +52,15 @@ class CommonController extends Controller {
 	private function checkAuth()
 	{
 	    // 如果是超级管理员，跳过权限验证
-	    if($this->user('role_id') == 1) return true;
-	    
+	    if(self::$adminUser['role_id'] == 1){
+	       return true;
+	    }
 		$url = CONTROLLER_NAME.'/'.ACTION_NAME;
-		$role_modules = $this->user('role_modules');
+		$role_modules = self::$adminUser['role_modules'];
 		
 		if(empty($role_modules)){
 			model('module')->getMenuTree();
-			$role_modules = $this->user('role_modules');
+			$role_modules = self::$adminUser['role_modules'];
 		}
 		
 		$isAccess = model('role')->authRoleAccess($url, $role_modules);
@@ -68,7 +69,7 @@ class CommonController extends Controller {
 			if(HttpRequest::isAjaxRequest()){
 				$this->ajaxReturn(300, $message);
 			}else{
-				redirect(__ROOT__, 3, $message);
+				$this->redirect(__ROOT__, 3, $message);
 			}
 		}
 	}
@@ -143,18 +144,6 @@ class CommonController extends Controller {
 	public function isPost()
 	{
 	    return (HttpRequest::getRequestMethod() == 'POST' && count($_POST));
-	}
-	
-	
-	/**
-	 * 从会话中获取用户信息
-	 * @param string $name
-	 * @return mixed
-	 */
-	public function user($name = null)
-	{
-	    $info = $this->session(SESSION_USER_NAME);
-	    return ($name && isset($info[$name])) ? $info[$name] : '';
 	}
 	
 	

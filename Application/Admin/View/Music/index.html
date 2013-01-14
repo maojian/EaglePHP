@@ -1,4 +1,4 @@
-<form id="pagerForm" method="post" action="{{$smarty.const.__URL__|url}}">
+<form id="pagerForm" method="post" action="{{$smarty.const.__URL__}}">
 	<input type="hidden" name="pageNum" value="{{$page.pageNum}}" />
 	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
 	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
@@ -8,7 +8,7 @@
 </form>
 
 <div class="pageHeader">
-	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__|url}}" method="post">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -35,9 +35,9 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="{{$smarty.const.__URL__&a=add|url}}" target="dialog" width="800" height="400"><span>添加</span></a></li>
-			<li><a class="edit" href="{{$smarty.const.__URL__&a=update&id={id}|url}}" target="dialog" width="800" height="400"><span>修改</span></a></li>
-			<li><a class="delete" href="{{$smarty.const.__URL__&a=delete|url}}" target="selectedTodo" rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
+			<li><a class="add" href="{{$smarty.const.__URL__}}add" target="dialog" width="800" height="400"><span>添加</span></a></li>
+			<li><a class="edit" href="{{$smarty.const.__URL__}}update/id/{id}" target="dialog" width="800" height="400"><span>修改</span></a></li>
+			<li><a class="delete" href="{{$smarty.const.__URL__}}delete" target="selectedTodo" rel="ids" postType="string" title="确实要删除这些记录吗?"><span>批量删除</span></a></li>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="114">
@@ -64,8 +64,8 @@
 				<td>{{$list[loop].state}}</td>
 				<td>{{$list[loop].create_time}}</td>
 				<td>
-					<a target="ajaxTodo" href="{{$smarty.const.__URL__&a=delete&ids=$list[loop].id|url}}" class="btnDel" title="确定要删除吗?">删除</a>
-					<a href="{{$smarty.const.__URL__&a=update&id=$list[loop].id|url}}" class="btnEdit" target="dialog" width="800" height="400">编辑</a>
+					<a target="ajaxTodo" href="{{$smarty.const.__URL__}}delete/ids/{{$list[loop].id}}" class="btnDel" title="确定要删除吗?">删除</a>
+					<a href="{{$smarty.const.__URL__}}update/id/{{$list[loop].id}}" class="btnEdit" target="dialog" width="800" height="400">编辑</a>
 				</td>
 			</tr>
 		    {{/section}}

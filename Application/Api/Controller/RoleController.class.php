@@ -5,7 +5,7 @@ class RoleController extends ApiCommonController{
     private $current_model = null;
     
     public function __construct(){
-    	$this->current_model = model('role');
+    	$this->current_model = M('role');
     }
     
     
@@ -29,8 +29,8 @@ class RoleController extends ApiCommonController{
      * 修改角色配置
      */
     public function updateRoleConfigAction(){
-    	$role_id = (int)$this->get('role');
-    	$cfg = $this->get('cfg');
+    	$role_id = (int)$_POST['role'];
+    	$cfg = $_REQUEST['cfg'];
     	//Log::info(var_export($_POST, true));
     	$this->current_model->where("id=$role_id")->save(array('config'=>$cfg));
     }

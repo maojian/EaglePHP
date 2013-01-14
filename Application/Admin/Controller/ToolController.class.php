@@ -282,7 +282,7 @@ class ToolController extends CommonController{
                   default:
                        // 文本框SQL命令执行
                        if($this->request('query')){
-                           $this->assign('list', $this->querySql($this->request('query', self::_NO_CHANGE_VAL_, false)));
+                           $this->assign('list', $this->querySql($this->request('query')));
                            $_REQUEST['go'] = 'query';
                        }elseif($dbname){
                            $data = $this->getTableState();

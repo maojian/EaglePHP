@@ -39,7 +39,7 @@ class CaseController extends CommonController{
 	        $this->ajaxReturn(300, '链接输入错误，正确链接如：http://www.eaglephp.com');
 	    }
 	    $uploadObj->allowTypes = array('image/gif','image/jpg','image/jpeg', 'image/pjpeg','image/bmp','image/x-png');
-	    if(($postFile = $this->file('img')) && $postFile['name']!=''){
+	    if($postFile = $this->file('img') && $postFile['name']!=''){
 	         $case_dir = getCfgVar('cfg_case_dir');
 	         $upload_dir = $uploadDir.$case_dir;
 	         $file_info = $uploadObj->uploadOne($postFile, $upload_dir);

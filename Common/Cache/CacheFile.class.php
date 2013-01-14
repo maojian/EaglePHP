@@ -16,7 +16,7 @@ class CacheFile extends Cache{
       */
      public function __construct($options){
           if($options) $this->options = $options;
-          $this->options['dir'] = DATA_DIR.getCfgVar('cfg_cache_dir').(isset($this->options['dir']) && !empty($this->options['dir']) ? __DS__.$this->options['dir'] : '');
+          $this->options['dir'] = DATA_DIR.(isset($this->options['dir']) && !empty($this->options['dir']) ? $this->options['dir'] : getCfgVar('cfg_cache_dir'));
           if(substr($this->options['dir'], -1) != __DS__) $this->options['dir'] .= __DS__;
           $this->options['expire'] = $this->options['expire'] ? $this->options['expire'] : getCfgVar('cfg_cache_time'); 
           $this->connected = (mk_dir($this->options['dir']) && is_writeable($this->options['dir']));

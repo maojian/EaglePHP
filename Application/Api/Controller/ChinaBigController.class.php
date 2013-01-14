@@ -6,7 +6,7 @@ class ChinaBigController extends Controller{
 	
     public function __construct(){
     	set_time_limit(0);
-    	$this->curModel = model('enterprise');
+    	$this->curModel = M('enterprise');
     }
     
     

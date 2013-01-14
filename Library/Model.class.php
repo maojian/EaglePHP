@@ -7,8 +7,7 @@
  * @copyright EaglePHP Group
  */
 
-class Model 
-{
+class Model {
 	
 	protected $fieldPath = null;
 	protected $name = null; // 模型名称
@@ -29,12 +28,11 @@ class Model
 	 * @param string $flag
 	 * @return object
 	 */
-   	public static function getModel($name=null, $flag=null)
+   	public static function getModel($name='', $flag='')
    	{
    		static $m_cache = array();
    		$cacheName = "__{$flag}_{$name}_Model__";
-		if(!isset($m_cache[$cacheName]))
-		{
+		if(!isset($m_cache[$cacheName])){
 		    if(strpos($name, '.') !== false) // 是否调用其他app下面的模型对象
 		    {
 		        $nameArr = explode('.', $name);
@@ -44,22 +42,11 @@ class Model
 		    }
 		    else
 		    {
-		        // 解决不同应用调用模型对象出现目录重叠的问题
-		        $traceArr = debug_backtrace();
-		        if(strrpos($file=$traceArr[1]['file'], 'Model.class.php'))
-		        {
-		            // 取得应用目录名称
-		            $appDir = dirname(APP_DIR).__DS__.basename(dirname(dirname($file))).__DS__;
-		        }
-		        else
-		        {
-		            $appDir = APP_DIR;
-		        }
+		        $appDir = APP_DIR;
 		    }
-
 		    $modelName = ucfirst($name) . 'Model';
 		    import("Model.{$modelName}", true, $appDir);
-			if(!class_exists($modelName, true)) $modelName = __CLASS__;
+			if (!class_exists($modelName, true)) eval ("class {$modelName} extends Model{}");
 			$modelObj = new $modelName();
 	   		$modelObj->db = Db::getInstance($flag);
 	   		$modelObj->fieldPath = getCfgVar('cfg_orm_dir').__DS__.$modelObj->db->getDbName().__DS__;
@@ -71,7 +58,6 @@ class Model
 		return $m_cache[$cacheName];
    	}
    	
-   	
 	/**
 	 * 魔术方法，针对特定的方法进行处理
 	 * 
@@ -82,57 +68,31 @@ class Model
 	{
 		$name = strtolower($method);
 		$arg = isset($args[0]) ? $args[0] : '';
-		if(in_array($name, array('where', 'table', 'join', 'order', 'group', 'limit', 'having', 'field', 'lock'), true))
-		{
-			if($arg !== '')
-			{
-				if($name == 'where')
-				{
-			        if($arg === true)
-			        {
+		if(in_array($name, array('where', 'table', 'join', 'order', 'group', 'limit', 'having', 'field', 'lock'), true)){
+			if($arg !== ''){
+				if($name == 'where'){
+			        if($arg === true){
 			            $arg = $this->_autoWhereMode();
 			        }
-			        if(isset($this->options[$name]) && ($val = $this->options[$name]))
-			        {
+			        if(isset($this->options[$name]) && ($val = $this->options[$name])){
 			           $arg .= ($arg ? ' AND ' : '').$val;
 			        }
 			    }
 				$this->options[$name] = $arg;
 			}
-		}
-		elseif(in_array($name, array('count', 'avg', 'sum', 'min', 'max'), true))
-		{
-			if(isset($this->options['field']))
-			{
+		}elseif(in_array($name, array('count', 'avg', 'sum', 'min', 'max'), true)){
+			if(isset($this->options['field'])){
 				$field = $this->options['field'];
-			}
-			else
-			{
+			}else{
 				$field = ($arg) ? $arg : '*';
 			}
 			return $this->totalSelect(strtoupper($name)."($field) AS ts_{$name}");
-		}
-		elseif($name == 'cache')
-		{
-		    $arg1 = isset($args[0]) ? $args[0] : 0; 
-		    if($arg1 !== false)
-		    {
-		        $cache = array();
-		        $cache['expire'] = (int)$arg1; // 有效期
-    		    $cache['type'] = isset($args[1]) ? $args[1] : ''; // 缓存类型
-    		    $cache['key'] = isset($args[2]) ? $args[2] : ''; // 缓存名称
-    		    $this->options['cache'] = $cache;
-		    }
-		}
-		elseif(substr($name,0,5) == 'getby')
-		{
+		}elseif(substr($name,0,5) == 'getby'){
 			$field = substr($name,5);
 			if(!$this->fields) $this->_checkTableInfo();
 			$options['where'] = $this->_packWhere($this->fields['_type'][$field], $field, $arg, false);
 			return $this->find($options);
-		}
-		else
-		{
+		}else{
 			throw_exception(__CLASS__."::{$method} , method not exists.");
 		}
 		return $this;

@@ -203,7 +203,7 @@ class NewsController extends CommonController {
 	            $path_info_arr = parse_url($img);
 	            
 	            // 提取用户上传的照片
-     	        if(isset($path_info_arr['host']) && in_array($path_info_arr['host'], array($host, ''))){
+     	        if(in_array($path_info_arr['host'], array($host, ''))){
      	            $one_img = $path_info_arr['path'];
      	        }else{
      	            $path_arr = pathinfo($path_info_arr['path']);
@@ -248,7 +248,7 @@ class NewsController extends CommonController {
 	        $this->ajaxReturn(300, language('NEWS:url.empty'));
 	    }
 	    $url_info = parse_url($url);
-	    $host = isset($url_info['host']) && $url_info['host'];
+	    $host = $url_info['host'];
 	    if(empty($host)){
 	        $this->ajaxReturn(300, language('NEWS:url.error'));
 	    }
@@ -322,7 +322,7 @@ class NewsController extends CommonController {
 			$this->assign('username', $_SESSION[SESSION_USER_NAME]['username']);
 			$this->assign('types', $this->types);
 			$this->assign('PHPSESSID', session_id());
-			$this->assign('uploadUrl', url(__URL__.'&a=upload&immediate=1&target=image', true));
+			$this->assign('uploadUrl', urlencode(__URL__.'upload/immediate/1/target/image/'));
 			$this->display();
 		}
 	}
@@ -352,7 +352,7 @@ class NewsController extends CommonController {
 			$this->assign('news_info', $news_info);
 			$this->assign('types', $this->types);
 			$this->assign('PHPSESSID', session_id());
-			$this->assign('uploadUrl', url(__URL__.'&a=upload&immediate=1&target=image', true));
+			$this->assign('uploadUrl', urlencode(__URL__.'upload/immediate/1/target/image/'));
 			$this->display();
 		}
 	}

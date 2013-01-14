@@ -8,9 +8,10 @@
     'dbport' => '3306',
     'dbuser' => 'root',
     'dbpwd' => '',
-    'dbname' => 'eaglephp',
+    'dbname' => 'eaglephp_test',
     'dbcharset' => 'utf8',
-    'dbprefix' => '',
+    'dbprefix' => 'eag_',
   ),
 );
-return $dbs;
+return $dbs; 
+?>

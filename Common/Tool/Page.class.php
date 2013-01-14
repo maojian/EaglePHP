@@ -209,11 +209,12 @@
 		
 		function _set_url($url = '') {
 			if(!empty($url)) {
-				//$this->url = $url. (stristr($url, '?') ? '&' : '?') . $this->page_name.'=';
-				$this->url = $url.'&'.$this->page_name.'=';
+				$this->url = $url. (stristr($url, '?') ? '&' : '?') . $this->page_name.'=';	
 			} else {
 				if(empty($_SERVER['QUERY_STRING'])) {
+					
 					$this->url = $_SERVER['REQUEST_URI'].'?'.$this->page_name.'=';
+					
 				} else {
 					if(stristr($_SERVER['QUERY_STRING'], $this->page_name.'=')) {
 						$this->url = str_replace($this->page_name.'='.$this->nowindex, '', $_SERVER['REQUEST_URI']);
@@ -249,7 +250,7 @@
 		*
 		*/
 		function _get_url($pageno = 1) {
-			return url($this->url.$pageno);
+			return $this->url.$pageno;
 		}
 		
 		/*

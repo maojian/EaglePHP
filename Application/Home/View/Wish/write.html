@@ -1,0 +1,164 @@
+{{include file="Wish/head.html"}}
+
+<script type="text/javascript">
+// 图片路径
+var url = "{{$smarty.const.__APP_RESOURCE__}}imgs/wish/";
+</script>
+
+<script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/add.js"></script>
+
+<div class="content">
+
+<table width="950" border="0" align="center" cellpadding="0" cellspacing="0" class="Add">
+  <tr>
+    <td width="250" valign="top" style="padding-top:35px;" ><div id="Peview" class="Face0">
+					<div class="cf">
+						<div class="Num">愿望编号：xxxx</div>
+						<div class="Detail"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs001.gif" width="50" height="50" align="left" id="IconImg" />
+						<span id="content" class="content"></span>
+						</div>
+						<div class="Sign" id="Sign"><div>来自{{$location}}的 <span id="nicheng">昵称</span></div><div>
+<script type="text/javascript">getTime();</script></div></div>
+					</div>
+		</div>
+	  </td>
+    <td width="700" valign="top">
+	<form name="add" action="{{$smarty.const.__ROOT__?c=wish&a=write|url}}" method="post" style="margin:0px;" onsubmit="return chkAspk(this)">
+	<div id="step1">
+	<table width="675" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="35"><strong>许愿的步骤：</strong><span class="rb">第1步：编辑签名</span> &gt;&gt; 第2步：选择装饰 &gt;&gt;   第3步：提交成功</td>
+      </tr>
+    </table>
+	<table width=640 border=0 align="center" cellPadding=0 cellSpacing=3 class="mleft17 mtop8">
+		<tr>
+          <td>我的昵称：</td>
+        <td><INPUT name=nickname class="log_input2 mall5" id=nickname onKeyUp="InputName(this,'nicheng');" maxlength="8"> 
+        *</td></tr>
+		
+        <tr>
+          <td width="80">愿望内容：<BR>
+            （<span class="red" id="Char">85</span>字以内）</td>
+          <td width="551" class=pall5><TEXTAREA class="log_input3" id="idContent" onblur="javascript:if(this.innerHTML==''){this.innerHTML='85字以内';}" onfocus="javascript:if(this.innerHTML=='85字以内'){this.innerHTML='';}" name="content" onKeyUp="strCounter(this);" onChange="strCounter(this);">85字以内</TEXTAREA></td></tr>
+        <tr>
+          <td>添加表情：</td>
+          <td>
+            <table cellSpacing=0 cellPadding=0 width=450 border=0>
+                    <tr>
+                <td><IMG style="CURSOR: pointer" onclick="putFace('bq01')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq01.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq02')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq02.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq03')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq03.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq04')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq04.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq05')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq05.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq06')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq06.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq07')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq07.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq08')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq08.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq09')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq09.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq10')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq10.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq11')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq11.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq12')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq12.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq13')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq13.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq14')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq14.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq15')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq15.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq16')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq16.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq17')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq17.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq18')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq18.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq19')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq19.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq20')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq20.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq21')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq21.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq22')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq22.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq23')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq23.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq24')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq24.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq25')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq25.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq26')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq26.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq27')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq27.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq28')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq28.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq29')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq29.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq30')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq30.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq31')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq31.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq32')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq32.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq33')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq33.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq34')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq34.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq35')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq35.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq36')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq36.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq37')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq37.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq38')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq38.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq39')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq39.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq40')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq40.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq41')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq41.gif" width=20 border=0> <IMG style="CURSOR: pointer" onclick="putFace('bq42')" height=20 alt="" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bq42.gif" width=20 border=0></td>
+                </tr></table></td></tr>
+        <tr>
+          <td>标签颜色：</td>
+          <td><span id="colorBlock" class="colorBlock0" onClick="FaceChoose('0')"></span><span id="colorBlock" class="colorBlock1" onClick="FaceChoose('1')"></span><span id="colorBlock" class="colorBlock2" onClick="FaceChoose('2')"></span><span id="colorBlock" class="colorBlock3" onClick="FaceChoose('3')"></span><span id="colorBlock" class="colorBlock4" onClick="FaceChoose('4')"></span><span id="colorBlock" class="colorBlock5" onClick="FaceChoose('5')"></span><span id="colorBlock" class="colorBlock6" onClick="FaceChoose('6')"></span><span id="colorBlock" class="colorBlock7" onClick="FaceChoose('7')"></span> </td>
+        </tr>
+	</table>
+		<table width=630 border=0 align="center" cellPadding=0 cellSpacing=0 class=mleft17>
+        <tr>
+          <td align=right width="60%" height=60><input name="face" id="face" value="0" type="hidden" /><IMG height=25 alt="" 
+            src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/bjzt_82.jpg" width=154 border=0 onclick="step01()"  style="cursor:pointer" /></td>
+          <td width="40%" align=center>+ 注：输入框后带<SPAN class=red> * 
+        </SPAN>的为必填内容</td>
+        </tr></table>
+		<table width=630 border=0 align="center" cellPadding=0 cellSpacing=0 class=mleft17>
+        <tr>
+          <td class=rb width=83>+ 注意事项：</td>
+        <td width="547" 
+            class=lh20>请保证您发表的签名不涉及黄、赌、毒以及不良政治言论，否则，管理人员有权保留或删除其管辖签名中的任意内容。</td>
+        </tr></table>	
+	</div>
+	<div id="step2" style="display:none">
+		<table width="675" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td height="35"><strong>许愿的步骤：</strong>第1步：编辑签名 &gt;&gt; <span class="rb">第2步：选择装饰</span> &gt;&gt;   第3步：提交成功</td>
+          </tr>
+        </table>
+		<table width="640" border="0" align="center" cellpadding="0" cellspacing="3">
+          <tr>
+            <td height="25"><strong>通用装饰：</strong></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td><img onmousedown="changePic('zs001');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs001.gif" border="0" /></td>
+            <td><img onmousedown="changePic('zs002');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs002.gif" border="0" /></td>
+            <td><img onmousedown="changePic('zs003');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs003.gif" border="0" /></td>
+            <td><img onmousedown="changePic('zs004');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs004.gif" border="0" /></td>
+            <td><img onmousedown="changePic('zs005');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs005.gif" border="0" /></td>
+            <td><img onmousedown="changePic('zs006');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs006.gif" border="0" /></td>
+            <td><img onmousedown="changePic('zs007');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs007.gif" border="0" /></td>
+            <td><img onmousedown="changePic('zs008');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs008.gif" border="0" /></td>
+          </tr>
+          <tr>
+            <td height="25"><strong>会员独享：</strong></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td><img onmousedown="changePic('hy001');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy001.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy002');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy002.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy003');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy003.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy004');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy004.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy005');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy005.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy006');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy006.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy007');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy007.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy008');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy008.gif" border="0" /></td>
+          </tr>
+          <tr>
+            <td><img onmousedown="changePic('hy009');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy009.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy010');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy010.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy011');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy011.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy012');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy012.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy013');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy013.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy014');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy014.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy015');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy015.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy016');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy016.gif" border="0" /></td>
+          </tr>
+          <tr>
+            <td><img onmousedown="changePic('hy017');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy017.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy018');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy018.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy019');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy019.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy020');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy020.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy021');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy021.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy022');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy022.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy023');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy023.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy024');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy024.gif" border="0" /></td>
+          </tr>
+          <tr>
+            <td><img onmousedown="changePic('hy025');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy025.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy026');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy026.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy027');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy027.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy028');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy028.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy029');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy029.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy030');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy030.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy031');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy031.gif" border="0" /></td>
+            <td><img onmousedown="changePic('hy032');" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/hy032.gif" border="0" /></td>
+          </tr>
+        </table>
+		<table cellspacing="0" cellpadding="0" width="500" align="center" border="0">
+          <tbody>
+            <tr>
+              <td align="middle" width="50%" height="50"><input name="icon" id="icon" value="zs001" type="hidden" /><img height="26" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs_2.jpg" width="152" border="0" onclick="step02()" style="cursor:pointer"/></td>
+              <td align="middle"><input type="image" height="26" src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/zs_3.jpg" width="152" border="0" /></td>
+            </tr>
+          </tbody>
+        </table>
+	</div>
+	</form>
+		</td>
+  </tr>
+</table>
+</div>
+
+</div>
+
+{{include file="Wish/foot.html"}}

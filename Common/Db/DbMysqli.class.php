@@ -36,11 +36,8 @@ class DbMysqli extends Db implements DbInterface
     {
         extract($this->config);
         $this->linkID = mysqli_connect($dbhost.':'.$dbport, $dbuser, $dbpwd, $dbname);
-        if(mysqli_connect_errno())
-        {
-            throw_exception(mysqli_connect_error());
-        }
-        $this->linkID->query("SET NAMES $dbcharset");
+        if(mysqli_connect_errno()) throw_exception(mysqli_connect_error());
+        mysqli_query("SET NAMES $dbcharset");
         return $this->linkID;
     }
      
@@ -51,10 +48,17 @@ class DbMysqli extends Db implements DbInterface
      */
     public function checkContent()
     {
-        if(!mysqli_ping($this->linkID))
+        $this->checkTimeOut();
+        $isResource = is_resource($this->linkID);
+        if(!$isResource || ($isResource && !mysqli_ping($this->linkID)))
         {
+            self::$connectNum++;
             $this->close();
             $this->linkID = $this->connect();
+        }
+        else
+        {
+            self::$connectNum = 0;
         }
     }
      

@@ -39,7 +39,7 @@ $('#hotRankSlide').cycle({
 
 <div class="subContent">
 <div id="indexSearch" class="module">
-<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<form action="{{$smarty.const.__ROOT__?c=news|url}}" method='post'>
 <input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
 <input type="submit" class="button" value="搜索" />
 </form>

@@ -12,6 +12,12 @@ class Cache{
    protected $options = array();
    
    protected $handler = null; // 操作句柄
+   
+   const APC = 'apc';
+   
+   const FILE = 'file';
+   
+   const MEMCACHE = 'memcache';
     
     /**
      * 获取缓存对象实例

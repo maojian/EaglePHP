@@ -108,7 +108,7 @@ $(function() {
 </div>
 
 <div id="indexSearch" class="module">
-<form action="{{$smarty.const.__ROOT__}}news" method='post'>
+<form action="{{$smarty.const.__ROOT__?c=news|url}}" method='post'>
 <input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 
 <input type="submit" class="button" value="搜索" />
 </form>
@@ -120,11 +120,10 @@ $(function() {
 <div class="mainContent">
 <div class="topic">
 <div class="topicTop"></div>
-<h4>今日微博：<a href="{{$smarty.const.__ROOT__}}note" target="_blank">{{$note.create_time|date_format:"%Y-%m-%d"}} 往期微博</a></h4>
+<h4>今日微博：<a href="{{$smarty.const.__ROOT__?c=note|url}}" target="_blank">{{$note.create_time|date_format:"%Y-%m-%d"}} 往期微博</a></h4>
 <p>{{$note.content}}</p>
 </div>
 {{include file="Include/mainContent.html"}}
 </div>
 {{include file="Include/subContent.html"}}
-
 {{include file="Include/foot.html"}}

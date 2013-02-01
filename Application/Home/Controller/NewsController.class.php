@@ -60,7 +60,7 @@ class NewsController extends CommonController{
         if($page > 0)
         {
             $pageStr .= '<a class="" href="'.$this->curModel->getHtmlLink($info, 0).'">第一页</a>';
-            $pageStr .= '<a class="" href="'.$this->curModel->getHtmlLink($info, $page-1).'">上一页</a>';
+            $pageStr .= '<a class="" href="'.$this->curModel->getHtmlLink($info, ($num=$page-1) == 1 ? 0 : $num).'">上一页</a>';
         }
         
         for($i=1; $i<=$total; $i++)

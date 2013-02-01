@@ -1,0 +1,31 @@
+{{include file="Include/head.html"}}
+<table class="mainTable" style="margin-top:2px;margin:0px auto; width:800px;">
+    <tr>
+        <th colspan="2">
+            输出配置文件
+        </th>
+    </tr>
+    <tr>
+        <td align="right" class="td1" width="140">
+            文件路径：
+        </td>
+        <td>
+            {{$path}}
+        </td>
+    </tr>
+    <tr>
+        <td align="right" class="td1">
+            文件内容：
+        </td>
+        <td>
+            <div style="white-space:pre;font-family:Consolas">
+			{{$file_content}}
+            </div>
+        </td>
+    </tr>
+</table>
+<div style="padding:20px 0 10px 0;text-align:center;">
+    <input type="button" value="上一步" onclick="document.location='{{$smarty.const.__URL__&a=two|url}}';"/>
+	<input type="button" value="下一步" onclick="document.location='{{$smarty.const.__URL__&a=four|url}}';"/>
+</div>
+</div> {{include file="Include/foot.html"}}

@@ -64,7 +64,8 @@ class NewsController extends CommonController {
 	    $autolitpic = $this->post('autolitpic');
 	    $dellink = $this->post('dellink');
 	    $needwatermark = $this->post('needwatermark');
-	    $content = html_entity_decode($this->post('content'));
+		$content = $this->post('content', self::_NO_CHANGE_VAL_, false);
+	    //$content = html_entity_decode($content);
 	    $keywords = $this->post('keywords');
 	    $description = $this->post('description');
 	    $vote_id = (int)$this->post('orgLookup_id');
@@ -72,7 +73,7 @@ class NewsController extends CommonController {
 	    if(!is_null($this->channelIdArr) && !in_array($type, $this->channelIdArr)){
 	        $this->ajaxReturn(300, language('NEWS:type.error'));
 	    }
-	    
+		
 	    $matchs = array();
 	    
 	    // 自动提取关键字
@@ -115,14 +116,13 @@ class NewsController extends CommonController {
 	        if($matchs[0]){
 	            foreach ($matchs[0] as $k=>$val){
 	                $a_text = $matchs[1][$k];
-	                if(strpos($a_text, 'http://')!==false && strpos($a_text, $host) === false){
+	                if((strpos($a_text, 'http://')!==false || strpos($a_text, 'https://')!==false) && strpos($a_text, $host) === false){
 	                    $search_arr[] = $val;
 	                    $replace_arr[] = $matchs[2][$k]; 
 	                }
 	            }
 	            $content = str_replace($search_arr, $replace_arr, $content);
 	        }
-	        $_POST['content'] = htmlspecialchars($content);
 	    }
 	    
 	    // 检查标题长度
@@ -176,7 +176,6 @@ class NewsController extends CommonController {
      	             $one_img = $upload_file;
      	          }
      	       }
-     	       $_POST['content'] = htmlspecialchars($content);
 	       }
 	    }
 	    
@@ -187,7 +186,7 @@ class NewsController extends CommonController {
 	       if(count($img_arr) > 0){
      	       foreach ($img_arr as $k=>$img){
      	          $path_info_arr = parse_url($img);
-     	          if($path_info_arr['host'] == ''){
+     	          if(!isset($path_info_arr['host'])){
      	              $src_img = realpath(getUploadAddr().str_replace(__UPLOAD__, '', $img));
      	              Image::watermark($src_img);
      	          }
@@ -203,7 +202,7 @@ class NewsController extends CommonController {
 	            $path_info_arr = parse_url($img);
 	            
 	            // 提取用户上传的照片
-     	        if(in_array($path_info_arr['host'], array($host, ''))){
+     	        if(isset($path_info_arr['host']) && in_array($path_info_arr['host'], array($host, ''))){
      	            $one_img = $path_info_arr['path'];
      	        }else{
      	            $path_arr = pathinfo($path_info_arr['path']);
@@ -234,7 +233,7 @@ class NewsController extends CommonController {
             $scriptJs = model('vote')->getJs($vote_id);
             $_POST['content'] .= "<!--插入投票start-->\r\n{$scriptJs}\r\n<!--插入投票end-->\r\n";
 	    }
-	    
+	    $_POST['content'] = $content;
 	}
 	
 	
@@ -244,21 +243,13 @@ class NewsController extends CommonController {
 	 */
 	public function pickAction(){
 	    $url = $this->post('url');
-	    if(empty($url)){
-	        $this->ajaxReturn(300, language('NEWS:url.empty'));
-	    }
+	    if(empty($url)) $this->ajaxReturn(300, language('NEWS:url.empty'));
 	    $url_info = parse_url($url);
-	    $host = $url_info['host'];
-	    if(empty($host)){
-	        $this->ajaxReturn(300, language('NEWS:url.error'));
-	    }
-	    
+	    $host = isset($url_info['host']) ? $url_info['host'] : '';
+	    if(empty($host)) $this->ajaxReturn(300, language('NEWS:url.error'));
 	    $content = curlRequest($url);
-	    
-	    if($content === false){
-	        $this->ajaxReturn(300, language('NEWS:url.not.open'));
-	    }
-	    
+	    if($content === false) $this->ajaxReturn(300, language('NEWS:url.not.open'));
+	       
 	    // 提取采集规则进行内容匹配
 	    $pick_info = model('pick')->field('lang,rule')->where("url LIKE '%{$host}%'")->find();
 	    if($pick_info){
@@ -267,21 +258,21 @@ class NewsController extends CommonController {
     	    $ew = $rule_arr[1];
     	    if(($lang = $pick_info['lang']) == 'gb2312'){
     	         $content = iconv($lang, 'utf-8', $content);
-    	    }    
+    	    }
 	    }
 	    
 	    // 标题
 	    $matches = array();
 	    preg_match_all('/<title>(.*)<\/title>/isU', $content, $matches);
-	    $data['title'] = isset($matches[1][0]) ? $matches[1][0] : '';
+	    $data['title'] = isset($matches[1][0]) ? trim($matches[1][0]) : '';
 	    
 	    // 关键字
 	    preg_match_all('/<meta[\s]+name=[\'"]keywords[\'"] content=[\'"](.*)[\'"]/isU', $content, $matches);
-	    $data['keywords'] = isset($matches[1][0]) ? $matches[1][0] : '';
+	    $data['keywords'] = isset($matches[1][0]) ? trim($matches[1][0]) : '';
 	    
 	    // 描述
 	    preg_match_all('/<meta[\s]+name=[\'"]description[\'"] content=[\'"](.*)[\'"]/isU', $content, $matches);
-	    $data['description'] = isset($matches[1][0]) ? $matches[1][0] : '';
+	    $data['description'] = isset($matches[1][0]) ? trim($matches[1][0]) : '';
 	    
 	    if($sw != '' && $ew!=''){
 	        $start = strpos($content, $sw);
@@ -311,7 +302,8 @@ class NewsController extends CommonController {
 			$_POST['clicknum'] = 0;
 			if($news_id = $this->news_model->add()){
 			    //model('helper')->weblogUpdates($this->news_model->getHref($news_id));
-			    $this->news_model->makeHtml($news_id);
+			    
+			    $this->news_model->makeHtml($this->news_model->where("id=$news_id")->find());
 				$this->ajaxReturn(200, language('PUBLIC:add.success'), '', 'closeCurrent');
 			}else{
 				$this->ajaxReturn(300, language('PUBLIC:add.failure'));
@@ -322,7 +314,7 @@ class NewsController extends CommonController {
 			$this->assign('username', $_SESSION[SESSION_USER_NAME]['username']);
 			$this->assign('types', $this->types);
 			$this->assign('PHPSESSID', session_id());
-			$this->assign('uploadUrl', urlencode(__URL__.'upload/immediate/1/target/image/'));
+			$this->assign('uploadUrl', url(__URL__.'&a=upload&immediate=1&target=image', true));
 			$this->display();
 		}
 	}
@@ -337,7 +329,7 @@ class NewsController extends CommonController {
 			if($this->news_model->save()){
 			    $news_id = $this->post('id');
 			    //model('helper')->weblogUpdates($this->news_model->getHref($news_id));
-			    $this->news_model->makeHtml($news_id);
+			    $this->news_model->makeHtml($this->news_model->where("id=$news_id")->find());
 				$this->ajaxReturn(200, language('PUBLIC:update.success'), '', 'closeCurrent');
 			}else{
 				$this->ajaxReturn(300, language('PUBLIC:update.failure'), '');
@@ -352,16 +344,29 @@ class NewsController extends CommonController {
 			$this->assign('news_info', $news_info);
 			$this->assign('types', $this->types);
 			$this->assign('PHPSESSID', session_id());
-			$this->assign('uploadUrl', urlencode(__URL__.'upload/immediate/1/target/image/'));
+			$this->assign('uploadUrl', url(__URL__.'&a=upload&immediate=1&target=image', true));
 			$this->display();
 		}
 	}
 	
 	
-    public function makeHtmlAction(){
-        //set_time_limit(0);
-		ini_set('max_execution_time', 0);
-        $this->ajaxReturn(200, language('NEWS:update.file.count', array(model('news')->makeAllHtml())));
+	/**
+	 * 生成html静态页
+	 * 
+	 * @return void
+	 */
+    public function makeAction()
+    {
+        if($this->isPost())
+        {
+            ini_set('max_execution_time', 0);
+            $type = (int)$this->post('type');
+            $start_id = (int)$this->post('start_id');
+            $end_id = (int)$this->post('end_id');
+            $this->ajaxReturn(200, language('NEWS:update.file.count', array(model('news')->makeList($type, $start_id, $end_id))));
+        }
+        $this->assign('types', $this->types);
+		$this->display();
     }
 	
 	

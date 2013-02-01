@@ -10,6 +10,34 @@ class IndexController extends CommonController {
     }
     
     
+    /**
+     * 统计信息
+     * 
+     * @return array
+     */
+    private function getTotalInfo()
+    {
+        $arr = array(
+        		'case'=>'文章', 
+        		'comment'=>'评论', 
+        		'message'=>'留言', 
+        		'note'=>'微博', 
+        		'adv'=>'广告',
+                'case'=> '案例',
+                'video'=>'视频',
+                'music'=>'音乐',
+                'news_type'=>'分类',
+                'album'=>'相册',
+                'photo'=>'照片'
+        );
+        $data = array();
+        foreach ($arr as $k=>$v)
+        {
+            $data[] = array($v, model($k)->count());
+        }
+        return $data;
+    }
+    
     
     private function getWeather(){
         $city_id = $this->post('city_id');
@@ -55,15 +83,25 @@ EOT;
      *  获取欢迎用户信息
      */
     private function getWelcome(){
-        $period = Date::getPeriodOfTime();
-        $date = Date::format('Y年m月d日 H时i分s秒');
-        $week = Date::getWeek();
-        $info = Date::dateInfo('GZ');
+        $data = $this->getData('remind');
+        $hour = (int)Date::format('H');
+        $message = null;
+        if(is_array($data))
+        {
+            foreach ($data as $k=>$v)
+            {
+                $range = $v['range'];
+				if(($hour >= $range[0] && $hour < $range[1]) || ($range[1] < $range[0]))
+                {
+                    $message = $v['message'][array_rand($v['message'])];
+                    break;
+                }
+            }
+        }
         $ip = HttpRequest::getClientIP();
         $address = HttpRequest::getIpLocation($ip);
-        $text = "{$period}好，欢迎".self::$adminUser['username'];
-        $text .= "&nbsp;&nbsp;{$date}&nbsp;&nbsp;($week)&nbsp;&nbsp;{$info}年";
-        $text .= "&nbsp;&nbsp;您的IP是：[{$ip}]";
+        $text = self::$adminUser['username'].'，'.$message;
+        $text .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您的IP是：[{$ip}]";
         if($address) $text .= "&nbsp;&nbsp;来自：".$address;
         return $text;
     }
@@ -104,7 +142,7 @@ EOT;
 			//array('The file path',__FILE__),
 	
 			array('PHP版本',PHP_VERSION),
-			array('PHP信息','<a href="'.__ROOT__.'system/phpinfo" target="_blank" style="text-decoration:underline;color:blue" >Yes</a>'),
+			array('PHP信息','<a href="'.url(__ROOT__.'?c=system&a=phpinfo').'" target="_blank" style="text-decoration:underline;color:blue" >Yes</a>'),
 			array('安全模式',$this->getCfg('safe_mode')),
 			array('管理员',$adminmail),
 			//array('allow_url_fopen',$this->getCfg('allow_url_fopen')),

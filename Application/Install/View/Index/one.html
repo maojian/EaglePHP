@@ -1,0 +1,97 @@
+{{include file="Include/head.html"}}
+<div class="mainWidth" style="padding:20px 0;margin:0px auto; width:800px;">
+    <h3>环境检查</h3>
+    <table class="mainTable">
+        <tbody align="center">
+            <tr>
+                <th>
+                    项目
+                </th>
+                <th>
+                    EaglePHP 所需配置
+                </th>
+                <th>
+                    EaglePHP 推荐
+                </th>
+                <th>
+                    当前服务器
+                </th>
+            </tr>
+            <tr>
+                <td class="td1">
+                    操作系统
+                </td>
+                <td>
+                    不限制
+                </td>
+                <td>
+                    Linux
+                </td>
+                <td>
+                    {{$platform}}
+                </td>
+            </tr>
+            <tr>
+                <td class="td1">
+                    PHP 版本
+                </td>
+                <td>
+                    5.2.1
+                </td>
+                <td>
+                    5.3.3
+                </td>
+                <td>
+                    {{$php_version}}
+                </td>
+            </tr>
+            <tr>
+                <td class="td1">
+                    数据库支持
+                </td>
+                <td>
+                    MySQL
+                </td>
+                <td>
+                    MySQL
+                </td>
+                <td>
+                    {{$support}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>目录权限检查</h3>
+    <table class="mainTable">
+        <tbody align="center">
+        <tr>
+            <th>
+                目录文件
+            </th>
+            <th>
+               目录描述
+            </th>
+            <th>
+                当前状态
+            </th>
+        </tr>
+        {{section name=loop loop=$dirs}}
+        <tr>
+            <td>
+            	{{$dirs[loop].dir}}
+            </td>
+            <td>
+                {{$dirs[loop].desc}}
+            </td>
+            <td>
+               {{$dirs[loop].current_state}}
+            </td>
+        </tr>
+        {{/section}}
+        </tr>
+    </tbody>
+    </table>
+    <div style="padding:20px 0 10px 0;text-align:center;">
+        <input type="button" value="上一步" onclick="document.location='{{$smarty.const.__URL__|url}}';"/><input type="button" class="submit" value="下一步" onclick="document.location='{{$smarty.const.__URL__&a=two|url}}';"/>
+    </div>
+</div> {{include file="Include/foot.html"}}

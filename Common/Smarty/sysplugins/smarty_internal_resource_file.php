@@ -51,7 +51,7 @@ class Smarty_Internal_Resource_File extends Smarty_Resource {
         $source->timestamp = @filemtime($source->filepath);
         $source->exists = !!$source->timestamp;
     }
-
+    
     /**
      * Load template's source from file into current template object
      *
@@ -62,7 +62,18 @@ class Smarty_Internal_Resource_File extends Smarty_Resource {
     public function getContent(Smarty_Template_Source $source)
     {
         if ($source->timestamp) {
-            return file_get_contents($source->filepath);
+            $content = file_get_contents($source->filepath);
+            // EaglePHP update
+            if(HTML_STRIP_SPACE)
+            {
+                /* 去除html空格与换行 */
+                $find = array("~>\s+<~", "~>(\s+\r|\n|\r\n)~", "/<!--[^!]*-->/i", '/\/\*[^*]*\*\//i', '#\t#');
+                $replace = array('><', '>', '', '', '');
+                $content = preg_replace($find, $replace, $content);
+            }
+            $content = preg_replace_callback('/\{\{[\s\S]*?\}\}/mi', array('Router', 'tplReplace'), $content);
+            
+            return $content;
         }
         if ($source instanceof Smarty_Config_Source) {
             throw new SmartyException("Unable to read config {$source->type} '{$source->name}'");

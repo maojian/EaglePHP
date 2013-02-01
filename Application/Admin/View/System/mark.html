@@ -1,5 +1,5 @@
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__ACTION__}}action/add" enctype="multipart/form-data" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);">
+	<form method="post" action="{{$smarty.const.__ACTION__&action=add|url}}" enctype="multipart/form-data" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 			<input type="hidden" name="img" value="{{$info.img}}"/>
 			<dl class="nowrap">
@@ -24,7 +24,7 @@
 			
 			<dl class="nowrap">
 				<dt style="width:40%;">水印图片文件名（如果不存在，则使用文字水印）：</dt>
-				<dd><img src="{{$smarty.const.__ACTION__}}target/showImg/rand/{{''|time}}"/></dd>
+				<dd><img src="{{$smarty.const.__ACTION__&target=showImg|url}}"/></dd>
 			</dl>
 			
 			<dl class="nowrap">

@@ -1,0 +1,75 @@
+{{include file="Include/head.html"}}
+<div class="mainWidth" style="padding:20px 0;margin:0px auto; width:800px;">
+    <form method="post" action="{{$smarty.const.__ACTION__|url}}">
+        <table class="mainTable">
+            <tr>
+                <th colspan="2">
+                    配置数据库
+                </th>
+            </tr>
+            <tr>
+                <td align="right" class="td1" width="25%">
+                    数据库服务器：
+                </td>
+                <td>
+                    <input type="text" name="hostname" value="{{$smarty.post.hostname|default:'127.0.0.1'}}" />&nbsp;通常为:localhost
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="td1">
+                    数据库端口：
+                </td>
+                <td>
+                    <input type="text" name="port" value="{{$smarty.post.port|default:'3306'}}" />&nbsp;默认值:3306
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="td1">
+                    数据库名：
+                </td>
+                <td>
+                    <input type="text" name="database" value="{{$smarty.post.database|default:'eaglephp'}}" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="td1">
+                    表前缀：
+                </td>
+                <td>
+                    <input type="text" name="dbprefix" value="{{$smarty.post.dbprefix}}" /> 如：eag_
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="td1">
+                    数据库用户名：
+                </td>
+                <td>
+                    <input type="text" name="username" value="{{$smarty.post.username|default:'root'}}" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right" class="td1">
+                    数据库密码：
+                </td>
+                <td>
+                    <input type="text" name="password" value="{{$smarty.post.password}}" />
+                </td>
+            </tr> {{if $err_msg}}
+            <tbody class="errTable">
+                <tr>
+                    <td width="25%">
+                    </td>
+                    <td>
+                        {{$err_msg}}
+                    </td>
+                </tr>
+            </tbody>
+            {{/if}}
+        </table>
+		{{$sql_msg}}
+        <div style="padding:20px 0 10px 0;text-align:center;">
+            <input type="button" value="上一步" onclick="document.location='{{$smarty.const.__URL__&a=one|url}}';"/><input type="submit" value="下一步"/>
+        </div>
+    </form>
+</div> 
+{{include file="Include/foot.html"}}

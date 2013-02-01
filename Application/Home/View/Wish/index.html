@@ -1,0 +1,45 @@
+{{include file="Wish/head.html"}}
+
+<div class="content">
+	<div class="content_l">
+		<div class="content_t"> &nbsp; &nbsp;你现在观看的是第<span class="rb"> {{$curPage}} </span>层墙</div>
+		<div class="clear"></div>
+		
+		{{section name=loop loop=$list}}
+        <div class="wish">
+		<div class="Face{{$list[loop].face}}" style="margin-left:8px;">
+			<div class="cf">
+				<div class="Num">愿望编号：{{$list[loop].id}}</div>
+				<div class="Detail"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/wish/{{$list[loop].icon}}.gif" width="50" height="50" align="left" onerror="javascript:this.src='{{$smarty.const.__APP_RESOURCE__}}imgs/wish/{{$list[loop].icon}}.gif';" />
+				<span class="content">{{$list[loop].content}}</span>
+				</div>
+				<div class="Sign"><div>来自{{$list[loop].location}}的&nbsp;{{$list[loop].nickname}}</div><div>{{$list[loop].submittime}}</div></div>
+			</div>
+		</div>
+		</div>
+		{{/section}}
+  </div>
+	<div class="content_r">
+		<div class="content_t">总共盖了 <span class="rb">{{$totalPage}}</span> 层墙</div>
+
+<!-- 楼层start -->
+<DIV class=main_slider>
+
+{{section name=loop loop=$pageArr}}	  	  
+<TABLE class=flow cellSpacing=0 cellPadding=0 border=0>
+  <TR>
+    <TD class="ceng"><A href="{{$smarty.const.__URL__&a=index&page=$pageArr[loop]|url}}">第{{$pageArr[loop]}}层</A></TD>
+  </TR>
+</TABLE>
+{{/section}}
+
+</DIV>
+
+
+	</div>
+	<div style="clear:both;"></div>
+</div>
+
+<div style="clear: both;"></div>
+
+{{include file="Wish/foot.html"}}

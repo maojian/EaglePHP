@@ -1,0 +1,237 @@
+BODY {
+	MARGIN: 0px; COLOR: #555555; FONT-SIZE: 12px
+}
+.rb {
+	COLOR: #ff0000; FONT-WEIGHT: bold
+}
+A:link {
+	COLOR: #fbf4e2; TEXT-DECORATION: none
+}
+A:hover {
+	COLOR: #fbf4e2
+}
+A:visited {
+	COLOR: #fbf4e2; TEXT-DECORATION: none
+}
+.clear {
+	CLEAR: both
+}
+.lh20 {
+	LINE-HEIGHT: 20px
+}
+.floatleft {
+	FLOAT: left
+}
+body>.content {
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(startColorStr='#D1C8B7', endColorStr='#F3F3E7', gradientType='0'); MARGIN: 0px auto; WIDTH: 960px;
+	background:-moz-linear-gradient(top,#D1C8B7,#F3F3E7);
+	background: -o-linear-gradient(top,#D1C8B7, #F3F3E7); 
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#D1C8B7), to(#F3F3E7)); 
+}
+.content_t {
+	LINE-HEIGHT: 35px
+}
+.content_l {
+	PADDING-BOTTOM: 0px; PADDING-LEFT: 5px; WIDTH: 830px; PADDING-RIGHT: 5px; FLOAT: left; PADDING-TOP: 0px;
+	/*background:-moz-linear-gradient(top,#D1C8B7,#F3F3E7);*//*火狐*/
+	
+}
+.wish {
+	WIDTH: 207px; MARGIN-BOTTOM: 10px; FLOAT: left
+}
+.wish_c {
+	PADDING-BOTTOM: 0px; LINE-HEIGHT: 18px; PADDING-LEFT: 7px; PADDING-RIGHT: 7px; PADDING-TOP: 0px
+}
+.wish_c IMG {
+	MARGIN-RIGHT: 5px
+}
+.FFFFFF {
+	MARGIN: 0px auto; BACKGROUND: url(face0.gif) no-repeat center top; HEIGHT: 210px
+}
+.FFEDCC {
+	MARGIN: 0px auto; BACKGROUND: url(FFEDCC.gif) no-repeat center top; HEIGHT: 210px
+}
+.FFE7E8 {
+	MARGIN: 0px auto; BACKGROUND: url(FFE7E8.gif) no-repeat center top; HEIGHT: 210px
+}
+.FFE0FB {
+	MARGIN: 0px auto; BACKGROUND: url(FFE0FB.gif) no-repeat center top; HEIGHT: 210px
+}
+.EDFEB7 {
+	MARGIN: 0px auto; BACKGROUND: url(EDFEB7.gif) no-repeat center top; HEIGHT: 210px
+}
+.CBF3FF {
+	MARGIN: 0px auto; BACKGROUND: url(CBF3FF.gif) no-repeat center top; HEIGHT: 210px
+}
+.C9FFC7 {
+	MARGIN: 0px auto; BACKGROUND: url(C9FFC7.gif) no-repeat center top; HEIGHT: 210px
+}
+.C0FFE5 {
+	MARGIN: 0px auto; BACKGROUND: url(C0FFE5.gif) no-repeat center top; HEIGHT: 210px
+}
+.content_r {
+	WIDTH: 120px; float: right;
+}
+.main_slider {
+	/* HEIGHT: 880px; */
+	SCROLLBAR-ARROW-COLOR: #ffffff; SCROLLBAR-FACE-COLOR: #77705e; OVERFLOW-X: hidden; HEIGHT: 880px; OVERFLOW-Y: auto; WIDTH: 110px; SCROLLBAR-DARKSHADOW-COLOR: #d3cbba; SCROLLBAR-HIGHLIGHT-COLOR: #77705e; SCROLLBAR-SHADOW-COLOR: #77705e; SCROLLBAR-TRACK-COLOR: #f6f1de; SCROLLBAR-3DLIGHT-COLOR: #d3cbba
+}
+.flow {
+	MARGIN: 10px; WIDTH: 74px
+}
+.ceng {
+	TEXT-ALIGN: center; LINE-HEIGHT: 25px; BACKGROUND: url(btn_bg.gif) no-repeat left top; COLOR: #fbf4e2; FONT-WEIGHT: bold
+}
+.ceng A:link {
+	COLOR: #fbf4e2
+}
+.ceng A:visited {
+	COLOR: #fbf4e2
+}
+.t14 {
+	FONT-SIZE: 14px; FONT-WEIGHT: bold
+}
+.log_input3 {
+	WIDTH: 450px; HEIGHT: 95px
+}
+#dv_zs {
+	FLOAT: left
+}
+.Add TH {
+	TEXT-ALIGN: right; PADDING-BOTTOM: 8px; BACKGROUND-COLOR: #f6f6ea; PADDING-LEFT: 8px; WIDTH: 80px; PADDING-RIGHT: 8px; FONT-WEIGHT: normal; PADDING-TOP: 8px
+}
+.Add TD {
+	PADDING-BOTTOM: 8px; PADDING-LEFT: 8px; PADDING-RIGHT: 8px; PADDING-TOP: 8px
+}
+.Add .td {
+	BACKGROUND-COLOR: #f39; COLOR: #fff
+}
+.Add .input {
+	BORDER-BOTTOM: #dbdbdb 1px solid; BORDER-LEFT: #999 1px solid; PADDING-BOTTOM: 3px; PADDING-LEFT: 3px; PADDING-RIGHT: 3px; BORDER-TOP: #999 1px solid; BORDER-RIGHT: #dbdbdb 1px solid; PADDING-TOP: 3px
+}
+.Add TEXTAREA {
+	BORDER-BOTTOM: #dbdbdb 1px solid; BORDER-LEFT: #999 1px solid; PADDING-BOTTOM: 3px; PADDING-LEFT: 3px; WIDTH: 320px; PADDING-RIGHT: 3px; HEIGHT: 60px; BORDER-TOP: #999 1px solid; BORDER-RIGHT: #dbdbdb 1px solid; PADDING-TOP: 3px
+}
+.Add .ok {
+	TEXT-ALIGN: center; BORDER-TOP: #eee 1px solid
+}
+.Add .ok INPUT {
+	BACKGROUND-IMAGE: url(btn_type02.gif); BORDER-BOTTOM: 0px; BORDER-LEFT: 0px; BACKGROUND-COLOR: #fff; WIDTH: 100px; BACKGROUND-REPEAT: no-repeat; HEIGHT: 24px; COLOR: #fff; FONT-SIZE: 14px; BORDER-TOP: 0px; FONT-WEIGHT: bold; BORDER-RIGHT: 0px
+}
+.Add .Peview {
+	VERTICAL-ALIGN: top
+}
+.Add #Peview {
+	MARGIN-LEFT: 20px
+}
+.Add #AD {
+	POSITION: relative; PADDING-BOTTOM: 3px; PADDING-LEFT: 3px; WIDTH: 240px; PADDING-RIGHT: 3px; BACKGROUND: url(face1.png) no-repeat; HEIGHT: 190px; PADDING-TOP: 3px
+}
+.Add #AD .Sign {
+	MARGIN: 0px 10px 8px 0px
+}
+.Add #colorBlock {
+	BORDER-BOTTOM: #333 1px solid; BORDER-LEFT: #333 1px solid; MARGIN: 5px; WIDTH: 34px; FLOAT: left; HEIGHT: 34px; BORDER-TOP: #333 1px solid; CURSOR: pointer; BORDER-RIGHT: #333 1px solid
+}
+.Add .colorBlock0 {
+	BACKGROUND: #ffffff
+}
+.Add .colorBlock1 {
+	BACKGROUND: #ffe7e8
+}
+.Add .colorBlock2 {
+	BACKGROUND: #ffedcc
+}
+.Add .colorBlock3 {
+	BACKGROUND: #edfeb7
+}
+.Add .colorBlock4 {
+	BACKGROUND: #c0ffe5
+}
+.Add .colorBlock5 {
+	BACKGROUND: #ffe0fb
+}
+.Add .colorBlock6 {
+	BACKGROUND: #c9ffc7
+}
+.Add .colorBlock7 {
+	BACKGROUND: #cbf3ff
+}
+.Add .iconBox {
+	MARGIN: 1px; FLOAT: left; CURSOR: pointer
+}
+.Add .red {
+	COLOR: #f69
+}
+.cf {
+	POSITION: absolute; WIDTH: 190px; HEIGHT: 210px; CURSOR: move
+}
+.Face0 {
+	WIDTH: 190px; HEIGHT: 210px
+}
+.Face1 {
+	WIDTH: 190px; HEIGHT: 210px
+}
+.Face2 {
+	WIDTH: 190px; HEIGHT: 210px
+}
+.Face3 {
+	WIDTH: 190px; HEIGHT: 210px
+}
+.Face4 {
+	WIDTH: 190px; HEIGHT: 210px
+}
+.Face5 {
+	WIDTH: 190px; HEIGHT: 210px
+}
+.Face6 {
+	WIDTH: 190px; HEIGHT: 210px
+}
+.Face7 {
+	WIDTH: 190px; HEIGHT: 210px
+}
+.Face0 {
+	BACKGROUND: url(face0.gif) no-repeat
+}
+.Face1 {
+	BACKGROUND: url(face1.gif) no-repeat
+}
+.Face2 {
+	BACKGROUND: url(face2.gif) no-repeat
+}
+.Face3 {
+	BACKGROUND: url(face3.gif) no-repeat
+}
+.Face4 {
+	BACKGROUND: url(face4.gif) no-repeat
+}
+.Face5 {
+	BACKGROUND: url(face5.gif) no-repeat
+}
+.Face6 {
+	BACKGROUND: url(face6.gif) no-repeat
+}
+.Face7 {
+	BACKGROUND: url(face7.gif) no-repeat
+}
+.Detail {
+	PADDING-BOTTOM: 0px; LINE-HEIGHT: 18px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; HEIGHT: 125px; OVERFLOW: hidden; WORD-BREAK: break-all; PADDING-TOP: 0px
+}
+.Detail IMG {
+	MARGIN-RIGHT: 5px
+}
+.Num {
+	TEXT-ALIGN: center; LINE-HEIGHT: 40px; FONT-WEIGHT: bold
+}
+.Sign {
+	TEXT-ALIGN: right; PADDING-BOTTOM: 0px; LINE-HEIGHT: 18px; MARGIN-TOP: 2px; PADDING-LEFT: 7px; PADDING-RIGHT: 7px; PADDING-TOP: 0px
+}
+.Sign DIV {
+	HEIGHT: 15px; OVERFLOW: hidden; WORD-BREAK: break-all
+}
+.Date {
+	
+}
+#verify {
+	FLOAT: left
+}

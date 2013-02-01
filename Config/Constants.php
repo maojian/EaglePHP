@@ -24,10 +24,17 @@ define('APP_COMPILE_DIR', DATA_DIR.'Compile'.__DS__.APP_NAME.__DS__);
 define('APP_CACHE_DIR', DATA_DIR.'Cache'.__DS__.APP_NAME.__DS__);
 define('APP_CONFIG_DIR', APP_DIR.'Config'.__DS__);
 
-define('SESSION_SAVE_TYPE', 'file'); //memcache 、 table 、file
+define('CACHE_FILE', 'file');
+define('CACHE_APC', 'apc');
+define('CACHE_MEMCACHE', 'memcache');
+
+define('SESSION_SAVE_TYPE', CACHE_FILE); //memcache 、 table 、file
 define('SESSION_LIFE_TIME', 3600); // session 生命周期 ,0为PHP默认时间
 
-define('URL_MODEL', 1); // URL模式
+!defined('URL_MODEL') && define('URL_MODEL', 1); // URL模式（1为普通模式、2为pathinfo模式、3为.html模式），注：每次切换URL模式后需删除Data下面的Complie目录。
+
 define('__DEFAULT_DATA_SOURCE__', 'default'); // 默认的数据源
 define('__CLI__', (php_sapi_name() == 'cli') ? true : false); // CLI 命令行模式
+define('OUTPUT_ENCODE', false);    // 采用ob_gzhandler方式压缩页面输出
+define('HTML_STRIP_SPACE' , true); // 模版编译时是否去除html空格、换行符、注释
 

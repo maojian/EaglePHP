@@ -94,7 +94,7 @@
 				return $this->_get_link($this->_get_url($this->nowindex-1), $this->pre_page, '');  // $style
 			}
 			
-			return '<a class="'.$style.'">'.$this->pre_page.'</a>';
+			return '<span class="'.$style.'">'.$this->pre_page.'</span>';
 		}
 		
 		/*** 下一页
@@ -105,7 +105,7 @@
 				return $this->_get_link($this->_get_url($this->nowindex+1), $this->next_page, '');// $style
 			}
 			
-			return '<a class="'.$style.'">'.$this->next_page.'</a>';
+			return '<span class="'.$style.'">'.$this->next_page.'</span>';
 		}
 		
 		/*** 首页
@@ -146,11 +146,11 @@
 				 		if($i != $this->nowindex) 
 				 		  $return .= $this->_get_link($this->_get_url($i), $i, $style);
 				 		 else
-				 		  $return .= $this->_get_text('<a class="'.$nowindex_style.'">'.$i.'</a>');
+				 		  $return .= $this->_get_text('<span class="'.$nowindex_style.'">'.$i.'</span>');
 				 } else {
 				 		break;
 				 }
-				 $return .= "\n";
+				 $return .= " ";/* \n */
 			}
 			unset($begin);
 			return $return;
@@ -198,7 +198,7 @@
 				case '4':
 				  $this->pre_page = '上一页';
 				  $this->next_page = '下一页';
-				  return $this->pre_page('pagesnone').$this->nowbar('', 'pagesOn').$this->next_page('pagesnone');
+				  return $this->pre_page('current').$this->nowbar('', 'pagesOn').$this->next_page('current');
 				  break;
 				  
 				case '5':
@@ -209,12 +209,11 @@
 		
 		function _set_url($url = '') {
 			if(!empty($url)) {
-				$this->url = $url. (stristr($url, '?') ? '&' : '?') . $this->page_name.'=';	
+				//$this->url = $url. (stristr($url, '?') ? '&' : '?') . $this->page_name.'=';
+				$this->url = $url.'&'.$this->page_name.'=';
 			} else {
 				if(empty($_SERVER['QUERY_STRING'])) {
-					
 					$this->url = $_SERVER['REQUEST_URI'].'?'.$this->page_name.'=';
-					
 				} else {
 					if(stristr($_SERVER['QUERY_STRING'], $this->page_name.'=')) {
 						$this->url = str_replace($this->page_name.'='.$this->nowindex, '', $_SERVER['REQUEST_URI']);
@@ -250,7 +249,7 @@
 		*
 		*/
 		function _get_url($pageno = 1) {
-			return $this->url.$pageno;
+			return url($this->url.$pageno);
 		}
 		
 		/*

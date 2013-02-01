@@ -36,7 +36,8 @@ class PickController extends CommonController{
 	public function addAction(){
 		if($this->isPost()){
 			$_POST['create_time'] = Date::format();
-			$_POST['rule'] = $this->post('rule');
+			$_POST['rule'] = $this->post('rule', self::_NO_CHANGE_VAL_, false);
+			if(!$this->post('lang')) $_POST['lang'] = 'utf-8';
 			if($this->cur_model->add()){
 				$this->ajaxReturn(200, '添加成功', '', 'closeCurrent');
 			}else{

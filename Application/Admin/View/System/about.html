@@ -1,6 +1,6 @@
 
 <div class="pageContent">
-	<form method="post" action="{{$smarty.const.__URL__}}add" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
+	<form method="post" action="{{$smarty.const.__URL__&a=add|url}}" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone);">
 		<div class="pageFormContent" layoutH="56">
 				<div class="unit" style="text-align:center;margin-top:50px;">
 				<h2>{{'cfg_admin_sysname'|getCfgVar}} {{'cfg_sys_version'|getCfgVar}}</h2>

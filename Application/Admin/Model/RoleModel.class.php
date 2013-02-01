@@ -13,7 +13,7 @@ class RoleModel extends Model{
 	/**
 	 * 验证是否有权限访问
 	 */
-    public function authRoleAccess($url, $modules){
+    public function authRoleAccess($url, $modules=array()){
     	$isAccess = false;
     	$url = strtolower($url);
     	$modules[] = array('name'=>'主页', 'url'=>'index/index');// 默认任何角色都可以访问主页

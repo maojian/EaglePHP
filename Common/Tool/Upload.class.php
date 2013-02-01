@@ -78,7 +78,7 @@ class Upload
      * @access public
      * @param string $savePath  上传文件保存路径
      * @return string
-     * @throws ThinkExecption
+     * @throws Execption
      */
     public function upload($savePath ='')
     {
@@ -151,7 +151,7 @@ class Upload
      * @param array $file  上传文件信息
      * @param string $savePath  上传文件保存路径
      * @return string
-     * @throws ThinkExecption
+     * @throws Execption
      */
     public function uploadOne($file,$savePath=''){
         //如果不指定保存文件名，则由系统默认
@@ -217,7 +217,7 @@ class Upload
      * @param mixed $name 数据
      * @param string $value  数据表名
      * @return string
-     * @throws ThinkExecption
+     * @throws Execption
      */
     private function save($file)
     {
@@ -277,7 +277,7 @@ class Upload
      * @access public
      * @param string $errorNo  错误号码
      * @return void
-     * @throws ThinkExecption
+     * @throws Execption
      */
     protected function error($errorNo)
     {

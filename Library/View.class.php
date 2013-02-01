@@ -39,6 +39,7 @@ class View extends SmartyBC {
 		$this->getSmartyInstance();
 		self :: $smartyBC->register_modifier('utf8Substr', 'utf8Substr');
 	    self :: $smartyBC->register_modifier('getCfgVar', 'getCfgVar');
+	    self :: $smartyBC->register_modifier('url', 'url');
 		self :: $smartyBC->cache_dir = APP_CACHE_DIR;
 		self :: $smartyBC->compile_dir = APP_COMPILE_DIR;
 		self :: $smartyBC->template_dir = APP_VIEW_DIR;
@@ -49,6 +50,8 @@ class View extends SmartyBC {
 	
 	/**
 	 * 获取Smarty实例对象
+	 * 
+	 * @return object
 	 */
     public function getSmartyInstance() 
     {
@@ -61,8 +64,10 @@ class View extends SmartyBC {
 		return self :: $smartyBC;
 	}
 
+	
 	/**
 	 * 获取模板页面路径
+	 * 
 	 * @return string
 	 */
 	public function getTplPath($path = '') 
@@ -72,28 +77,30 @@ class View extends SmartyBC {
 	
 	
 	/**
-	 * 设置模板常量
-	 * @return void
+	 * (non-PHPdoc)
+	 * @see Smarty_Internal_Data::assign()
 	 */
-	public function assign($name, $value = null) 
+	public function assign($tpl_var, $value = null, $nocache = false)
 	{
-		self :: $smartyBC->assign($name, $value);
+		self :: $smartyBC->assign($tpl_var, $value, $nocache);
 	}
 	
 	
 	/**
 	 * 获取模板内容
+	 * 
 	 * @return string
 	 */
-	public function fetch($tpl=ACTION_NAME)
+	public function fetch($template = ACTION_NAME, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
 	{
-		$path = CONTROLLER_NAME."/{$tpl}".self::TPL_SUFFIX;
-		return self :: $smartyBC->fetch($path);
+		$path = CONTROLLER_NAME."/{$template}".self::TPL_SUFFIX;
+		return self :: $smartyBC->fetch($path, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars, $no_output_filter);
 	}
 	
 	
 	/**
 	 * 判断模板是否缓存
+	 * 
 	 * @param int $lifetime
 	 * @param string $cache_id
 	 * @param string $path
@@ -111,14 +118,16 @@ class View extends SmartyBC {
 
 	/**
 	 * 视图层显示
+	 * 
 	 * @param string $path 模板路径
 	 * @return void
 	 */
-	public function display($path = '') 
+	public function display($template = null, $cache_id = null, $compile_id = null, $parent = null) 
 	{
 	    try 
 	    {
-	        self :: $smartyBC->display($this->getTplPath($path));
+	        if(!ini_get('zlib.output_compression') && OUTPUT_ENCODE) ob_start('ob_gzhandler');
+	        self :: $smartyBC->display($this->getTplPath($template), $cache_id, $compile_id, $parent);
 	    }
 	    catch (Exception $e)
 	    {
@@ -129,6 +138,7 @@ class View extends SmartyBC {
 	
 	/**
 	 * 缓存模板显示
+	 * 
 	 * @return void
 	 */
 	public function cacheDisplay($lifetime=null, $cache_id=null,  $path=null)

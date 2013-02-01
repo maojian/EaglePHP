@@ -2,7 +2,7 @@
 return array (
   'img' => 'mark.png',
   'upload' => '1',
-  'type' => '2',
+  'type' => '1',
   'width' => '100',
   'height' => '100',
   'text' => 'www.eaglephp.com',

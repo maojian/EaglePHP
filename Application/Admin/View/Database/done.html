@@ -1,6 +1,6 @@
 
 <div class="pageHeader">
-	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__}}done" method="post">
+	<form onsubmit="return navTabSearch(this);" action="{{$smarty.const.__URL__&a=done|url}}" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -28,8 +28,8 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="{{$smarty.const.__ACTION__}}/date/{{$smarty.post.date}}" target="selectedTodo"  rel="ids" postType="string" title="确实要还原这些表吗?"><span>批量还原数据</span></a></li>
-			<li><a class="delete" href="{{$smarty.const.__URL__}}index/type/delBak/date/{{$smarty.post.date}}" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些备份文件吗?，一旦删除将不可恢复数据。"><span>批量删除备份文件</span></a></li>
+			<li><a class="add" href="{{$smarty.const.__ACTION__&date=$smarty.post.date|url}}" target="selectedTodo"  rel="ids" postType="string" title="确实要还原这些表吗?"><span>批量还原数据</span></a></li>
+			<li><a class="delete" href="{{$smarty.const.__URL__&a=index&type=delBak&date=$smarty.post.date|url}}}}" target="selectedTodo"  rel="ids" postType="string" title="确实要删除这些备份文件吗?，一旦删除将不可恢复数据。"><span>批量删除备份文件</span></a></li>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="77">

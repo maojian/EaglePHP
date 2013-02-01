@@ -5,15 +5,19 @@
  * @since 1.6 - 2011-10-14
  */
  
-class RunTime {
+class RunTime 
+{
 	
     private static $start_time = 0;
     private static $stop_time = 0;
     
     /**
      * 获得当前Unix时间戳和微秒数
+     * 
+     * @return float
      */
-    public static function getMicotime(){
+    public static function getMicotime()
+    {
     	list($usec, $sec) = explode(' ',microtime());
     	return ((float)$usec+(float)$sec);
     }
@@ -21,32 +25,44 @@ class RunTime {
     
     /**
      * 启动开始时间
+     * 
+     * @return void
      */
-    public static function init(){
+    public static function init()
+    {
     	self::start();
     }
     
     
     /**
      * 开始计时
+     * 
+     * @return void
      */
-    public static function start(){
+    public static function start()
+    {
     	self::$start_time = self::getMicotime();
     }
     
     
     /**
      * 停止计时
+     * 
+     * @return void
      */
-    public static function stop(){
+    public static function stop()
+    {
     	self::$stop_time = self::getMicotime();
     }
     
     
     /**
      * 计算运行时间
+     * 
+     * @return float
      */
-    public static function spent(){
+    public static function spent()
+    {
     	return round((self::$stop_time-self::$start_time) * 1000);
     }
     

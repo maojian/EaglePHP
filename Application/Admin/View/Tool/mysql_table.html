@@ -1,5 +1,5 @@
 
-<form id="pagerForm" method="post" action="{{$smarty.const.__ACTION__}}">
+<form id="pagerForm" method="post" action="{{$smarty.const.__ACTION__|url}}">
 	<input type="hidden" name="url_param" value="{{$url_param}}" />
 </form>
 
@@ -23,7 +23,7 @@
 			{{section name=loop loop=$table_status}}
 			<tr>
 				<td><input class="choose_table" name="ids" value="{{$table_status[loop].name}}" type="checkbox"></td>
-				<td><a href="{{$smarty.const.__ACTION__}}go/record/table/{{$table_status[loop].name}}/?url_param={{$url_param}}" title="Mysql管理" target="navTab" rel="Tool" style="text-decoration: underline;color: blue;">{{$table_status[loop].name}}</a></td>
+				<td><a href="{{$smarty.const.__ACTION__&go=record&table=$table_status[loop].name&url_param=$url_param|url}}" title="Mysql管理" target="navTab" rel="Tool" style="text-decoration: underline;color: blue;">{{$table_status[loop].name}}</a></td>
 				<td>{{$table_status[loop].rows}}</td>
 				<td>{{$table_status[loop].data_length}}</td>
 				<td>{{$table_status[loop].create_time}}</td>
@@ -32,9 +32,9 @@
 				<td>{{$table_status[loop].collation}}</td>
 				<td>{{$table_status[loop].comment}}</td>
 				<td> 
-					<a href="{{$smarty.const.__ACTION__}}go/struct/table/{{$table_status[loop].name}}/?url_param={{$url_param}}" title="{{$table_status[loop].name}} 表结构" target="dialog" width="1000" height="600" style="text-decoration: underline;color: blue;">结构</a> |
-					<a href="{{$smarty.const.__ACTION__}}go/truncate/table/{{$table_status[loop].name}}/?url_param={{$url_param}}" target="ajaxTodo" callback="ajaxTodoCall" title="确定要清空{{$table_status[loop].name}}表吗？" style="text-decoration: underline;color: blue;">清空</a> |
-					<a href="{{$smarty.const.__ACTION__}}go/drop/table/{{$table_status[loop].name}}/?url_param={{$url_param}}" target="ajaxTodo" callback="ajaxTodoCall" title="确定删除这条数据吗？" style="text-decoration: underline;color: blue;">删除</a>
+					<a href="{{$smarty.const.__ACTION__&go=struct&table=$table_status[loop].name&url_param=$url_param|url}}" title="{{$table_status[loop].name}} 表结构" target="dialog" width="1000" height="600" style="text-decoration: underline;color: blue;">结构</a> |
+					<a href="{{$smarty.const.__ACTION__&go=truncate&table=$table_status[loop].name&url_param=$url_param|url}}" target="ajaxTodo" callback="ajaxTodoCall" title="确定要清空{{$table_status[loop].name}}表吗？" style="text-decoration: underline;color: blue;">清空</a> |
+					<a href="{{$smarty.const.__ACTION__&go=drop&table=$table_status[loop].name&url_param=$url_param|url}}" target="ajaxTodo" callback="ajaxTodoCall" title="确定删除这条数据吗？" style="text-decoration: underline;color: blue;">删除</a>
 				</td>
 			</tr>
 		    {{/section}}
@@ -67,7 +67,7 @@
 <script type="text/javascript">
 <!--
 function ajaxTodoCall(){
-	navTab.reload('{{$smarty.const.__ACTION__}}?{{$url_param}}', {}, 'Tool');
+	navTab.reload('{{$smarty.const.__ACTION__&$url_param|url}}', {}, 'Tool');
 }
 
 $("#sava_file_cho").each(function(){
@@ -76,7 +76,7 @@ $("#sava_file_cho").each(function(){
           var table_str = null;
           var file_save = $("#file_save").attr("checked");
           var file_path = $("#file_path").val();
-          var url = "{{$smarty.const.__ACTION__}}go/export/?url_param={{$url_param}}";
+          var url = "{{$smarty.const.__ACTION__&go=export&url_param=$url_param|url}}";
        	  $("input[name='ids']").each(function(){
     	  	if($(this).attr("checked"))
     	  	{

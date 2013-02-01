@@ -14,11 +14,12 @@ class MusicController extends CommonController{
     }
     
     public function indexAction(){
-		$list = $this->cur_model->where("state=0")->order('rank DESC,id DESC')->select(array('cache'=>true));
+		$list = $this->cur_model->where("state=0")->order('rank DESC,id DESC')->cache()->select();
 		$music = null;
 		foreach($list as $val){
 		    $music .= "{title: '{$val['title']}',artist: '{$val['author']}', mp3: '{$val['url']}'},";
 		}
+		$this->assign('url', url(__PUB__.'api/index.php?c=xiami', false, 1));
 		$this->assign('music', trim($music, ','));
 		$this->assign('list', $list);
 		$this->assign('title', '音乐');

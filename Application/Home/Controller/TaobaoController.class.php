@@ -38,16 +38,17 @@ class TaobaoController extends CommonController{
             $keyword = mb_convert_encoding($keyword, 'utf-8', 'gbk');
             $this->request('keyword', $keyword);
         }
+        if(preg_match('#林志玲|范冰冰|充气|自慰|真人#', $keyword) || $cid==2813) redirect(__URL__ , 3, '禁止搜索');
         $perpage = 33;
         $data = $this->taobaoClient->getTaoBaoKeItems(array('cid'=>$cid, 'sort'=>$sort, 'start_price'=>$start_price, 'end_price'=>$end_price, 'keyword'=>$keyword, 'page'=>$pageNum, 'page_size'=>$perpage));
         $url = __ACTION__;
      
         // 组装查询条件
-        if($cid) $url .= "cid/{$cid}/";
-        if($keyword) $url .= 'keyword/'.urlencode($keyword).'/';
-        if($sort) $url .= "sort/{$sort}/";
-        if($start_price) $url .= "start_price/{$start_price}/";
-        if($end_price) $url .= "end_price/$end_price/";
+        if($cid) $url .= "&cid={$cid}";
+        if($keyword) $url .= '&keyword='.urlencode($keyword);
+        if($sort) $url .= "&sort={$sort}";
+        if($start_price) $url .= "&start_price={$start_price}";
+        if($end_price) $url .= "&end_price={$end_price}";
         
         $page = new Page(array ('total' =>$data['count'], 'perpage' =>$perpage, 'url' => $url));
     	$this->assign('cats', $this->taobaoClient->getItemCates());

@@ -1,7 +1,7 @@
 <?php
 class VoteModel extends Model
 {
-    
+
 	public function getJs($id)
 	{
 	    $dir = getUploadAddr().'vote/';

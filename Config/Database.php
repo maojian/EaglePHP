@@ -8,7 +8,7 @@
     'dbport' => '3306',
     'dbuser' => 'root',
     'dbpwd' => '',
-    'dbname' => 'eaglephp_test',
+    'dbname' => 'hahahcms',
     'dbcharset' => 'utf8',
     'dbprefix' => 'eag_',
   ),

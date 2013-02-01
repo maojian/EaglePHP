@@ -56,7 +56,7 @@
 
 	var settings = {
 		flash_url : "{{$smarty.const.__SHARE__}}plug/swfupload/swfupload.swf",
-		upload_url: "{{$smarty.const.__URL__}}upload",
+		upload_url: "{{$smarty.const.__URL__&a=upload|url}}",
 		post_params: {"PHPSESSID" : "{{$PHPSESSID}}"},
 		file_size_limit : "10 MB",
 		file_types : "*.jpg;*.gif;*.jpeg;*.png;",

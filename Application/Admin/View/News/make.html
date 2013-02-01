@@ -1,0 +1,34 @@
+
+<div class="pageContent">
+	<form method="post" action="{{$smarty.const.__URL__&a=make|url}}" class="pageForm required-validate" onsubmit="return iframeCallback(this, dialogAjaxDone);" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="{{$info.id}}">
+		<div class="pageFormContent" layoutH="56">
+			<dl>
+				<dt>类型：</dt>
+				<dd>
+					<select name="type" class="combox">
+						<option value="">--类型--</option>
+						{{html_options options=$types}}
+					</select>
+				</dd>
+			</dl>
+			<dl>
+				<dt>起始ID：</dt>
+				<dd><input name="start_id" type="text" size="10"/> （空或0表示从头开始）</dd>
+			</dl>
+			<dl>
+				<dt>结束ID：</dt>
+				<dd><input name="end_id" type="text" size="10"/> （空或0表示直到结束ID）</dd>
+			</dl>
+
+		</div>
+		<div class="formBar">
+			<ul>
+				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">生成</button></div></div></li>
+				<li>
+					<div class="button"><div class="buttonContent"><button type="button" class="close">取消</button></div></div>
+				</li>
+			</ul>
+		</div>
+	</form>
+</div>

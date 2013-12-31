@@ -3,7 +3,7 @@
 /**
  * cost manager class
  * @author maojianlw@139.com
- * @since 2012-1-27
+ * @since 2013-8-25
  */
 
 class CostController extends CommonController{
@@ -126,7 +126,8 @@ class CostController extends CommonController{
 	 	$endDate = $this->post('endDate');
 	 	
 	 	if(!$startDate || !$endDate){
-	 		$startDate = date('Y-m', strtotime('-12 month'));
+	 		$minDateInfo = $this->curModel->field('DATE_FORMAT( MIN( usetime ) ,  "%Y-%m" ) AS minDate')->find();
+	 		$startDate = (isset($minDateInfo['minDate']) && !empty($minDateInfo['minDate'])) ? $minDateInfo['minDate'] : date('Y-m');
 	 		$endDate = date('Y-m');
 	 		
 	 		$_POST['startDate'] = $startDate;

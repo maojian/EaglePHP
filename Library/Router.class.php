@@ -1,7 +1,10 @@
 <?php
 class Router
 {
-        
+
+    protected static $isRewrite = null;
+    
+    
     /**
      * URL解析
      * 
@@ -46,25 +49,27 @@ class Router
                 $urlArr2[] = $urlArr['c'];
                 unset($urlArr['c']);
             }
+            /*
             else
             {
                 $urlArr2[] = 'index';
-            }
+            }*/
             if(isset($urlArr['a']))
             {
                 $urlArr2[] = $urlArr['a'];
                 unset($urlArr['a']);
             }
+            /*
             else
             {
                 $urlArr2[] = 'index';
-            }
+            }*/
             if(is_array($urlArr))
             {
                 foreach ($urlArr as $k=>$v) if(!empty($v)) $urlArr2[] = $k.'/'.$v;
                 $url = implode('/', $urlArr2);
             }
-            $url = $queryArr[0].'/'.$url;
+            $url = rtrim($queryArr[0],'/').'/'.$url; 
         }
         return $url;
     }
@@ -77,7 +82,7 @@ class Router
 	 */
 	public static function pathinfoParse() 
 	{
-	    if(HttpRequest::getServer('QUERY_STRING')) return self::ordinaryParse();
+	    //if(HttpRequest::getServer('QUERY_STRING')) return self::ordinaryParse();
 	    $controller = $action = null;
 		if (isset($_SERVER['PATH_INFO'])) 
 		{
@@ -134,7 +139,7 @@ class Router
                 foreach ($urlArr as $k=>$v) if(!empty($v)) $urlArr2[] = $k.'-'.$v;
                 $url = count($urlArr2) ? implode('/', $urlArr2).'.html' : '';
             }
-            $url = $queryArr[0].'/'.$url;
+            $url = rtrim($queryArr[0],'/').'/'.$url; 
         }
         return $url;
     }
@@ -212,6 +217,7 @@ class Router
 	 */
 	public static function defineConst($controller, $action) 
 	{
+	    self::$isRewrite = getCfgVar('cfg_open_rewrite');
 	    $scriptName = $_SERVER['SCRIPT_NAME'];
 	    $documentRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
 	    $scriptFileName = str_replace('\\', '/', $_SERVER['SCRIPT_FILENAME']);
@@ -243,7 +249,7 @@ class Router
 	    }
 	    
 	    // 开启伪静态
-	    if(getCfgVar('cfg_open_rewrite'))
+	    if(self::$isRewrite)
 	    {
 	        $root = str_replace(array('/Public', '/index.php'), array('', ''), $scriptName).'/';
 	    }
@@ -336,7 +342,8 @@ class Router
         }
         if(strpos($text, '=') !== false)
         {
-            $paramsArr = explode('&', $text);
+            $qArr = explode('?', $text);
+            $paramsArr = explode('&', $qArr[1]);
             foreach ($paramsArr as &$v)
             {
                 if(strpos($v, '.') !== false || strpos($v, '[') !== false || strpos($v, '->') !== false)
@@ -351,7 +358,7 @@ class Router
                     }
                 } 
             }
-            $text = implode('&', $paramsArr);
+            $text = $qArr[0].'?'.implode('&', $paramsArr);
         }
         if($isIndex !== false) $text = $search.$text;
         $text = self::url($text);

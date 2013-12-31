@@ -1,0 +1,188 @@
+{{include file="../Include/user_head.html"}}
+<div id="outterWrapper">
+<div id="container">
+	<div id="header">
+    	<h1 class="bannerReg">注册我的通行证</h1>
+    </div>
+    <div id="content">
+    	<div id="main">
+            <script type="text/javascript">
+
+function reload_captcha() {
+	$('#captcha').attr('src', '{{$smarty.const.__URL__&a=verifyCode|url}}?'+Math.random());
+}
+
+function remote_check(name, value) {
+  var url='{{$smarty.const.__URL__&a=check|url}}';
+  var ret;
+  $.ajax({'url':url,'async':false,'dataType':'json','data':{'name':name,'value':value},'success':function(data){ret=data;}});
+  return ret.message;
+}
+
+var validator={
+	'username':[
+	  [/\S+/, '请输入用户名'],
+	  [/\S{4,}/, '用户名少于4位'],
+	  [function(username){return remote_check('username',username);}, '此用户名已被使用']
+	],
+	'nickname':[
+	      	  [/\S+/, '请输入昵称'],
+	      	  [/\S{2,}/, '昵称少于2位']
+	      	],
+	'password':[
+	  [/^.+$/, '请输入密码'],
+	  [/^.{6,}$/, '密码少于6位']
+	],
+	'confirm':[
+	  [/^.+$/, '请输入确认密码'],
+	  [function(s){return s==$('#item_password input').val();}, '两次密码输入不一致']
+	],
+	'email':[
+	  [/\S+/, '请输入电子邮件'],
+	  [/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i, '请输入格式正确的电子邮件'],
+	  [function(email){return remote_check('email',email)}, '此电子邮件已被使用']
+	],
+	'captcha':[
+	  [/\S+/,'请输入验证码']
+	]
+};
+
+function validate(item) {
+  var str=$("#item_"+item+" input").val();
+  var m={
+    'RegExp':function(r,s){
+      return r.test(s);
+    },
+    'Function':function(f,s){
+      return f(s);
+    },
+    'String':function(v,s){return v==s;}
+  };
+  for (var v in validator[item]) {
+    var vi=validator[item][v];
+    //var c=vi[0].constructor.name;
+    var c=Object.prototype.toString.apply(vi[0]).match(/(\w+)\]$/)[1];
+    if (m[c] && !m[c](vi[0],str)) {
+      fail(item,vi[1]);
+      return false;
+    }
+  }
+  succ(item);
+  return true;
+}
+
+var result={};
+for (var k in validator) {
+result[k]=false;
+}
+
+function fail(item, msg) {
+$("#item_"+item+" .f3 span").html(msg).removeClass('valid').addClass('fail');
+result[item]=false;
+disable();
+}
+
+function succ(item) {
+$("#item_"+item+" .f3 span").html('&nbsp;').removeClass('fail').addClass('valid');
+result[item]=true;
+check_all();
+}
+
+function check_all() {
+for (var k in result){
+  if (result[k]==false){
+    disable();
+    return true;
+  }
+}
+/*
+if (!$('#agree').attr('checked')) {
+  disable();
+  return true;
+}
+*/
+	enable();
+	return true;
+}
+
+function enable(){
+	$('#submit_enabled').show();
+	$('#submit_disabled').hide();
+	return true;
+}
+
+function disable(){
+	$('#submit_enabled').hide();
+	$('#submit_disabled').show();
+	return false;
+}
+
+function check_and_submit() {
+	if (!check_all()) {
+		return;
+    }
+	$('form')[0].submit();
+}
+
+$('#header').append('<div class="subNavi"><a href="{{$smarty.const.__URL__&a=login|url}}">登录</a></div>');
+
+</script>
+<div id="sideMain">
+	<div id="regForm">
+	{{if $message}}<font color="red">{{$message}}</font><br/><br/>{{/if}}
+	<form action="{{$smarty.const.__ACTION__|url}}" method="post">
+		<ul>
+			<li id="item_username">
+				<div class="f1"><strong>用户名</strong></div>
+				<div class="f2"><input type="text" class="text" maxlength="16" name="username" /></div>
+				<div class="f3"><span></span></div>
+				<div class="f4">由4-16位任意字符组成</div>
+			</li>
+			<li id="item_nickname">
+				<div class="f1"><strong>昵称</strong></div>
+				<div class="f2"><input type="text" class="text" maxlength="16" name="nickname" /></div>
+				<div class="f3"><span></span></div>
+				<div class="f4">由2-5位任意字符组成</div>
+			</li>
+			<li id="item_password">
+				<div class="f1"><strong>密　码</strong></div>
+				<div class="f2"><input type="password" class="text" maxlength="16" name="password"  /></div>
+				<div class="f3"><span></span></div>
+				<div class="f4">由6-16位字符组成</div>
+			</li>
+			<li id="item_confirm">
+				<div class="f1"><strong>确认密码</strong></div>
+				<div class="f2"><input type="password" class="text" maxlength="16" name="confirm" /></div>
+				<div class="f3"><span></span></div>
+				<div class="f4">由6-16位字符组成</div>
+			</li>
+			<li id="item_email">
+				<div class="f1"><strong>电子邮件</strong></div>
+				<div class="f2"><input type="text" class="text" maxlength="50" name="email" /></div>
+				<div class="f3"><span></span></div>
+				<div class="f4">请填写有效电子邮件，以获得注册验证信</div>
+			</li>
+			<li class="validCode" id="item_captcha">
+				<div class="f1"><strong>验证码</strong></div>
+				<div class="f2"><span><img src="{{$smarty.const.__URL__&a=verifyCode|url}}" id="captcha" onclick="reload_captcha()"/><a href="#" onclick="reload_captcha();">换一张</a></span></div>
+				<div class="clear"></div>
+				<div class="f5">
+				  <input type="text" class="text" maxlength="4" name="captcha" />
+				</div>
+				<div class="f3"><span></span></div>
+				<div class="f4">不区分大小写</div>
+			</li>
+		</ul>
+		<div class="button">
+			<img id="submit_enabled" onclick="check_and_submit();" src="{{$smarty.const.__APP_RESOURCE__}}imgs/btn_reg.gif" title="注册" style="cursor:pointer;display:none;"/>
+			<img id="submit_disabled" src="{{$smarty.const.__APP_RESOURCE__}}imgs/btn_reg_invalid.gif" title="注册"/>
+		</div>
+	</form>
+	</div>
+</div>
+<script type="text/javascript">
+$('#regForm input')
+.blur(function(){validate(this.name);})
+.change(check_all);
+</script>
+{{include file="../Include/user_foot.html"}}

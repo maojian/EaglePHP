@@ -57,7 +57,7 @@ class ModuleModel extends Model{
    		
    		foreach($childs as $k=>$child){
    			if($recur_array = $this->buildTree($data, $child['id'], $type)){
-   				$childs[$k]['childs'] = $recur_array;
+   				$childs[$k]['childs'] = list_sort_by($recur_array, 'number');
    			}
    		}
    		return $childs;
@@ -151,10 +151,19 @@ class ModuleModel extends Model{
 				$tree = '';
 				foreach($childs as $child){
 					$url = $child['url'];
+					$rel = '';
 					if($url){
 						$urls = explode('/', $url);
 						$rel = ucfirst($urls[0]);
 						$url = __ROOT__.'?c='.$urls[0].'&a='.(isset($urls[1]) ? $urls[1] : 'index');
+					    if(count($urls)>2)
+                        {
+                            unset($urls[0], $urls[1]);
+                            for($i=2; $i<=count($urls); $i++)
+                            {
+                                $url .= '&'.$urls[$i].'='.$urls[++$i];
+                            }
+                        }
 						$href = (strpos($url, 'http://') !== false) ? "href=$url" : "href=".url($url);
 					}else{
 						$href = 'href="javascript:"';
@@ -179,7 +188,7 @@ class ModuleModel extends Model{
 		if(is_array($modules)){
 			foreach($modules as $module){
 				$tree .= '<div class="accordionHeader"><h2><span>Folder</span>'.$module['name'].'</h2></div><div class="accordionContent"><ul class="tree treeFolder">';
-				$tree .= getChildNode($module['childs']);
+				$tree .= getChildNode(isset($module['childs']) ? $module['childs'] : null);
 				$tree .= '</ul></div>';
 			}
 		}

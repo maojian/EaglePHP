@@ -205,11 +205,10 @@ class Security
 	}
 	
 	
-	/*
-	 * 移除有害的属性
+	/**
+	 * 移除恶意的属性
 	 * 
 	 * @param string $str
-	 * @return string
 	 */
 	protected static function _removeEvilAttributes($str)
 	{
@@ -287,8 +286,6 @@ class Security
 	 */
 	public static function xssClean($str)
 	{
-	    if(empty($str)) return '';
-	    
 	    if (is_array($str))
 		{
 			while (list($key) = each($str))
@@ -335,17 +332,17 @@ class Security
 		do
 		{
 			$original = $str;
-
+            /*
 			if (preg_match("/<a/i", $str))
 			{
 				$str = preg_replace_callback("#<a\s+([^>]*?)(>|$)#si", array(__CLASS__, '_removeJsLink'), $str);
 			}
-
+            
 			if (preg_match("/<img/i", $str))
 			{
 				$str = preg_replace_callback("#<img\s+([^>]*?)(\s?/?>|$)#si", array(__CLASS__, '_removeJsImage'), $str);
 			}
-
+			*/
 			if (preg_match("/script/i", $str) OR preg_match("/xss/i", $str))
 			{
 				$str = preg_replace("#<(/*)(script|xss)(.*?)\>#si", '[removed]', $str);
@@ -363,12 +360,8 @@ class Security
 		
 		$str = preg_replace('#(alert|cmd|passthru|eval|exec|expression|system|fopen|fsockopen|file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si', "\\1\\2&#40;\\3&#41;", $str);
 		$str = self::_doNeverAllowed($str);
-		
-		//$str = (!get_magic_quotes_gpc()) ? addcslashes($str, "\000\n\r\\'\"\032") : $str;
-        //$str = htmlspecialchars($str);
         
 		return $str;
 	}
-    
-    
+
 }

@@ -460,7 +460,7 @@ class Upload
     private function getExt($filename)
     {
         $pathinfo = pathinfo($filename);
-        return $pathinfo['extension'];
+        return isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
     }
 
     /**

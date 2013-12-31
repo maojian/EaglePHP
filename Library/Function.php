@@ -4,8 +4,8 @@
  * EaglePHP框架系统公共函数库
  *
  * @author maojianlw@139.com
- * @since 2.3 - 2012-11-27
- * @link www.eaglephp.com
+ * @since 2.6 - 2013-06-07
+ * @link http://www.eaglephp.com
  */
 
 
@@ -77,7 +77,6 @@ function htmlEscape($var)
 }
 
 
-
 /**
  * 跳转至指定的路径
  * @param string $url 路径
@@ -86,19 +85,12 @@ function htmlEscape($var)
  * @param bool $isConvert 是否按照URL_MODEL转换
  * @return void 直接退出
  */
-function redirect($url, $time = 0, $msg = '', $isConvert=true)
+function redirect($url, $time = 0, $msg = '', $result=0, $isConvert=true)
 {
-    $url = ($isConvert) ? url($url) : $url;
     $html = $meta = null;
-    if (!HttpResponse::isSendHeader())
-    {
-        HttpResponse::sendContentHeader($time > 0 ? "refresh:{$time};url={$url}" : "Location:{$url}");
-    }
-    else
-    {
-        $meta = "<meta http-equiv=refresh content={$time};URL={$url}>";
-    }
-    if ($time > 0) $html = template(language('SYSTEM:auto.jump.tips', array($msg, $time)));
+    $url = ($isConvert && $url) ? url($url) : $url;
+    if($url) (!HttpResponse::isSendHeader()) ? HttpResponse::sendContentHeader($time > 0 ? "refresh:{$time};url={$url}" : "Location:{$url}") : $meta = "<meta http-equiv=refresh content={$time};URL={$url}>";
+    if ($time > 0) $html = template($msg, $result, $url);
     exit ($html . $meta);
 }
 
@@ -106,30 +98,55 @@ function redirect($url, $time = 0, $msg = '', $isConvert=true)
 /**
  * 提示信息模板
  */
-function template($message, $title='Notice')
+function template($message, $result=0, $url='')
 {
     $message = nl2br($message);
     $copyright = getCfgVar('cfg_webname');
+    $promptMsg = language('SYSTEM:prompt.msg');
+    $promptForward = language('SYSTEM:prompt.forward');
+    $image = __SHARE__.'image/msg.png';
+	$imageBG = __SHARE__.'image/msg_bg.png';
+	switch ($result)
+	{
+		case 1:
+			$cls = 'ok';
+			break;
+		case 2:
+			$cls = 'guery';
+			break;
+		default:
+			$cls = 'no';
+			break;
+	}
+	$forwardText = ($url) ? "<a href='{$url}'>{$promptForward}</a>" : '<a href="javascript:history.back();" >[点这里返回上一页]</a>';
     $html = <<<EOT
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-                    <title>{$title} - {$copyright}</title>
-                    <style type="text/css"> 
-                        body{font-size:10pt; padding:10pt; margin:0; color:#111; font-family:Arial,sans-serif,Helvetica,"宋体";}
-                        .error_message{margin:5px;padding:4px 10px;font-family: Lucida Console;font-size: 14px;border:1px dotted #ff9797;background:#fffff2;-moz-border-radius:4px;-webkit-border-radius:4px;border-radius:4px;}
-                        h1{font-size:14pt; font-weight:bold; padding:0 0 10px 0; line-height:1.2em; margin:0; color:#911; _padding-left:0px;}
-                        .box{position:relative;border:1px solid #ccc; padding:10px; background:#ffffd6; line-height:1.4em; border-radius:4px; word-wrap:break-word; width:800px; margin:0 auto;}
-                    </style>
-                </head>
-                <body>
-                    <div class="box">
-                        <b>{$title}：</b>
-                        <div class="error_message">{$message}</div>
-                    </div>
-                </body>
-                </html>
+    			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+				<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=7" />
+				<title>{$copyright}-{$promptMsg}</title>
+				<style type="text/css">
+				<!--
+				*{padding:0; margin:0; font-size:12px}
+				a:link,a:visited{text-decoration:none;color:#0068a6}
+				a:hover,a:active{color:#ff6600;text-decoration: underline}
+				.showMsg{border: 1px solid #1e64c8; zoom:1; width:450px; height:172px;position:absolute;top:44%;left:50%;margin:-87px 0 0 -225px}
+				.showMsg h5{background-image: url({$image});background-repeat: no-repeat; color:#fff; padding-left:35px; height:25px; line-height:26px;*line-height:28px; overflow:hidden; font-size:14px; text-align:left;}
+				.showMsg .content{padding:46px 12px 10px 45px; font-size:14px; height:64px; text-align:left}
+				.showMsg .bottom{background:#e4ecf7; margin: 0 1px 1px 1px;line-height:26px; *line-height:30px; height:26px; text-align:center}
+				.showMsg .ok, .showMsg .guery, .showMsg .no{background: url({$imageBG}) no-repeat 0px -560px;}
+				.showMsg .guery{background-position: left -460px;}
+				.showMsg .no{background-position: left -360px;}
+				-->
+				</style>
+				</head>
+				<body>
+				<div class="showMsg" style="text-align:center">
+					<h5>{$promptMsg}</h5>
+				    <div class="content {$cls}" style="display:inline-block;display:-moz-inline-stack;zoom:1;*display:inline;max-width:330px">{$message}</div>
+				    <div class="bottom">{$forwardText}</div>
+				</div>
+				</body>
+				</html>
 EOT;
     return $html;
 }
@@ -374,7 +391,12 @@ function get_client_ip()
     $ip = getenv ('REMOTE_ADDR');
     else
     $ip = HttpRequest::getServer('REMOTE_ADDR');
-    return ($ip);
+    if(strpos($ip, ',')!==false)
+    {
+    	$ipArr = explode(',', $ip);
+    	$ip = $ipArr[0];
+    }
+    return $ip;
 }
 
 
@@ -428,15 +450,25 @@ function throw_exception($message, $code=0, $type='TraceException')
  */
 function halt($data, $attach=null)
 {
-    $data = (is_array($data)) ? implode('<br/>', $data) : $data;
+    // 清楚输出缓存中的内容
+    //ob_end_clean();
     if(HttpRequest::isAjaxRequest())
     {
-        ob_end_flush();
+        $data = (is_array($data)) ? implode('<br/>', $data) : $data;
         $output = json_encode(array('statusCode'=>300, 'message'=>$data, 'attach'=>$attach));
+    }
+    elseif (__CLI__)
+    {
+        $data = (is_array($data)) ? implode("\n", $data) : $data;
+        $output = $data;
     }
     else
     {
-        $output = template($data, 'Error Info');
+        // 下面注释的这两句代码是另外一种错误信息提示方式
+        //$data = (is_array($data)) ? implode('<br/>', $data) : $data;
+        //$output = template($data, 'Error Info');
+        // 错误信息以执行过的函数堆栈信息显示 back trace funcation
+        Log::showDebugBackTrace();
     }
     exit($output);
 }
@@ -597,39 +629,39 @@ function auto_charset($fContents,$from='gbk',$to='utf-8')
  * @param int $readTimeout
  */
 function curlRequest($url,$data='',$method='POST',$cookieFile='',$headers='',$connectTimeout = 30,$readTimeout = 30)
-{
+{ 
     $method = strtoupper($method);
     if(!function_exists('curl_init')) return socketRequest($url, $data, $method, $cookieFile, $connectTimeout);
 
     $option = array(
         CURLOPT_URL => $url,
-        CURLOPT_HEADER =>0,
+        CURLOPT_HEADER => 0,
         CURLOPT_RETURNTRANSFER => 1,
         CURLOPT_CONNECTTIMEOUT => $connectTimeout,
         CURLOPT_TIMEOUT => $readTimeout
     );
 
-    if($headers)
-    {
-        $option[CURLOPT_HTTPHEADER] = $headers;
-    }
+    if($headers) $option[CURLOPT_HTTPHEADER] = $headers;
 
     if($cookieFile)
     {
         $option[CURLOPT_COOKIEJAR] = $cookieFile;
         $option[CURLOPT_COOKIEFILE] = $cookieFile;
-        //$option[CURLOPT_COOKIESESSION] = true;
-        //$option[CURLOPT_COOKIE] = 'prov=42;city=1';
     }
 
-    if($data && $method == 'POST')
+    if($data && strtolower($method) == 'post')
     {
         $option[CURLOPT_POST] = 1;
         $option[CURLOPT_POSTFIELDS] = $data;
     }
-
+	
+	if(stripos($url, 'https://') !== false)
+    {
+    	$option[CURLOPT_SSL_VERIFYPEER] = false;
+    	$option[CURLOPT_SSL_VERIFYHOST] = false;
+    }
+    
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt_array($ch,$option);
     $response = curl_exec($ch);
     if(curl_errno($ch) > 0) throw_exception("CURL ERROR:$url ".curl_error($ch));
@@ -661,7 +693,7 @@ function socketRequest($url, $data, $method, $cookieFile, $connectTimeout) {
 
     $conf_arr = array(
         'limit'=>0,
-        'post'=>'',
+        'post'=>$data,
         'cookie'=>$cookieFile,
         'ip'=>'',
         'timeout'=>$connectTimeout,
@@ -669,18 +701,19 @@ function socketRequest($url, $data, $method, $cookieFile, $connectTimeout) {
         );
 
     foreach ($conf_arr as $k=>$v) ${$k} = $v;
-
     if($post) {
         if(is_array($post))
         {
-            $post = http_build_query($post);
+            $postBodyString = '';
+            foreach ($post as $k => $v) $postBodyString .= "$k=" . urlencode($v) . "&";
+            $post = rtrim($postBodyString, '&');
         }
         $out = "POST $path HTTP/1.0\r\n";
         $out .= "Accept: */*\r\n";
         //$out .= "Referer: $boardurl\r\n";
         $out .= "Accept-Language: zh-cn\r\n";
         $out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+        $out .= "User-Agent: ".HttpRequest::getServer('HTTP_USER_AGENT')."\r\n";
         $out .= "Host: $host\r\n";
         $out .= 'Content-Length: '.strlen($post)."\r\n";
         $out .= "Connection: Close\r\n";
@@ -692,7 +725,7 @@ function socketRequest($url, $data, $method, $cookieFile, $connectTimeout) {
         $out .= "Accept: */*\r\n";
         //$out .= "Referer: $boardurl\r\n";
         $out .= "Accept-Language: zh-cn\r\n";
-        $out .= "User-Agent: $_SERVER[HTTP_USER_AGENT]\r\n";
+        $out .= "User-Agent: ".HttpRequest::getServer('HTTP_USER_AGENT')."\r\n";
         $out .= "Host: $host\r\n";
         $out .= "Connection: Close\r\n";
         $out .= "Cookie: $cookie\r\n\r\n";
@@ -876,7 +909,7 @@ function getCfgVar($varname = null)
     {
         $config = import('Config.System', false, DATA_DIR);
     }
-    return ($varname != null && isset($config[$varname])) ? $config[$varname] : $config;
+    return ($varname == null) ? $config : (isset($config[$varname]) ? $config[$varname] : '');
 }
 
 
@@ -1073,4 +1106,23 @@ function url($url, $isEncode=false, $model=null)
 {
     $url = $isEncode ? urlencode($url) : $url;
     return Router::url($url, $model);
+}
+
+
+/**
+ * 正则提取文本中的url替换成可点击链接
+ * 
+ * @param srting $url
+ * @return string
+ */
+function addLink($msg)
+{
+    // 解析链接
+    function parseLink($linkArr)
+    {
+        $link = $linkArr[0];
+        $url = (strpos($link, '://') === false) ? 'http://'.$link : $link;
+        return "<a href=\"{$url}\" target=\"_blank\" rel=\"nofollow\">{$link}</a>";
+    }
+    return preg_replace_callback('#([(http?|ftp)://a-zA-Z0-9]*\.[a-zA-Z0-9\.]*[a-zA-Z])+([a-zA-Z0-9\~\!\@\#\$\%\^\&amp;\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?#', 'parseLink', $msg);
 }

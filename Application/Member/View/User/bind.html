@@ -1,0 +1,107 @@
+{{include file="../Include/user_head.html"}}
+
+<script type="text/javascript">
+
+var login = false;
+
+function checkEmail() {
+	var url='{{$smarty.const.__URL__&a=check|url}}';
+	var value = $("#email").val();
+	if(value == ""){alert("请输入您的邮箱！");return false;}
+	var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/; //验证邮箱的正则表达式
+	if(!reg.test(value)){alert("邮箱格式不对");return false;}
+	var ret;
+	$.ajax({'url':url,'async':false,'dataType':'json','data':{'name':'email','value':value},'success':function(data){ret=data;}});
+	// 邮箱已注册
+	if(ret.message == false)
+	{
+		login = true;
+		$("#infoBox").css("display", "block");
+		$("#pwd2Text").css("display", "none");
+	}
+	else
+	{
+		login = false;
+		$("#infoBox").css("display", "none");
+		$("#pwd2Text").css("display", "block");
+	}
+}
+
+function changeEmail()
+{
+	$("#email").val("");
+	$("#infoBox").css("display", "none");
+	$("#pwd2Text").css("display", "block");
+}
+
+
+function bind()
+{
+	var email = $("#email").val();
+	if(email == ""){alert("请输入您的邮箱！");return false;}
+	var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/; //验证邮箱的正则表达式
+	if(!reg.test(email)){alert("邮箱格式不对");return false;}
+	var password =  $("#password").val();
+	var password2 =  $("#password2").val();
+	if(!login)
+	{
+		if(password.length < 6 || password2 < 6)
+		{
+			alert("密码不能少于6位.");
+			return false;
+		}
+		if(password != password2)
+		{
+			alert("您输入的两次密码不一致.");
+			return false;
+		}
+	}
+	else
+	{
+		if(password=="")
+		{
+			alert("请输入您的密码.");
+			return false;
+		}
+	}
+		
+	var ret = null;
+	$.ajax({'url':"{{$smarty.const.__ACTION__|url}}",'async':false,'dataType':'json','data':{'email':email,'password':password,'password2':password2,'type':(login ? 1 : 2)},'success':function(data){ret=data;}});
+	if(ret.statusCode == 200)
+	{
+		window.location = ret.message;
+	}
+	else
+	{
+		alert(ret.message);
+	}
+}
+
+</script>
+
+<div id="outterWrapper">
+<div id="container">
+	<div id="header">
+    	<h1 class="bannerModifyMail">修改电子邮件</h1>
+    </div>
+    <div id="content">
+    	<div id="main">
+            <div class="globalNotice">
+	<div class="regNotice">
+		<p style="color:green;"><img src="{{$userInfo.avatar}}">&nbsp;&nbsp;<b>{{$userInfo.name}}，您好！您正在通过第三方链接登录，请填写你的邮箱。</b></p>
+	</div>
+</div>
+<div id="sideMain">
+	<div id="validMail">
+	<form method="post" action="{{$smarty.const.__ACTION__|url}}">
+		<p class="changeMail">邮箱：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" class="text" name="email" maxlength="50" id="email" onblur="checkEmail()"/></p>
+		<p style="color: red;display: none;" id="infoBox">此邮箱已注册，请直接登录绑定，或<a href="javascript:void(0);" onclick="changeEmail();">更换邮箱</a></p>
+		<p class="changeMail">密码：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" class="text" name="password" maxlength="50" id="password"/></p>
+		<p class="changeMail" id="pwd2Text">确认密码：<input type="password" class="text" name="password2" maxlength="50" id="password2"/></p>
+		<p class="button">
+		  <input type="button" value="登录并绑定" class="button" style="width:13em;" onclick="bind()"/>
+		</p>
+	</form>
+	</div>
+</div>
+{{include file="../Include/user_foot.html"}}

@@ -29,9 +29,9 @@
 #index #syndication h3 strong { background-position:0 -285px; }
 #index .subContent h3 .more { margin-top:10px; }
 
-#focus670x160 { width:670px; height:180px; overflow:hidden; position:relative; margin-bottom:15px; }
-#focus670x160 .pics { width:670px; height:180px; overflow:hidden; }
-#focus670x160 .pics img { width:670px; height:180px; }
+#focus670x160 { width:670px; height:160px; overflow:hidden; position:relative; margin-bottom:15px; }
+#focus670x160 .pics { width:670px; height:160px; overflow:hidden; }
+#focus670x160 .pics img { width:670px; height:160px; }
 #focus670x160 #nav670x160 { position:absolute; right:5px; bottom:5px; z-index:99; } 
 #focus670x160 #nav670x160 a { display:block; width:19px; height:19px; line-height:19px; text-align:center; font-weight:bold; float:left; background:url(../imgs/btn_focusnav.png) no-repeat 0 0; color:#fff; float:left; margin-left:2px;  }
 #focus670x160 #nav670x160 a.activeSlide { width:26px; background-position:100% 0; }

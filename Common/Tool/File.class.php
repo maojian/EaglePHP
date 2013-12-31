@@ -80,7 +80,7 @@ class File
 		$writeCheck = fwrite($handle, $data);
 		$method == self::READWRITE && ftruncate($handle, strlen($data));
 		fclose($handle);
-		$ifChmod && chmod($fileName, 0777);
+		//$ifChmod && chmod($fileName, 0777);
 		return $writeCheck;
 	}
 
@@ -243,6 +243,65 @@ class File
 			
 			return $mimes;
 	}
+	
+	
+
+    /**
+     *  PHP-HTTP断点续传实现
+     *  
+     *  @param string $file 文件路径
+     *  @param string $name 文件名称
+     *  @return void
+     */
+    public static function download($file, $name='') 
+    {
+        $name = $name ? $name : basename($file);
+        if(!file_exists($file)) return false;
+        $size = filesize($file);
+        $size2 = $size-1;
+        $range = 0;
+        if(isset($_SERVER['HTTP_RANGE'])) 
+        {
+            header('HTTP /1.1 206 Partial Content');
+            $range = str_replace('=','-',$_SERVER['HTTP_RANGE']);
+            $range = explode('-',$range);
+            $range = trim($range[1]);
+            header('Content-Length:'.$size);
+            header('Content-Range: bytes '.$range.'-'.$size2.'/'.$size);
+        } 
+        else 
+        {
+            header('Content-Length:'.$size);
+            header('Content-Range: bytes 0-'.$size2.'/'.$size);
+        }
+        header('Accenpt-Ranges: bytes');
+        header('application/octet-stream');
+        header("Cache-control: public");
+        header("Pragma: public");
+        
+        //解决在IE中下载时中文乱码问题
+        $ua = $_SERVER['HTTP_USER_AGENT'];
+        if(preg_match('/MSIE/',$ua)) 
+        {
+            $ie_filename = str_replace('+','%20',urlencode($name));
+            header('Content-Disposition:attachment; filename='.$ie_filename);
+        }  
+        else 
+        {
+            header('Content-Disposition:attachment; filename='.$name);
+        }
+        $fp = fopen($file,'rb+');
+        fseek($fp,$range);
+        while(!feof($fp)) 
+        {
+            set_time_limit(0);
+            print(fread($fp,1024));
+            flush();
+            ob_flush();
+        }
+        fclose($fp);
+    }
+
 	
 	
 }

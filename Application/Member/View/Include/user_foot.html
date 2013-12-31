@@ -1,0 +1,36 @@
+<div id="sideSub">
+	{{if $class}}
+	<div class="regFlow">
+		<ol class="{{$class}}">
+			<li>填写信息</li>
+			<li>验证邮件</li>
+			<li>注册成功</li>
+		</ol>
+	</div>
+	{{/if}}
+	<script type="text/javascript">
+	$($('div.regFlow li')[0]).wrapInner('<strong></strong>');
+	</script>
+	<div class="subNotice">
+		<p>注册通行证:</p>
+		<p>让您写博、交友、互动，一个都不少。</p>
+	</div>
+	{{if !$class}}
+	<div class="toReg">
+		<a href="{{$smarty.const.__ROOT__?c=user&a=oauth&type=QQ|url}}"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/qqlogin.png" /></a>&nbsp;&nbsp;
+		<a href="{{$smarty.const.__ROOT__?c=user&a=oauth&type=Sina|url}}"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/weibologin.png" /></a>
+		<br/><br/>
+		<a href="{{$smarty.const.__URL__&a=register|url}}" title="还没有通行证？立即注册 &raquo;"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/toreg.png" width="210" height="21" alt="还没有通行证？立即注册 &raquo;" /></a>
+	</div>
+	{{/if}}
+</div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div id="footer">
+    	<div class="copyright">{{'cfg_powerby'|getCfgVar}}<br/></div>
+    </div>
+</div>
+</div>
+</body>
+</html>

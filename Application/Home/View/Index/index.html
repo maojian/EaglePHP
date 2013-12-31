@@ -103,10 +103,62 @@ $(function() {
 
 
 <div class="subContent">
-<div class="module">
-<embed src="{{$video.url}}" quality="high" width="277" height="180" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" wmode="Transparent"></embed>
-</div>
+<script language="JavaScript" type="text/javascript">
+<!--
+function chk_login(obj){
+	if(obj.username.value == ""){
+		alert("请填写用户名");
+		obj.username.focus();
+		return false;
+	}
+	if(obj.password.value == ""){
+		alert("请填写密码");
+		obj.password.focus();
+		return false;
+	}
+}
+//-->
+</script>
+<div id="login" class="module">
+		{{if $is_login}}
+    	<div class="loged">
+            <div class="userInfo">
+            	<a href="" class="avatar" title="更换头像" target="_blank"><img src="{{$userInfo.avatar}}" id="loged_avatar" width="48" height="48"></a>
+                <div class="text">
 
+                <h5><span id="cur_time">{{$tip}}</span>，<span id="cur_username_2">{{$userInfo.username}}</span>！</h5>
+                <div class="weather pub_dropmenuP"><a href="javascript:;" class="city" onclick="$('#dm_changCity').slideToggle('fast')" id="user_city"></a> <span id="weather_block"></span>
+      	</div>
+              </div>
+              <div class="clear"></div>
+          </div>
+          <div class="miniDash">
+            <div class="button">
+                <a class="button_n" href="{{$smarty.const.__PROJECT__member|url}}"><em>管理中心</em></a> <a class="button_n" href="{{$smarty.const.__PROJECT__member/?c=user&a=logout|url}}"><em>退出</em></a>
+                </div>
+          </div>
+        </div>
+        {{else}}
+    	<div class="login" style="">
+    	<form action="{{$smarty.const.__PUB__member/index.php?c=user&a=login|url}}" method="post" name="frmLogin" onsubmit="javascript:return chk_login(this)">
+        	<ul>
+            	<li class="login01"><span>用户名</span> <input class="textfield" type="text" name="username" value="{{$member_name}}"></li>
+
+                <li class="login02"><span>密　码</span> <input class="textfield" type="password" name="password"></li>
+            </ul>
+            <div class="remember">
+            <span><input type="checkbox" name="remember" id="remember"  {{if $member_name}}checked="checked"{{/if}}> <label for="remember">记住我</label></span>
+            <a href="{{$smarty.const.__PUB__member/index.php?c=user&a=findPwd|url}}">忘记密码</a>
+            </div>
+
+            <div class="button">
+            	<input type="submit" value="登录" class="btn_login">
+                <input type="button" value="注册" class="btn_reg" onclick="location.href='{{$smarty.const.__PUB__member/index.php?c=user&a=register|url}}'">
+            </div>
+         </form>
+         </div>
+         {{/if}}
+    </div>
 <div id="indexSearch" class="module">
 <form action="{{$smarty.const.__ROOT__?c=news|url}}" method='post'>
 <input type="text" class="textfield" name="content" value="搜索你感兴趣的博客内容" onfocus="if (this.value == '搜索你感兴趣的博客内容') this.value = '';" onblur="if (this.value == '') this.value = '搜索你感兴趣的博客内容';" /> 

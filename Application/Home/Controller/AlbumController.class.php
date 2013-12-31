@@ -20,7 +20,7 @@ class AlbumController extends CommonController{
         }
 		$this->assign('list', $list);
 		$this->assign('page', $page->show(4));
-		$this->assign('title', '相册');
+		$this->assign('title', '相册名称大全,qq相册封面拼图,qq相册名称');
         $this->display();
     }
     

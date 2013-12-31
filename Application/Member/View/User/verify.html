@@ -1,0 +1,25 @@
+{{include file="../Include/user_head.html"}}
+<div id="outterWrapper">
+<div id="container">
+	<div id="header">
+    	<h1 class="bannerValid">验证电子邮件</h1>
+    </div>
+    <div id="content">
+    	<div id="main">
+            <div id="sideMain">
+	<div id="validMail">
+		<p style="font-weight:normal;">验证邮件已发送至 <span class="caution">{{$email}}</span></p>
+		<p class="loginMail" style="font-weight:normal;">请登录您的邮箱查收：<a href="{{$email_host}}" target="_blank" class="popup" style="font-weight:bold;">{{$email_host}}</a></p>
+		<p class="notice">点击邮件中的验证链接，即可验证你的电子邮件。</p>
+	</div>
+	<div id="solution">
+		<p>如果 15 分钟内没有收到电子邮件？请试试以下方法</p>
+		<ul>
+			<li>电子邮件地址写错了？<a href="{{$smarty.const.__URL__&a=editEmail|url}}">点击这里修改</a></li>
+			<li>看看是否在邮箱的垃圾邮件里。</li>
+			<li><a href="{{$smarty.const.__ACTION__|url}}">点击这里重新发送</a></li>
+			<!-- <li>如上述方法无效，请点击<a target="_blank" href="">这里</a></li>  -->
+		</ul>
+	</div>
+</div>
+{{include file="../Include/user_foot.html"}}

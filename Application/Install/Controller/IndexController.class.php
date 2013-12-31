@@ -95,16 +95,16 @@ class IndexController extends Controller {
 				$hava_db = false;
 				if(is_array($databases)){
 					foreach($databases as $dbName){
+						$dbName = current($dbName);
 						if($dbName == $database){
 							$hava_db = true;
 							break;
 						}
 					}
 				}
-
-				if(!$hava_db){
-					$model->execute("CREATE DATABASE $database;");
-				}
+				// 如果数据库不存在，则自动创建
+				if(!$hava_db) $model->execute("CREATE DATABASE $database;");
+				else redirect(__ROOT__.'?c=index&a=two', 3, '很抱歉，数据库‘'.$database.'’已经存在!');
 				$this->redirect('?c=index&a=three');
 			}
 		}
@@ -150,10 +150,7 @@ class IndexController extends Controller {
 				$tables[] = $tabName;
 			}
 		}
-		if(!Log::isError())
-		{
-		    file_put_contents(DATA_DIR.'Install/INSTALL.LOCK', 'ok');
-		}
+		if(!Log::isError()) file_put_contents(DATA_DIR.'Install/INSTALL.LOCK', 'ok');
 		$this->assign('tables', $tables);
 		$this->assign('file', str_replace('\\', '//', $_SERVER['SCRIPT_FILENAME']));
 		$this->display();

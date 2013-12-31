@@ -8,9 +8,9 @@
     'dbport' => '3306',
     'dbuser' => 'root',
     'dbpwd' => '',
-    'dbname' => 'hahahcms',
+    'dbname' => 'eaglephp_publish',
     'dbcharset' => 'utf8',
-    'dbprefix' => 'eag_',
+    'dbprefix' => '',
   ),
 );
 return $dbs; 

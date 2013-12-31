@@ -189,7 +189,7 @@ class DatabaseController extends CommonController{
      * 数据库还原
      */
     public function doneAction(){
-        $ids = $this->get('ids');
+        $ids = $this->post('ids');
         if($ids){
              // 正式对表数据还原
              $date = $this->get('date');

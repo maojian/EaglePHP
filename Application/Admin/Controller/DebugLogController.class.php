@@ -26,6 +26,7 @@ class DebugLogController extends CommonController{
     private function getLogDir(){
         if(!is_dir($this->logDir)) return false;
     	$dirObj = opendir($this->logDir);
+    	$logDirArr = array();
     	while($file = readdir($dirObj)){
     		if($file!='.' && $file!='..' && is_dir($this->logDir.'/'.$file)){
     			$logDirArr[$file] = $file;

@@ -36,11 +36,13 @@ class ManagerController extends CommonController {
 	 */
 	protected function getChannelBox($channelIds='')
 	{
+	    $channelArr = array();
+	    $box = null;
 	    if($channelIds) $channelArr = explode(',', $channelIds);
 	    $list = model('helper')->getNewsTypeList();
 	    foreach ($list as $k=>$v)
 	    {
-	        $box .= "<option value='{$k}' ".(in_array($k, $channelArr) ? 'selected="true"' : '').">{$v}</option>";
+	        $box .= "<option value='{$k}' ".(is_array($channelArr) && in_array($k, $channelArr) ? 'selected="true"' : '').">{$v}</option>";
 	    }
 	    return $box;
 	}

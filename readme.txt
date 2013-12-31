@@ -135,13 +135,13 @@ class IndexController extends Controller{
 /******************* 联系方式  ******************/
 
 使用框架过程中如果遇到什么疑问或者建议，请联系我。
-Email：maojianlw@139.com
-QQ:   408865477
-QQ群：     244174426
+Email: maojianlw@139.com
+QQ:    408865477
+QQ群:  244174426
 
-EaglePHP官网：           http://www.eaglephp.com
-EaglePHP留言反馈：   http://www.eaglephp.com/index.php/message
-EaglePHP Github: https://github.com/maojian/EaglePHP
-EaglePHP Googlecode：   http://eaglephp.googlecode.com
+EaglePHP官网:           http://www.eaglephp.com
+EaglePHP留言反馈:   	http://www.eaglephp.com/index.php/message
+EaglePHP Github:	https://github.com/maojian/EaglePHP
+EaglePHP Googlecode:   	http://eaglephp.googlecode.com
 							
 																	

@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员中心_{{'cfg_webname'|getCfgVar}}</title>
+<link href="{{$smarty.const.__APP_RESOURCE__}}css/manage.css" type="text/css" rel="stylesheet" />
+<style>
+
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<div class="topwrap">
+<div id="header">
+<div class="logo"><img src="{{$smarty.const.__APP_RESOURCE__}}imgs/mlogo.gif"/></div>
+<div class="menu">
+<a href="{{$smarty.const.__PROJECT__|url}}" target="_blank" style="float:right;margin-right:0; padding:0; font-size:13px;">{{'cfg_webname'|getCfgVar}}首页</a>
+<a href="{{$smarty.const.__ROOT__}}" class="menuon">管理首页</a>
+<a href="{{$smarty.const.__ROOT__?c=user&a=logout|url}}">退出</a>
+</div>
+</div>
+</div>

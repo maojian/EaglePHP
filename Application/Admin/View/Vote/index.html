@@ -64,7 +64,7 @@
 				<td>
 					<a href="{{$smarty.const.__URL__&a=update&id=$list[loop].id|url}}" class="btnEdit" target="dialog" width="800" height="500" title="编辑">编辑</a>
 					<a href="{{$smarty.const.__URL__&a=getCode&id=$list[loop].id|url}}" class="btnView" target="dialog" width="800" height="500" title="获取代码">获取代码</a>
-					<a href="{{$smarty.const.__PUB__}}index.php?c=vote&a=view&id=$list[loop].id|url}}" class="btnLook" target="_blank" title="投票结果">投票结果</a>
+					<a href="{{$smarty.const.__PUB__index.php?c=vote&a=view&id=$list[loop].id|url}}" class="btnLook" target="_blank" title="投票结果">投票结果</a>
 					<a target="ajaxTodo" href="{{$smarty.const.__URL__&a=delete&ids=$list[loop].id|url}}" class="btnDel" title="确定要删除吗?">删除</a>
 				</td>
 			</tr>

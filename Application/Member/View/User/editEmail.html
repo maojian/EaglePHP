@@ -1,0 +1,32 @@
+{{include file="../Include/user_head.html"}}
+<div id="outterWrapper">
+<div id="container">
+	<div id="header">
+    	<h1 class="bannerModifyMail">修改电子邮件</h1>
+    </div>
+    <div id="content">
+    	<div id="main">
+            <div class="globalNotice">
+	<div class="regNotice">
+		<p>{{$message|default:"修改电子邮件。"}}</p>
+	</div>
+</div>
+<div id="sideMain">
+	<div id="validMail">
+	<form method="post" action="{{$smarty.const.__ACTION__|url}}">
+		<p>你之前填写的电子邮件 <span class="caution">{{$email}}</span></p>
+		<p class="changeMail">新的电子邮件 <input type="text" class="text" name="email" maxlength="50" /></p>
+		<p class="button">
+		  <input type="submit" value="修改并发送新的验证邮件" class="button" style="width:13em;" />
+		</p>
+	</form>
+	</div>
+	<div id="solution">
+		<p>仍然没有收到电子邮件？请试试以下方法：</p>
+		<ol>
+			<li>看看是否在邮箱的垃圾邮件里。</li>
+			<li>直接使用您注册的<span class="caution">{{$email}}</span>发送邮件至 <strong>{{'cfg_adminemail'|getCfgVar}}</strong>，<br />邮件主题为您的用户名，正文内容为“验证邮件”。</li>
+		</ol>
+	</div>
+</div>
+{{include file="../Include/user_foot.html"}}

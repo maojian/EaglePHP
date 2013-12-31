@@ -67,7 +67,7 @@ class VideoController extends CommonController{
 			}
 		}else{
 		    $this->assign('state_arr', $this->state_arr);
-			$this->display('Case/action');
+			$this->display('Video/action');
 		}
 	}
 	
@@ -88,7 +88,7 @@ class VideoController extends CommonController{
 			$info = $this->cur_model->where("id=$id")->find();
 			$this->assign('info', $info);
 			$this->assign('state_arr', $this->state_arr);
-			$this->display('Case/action');
+			$this->display('Video/action');
 		}
 	}
 

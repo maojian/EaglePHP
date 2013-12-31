@@ -15,12 +15,13 @@ class NewsController extends CommonController{
         $type_id = (int)$this->get('type');
         if($type_id){
             $type_info = model('news_type')->field('title')->where("id=$type_id")->find();
-            $this->assign('type_name', $type_info['title']);
+            $title = $type_info['title'];
+            $this->assign('type_name', $title);
+            $this->assign('alternate', $this->getAlternate($title, $type_id));
             $this->assign('title', $type_info['title']);
         }else{
             $this->assign('title', '文章搜索');
         }
-        
     	$this->display();
     }
     
@@ -85,6 +86,13 @@ class NewsController extends CommonController{
     }
     
     
+    protected function getAlternate($title, $type)
+    {
+        $url = HttpRequest::getHostInfo().'/index.php?c=rss&a=xml&type='.$type;
+        $text = '<link rel="alternate" type="application/rss+xml" title="'.$title.' - '.getCfgVar('cfg_webname').'" href="'.url($url).'" />';
+        return $text;
+    }
+    
     /**
      * 新闻内容页
      */
@@ -127,6 +135,7 @@ class NewsController extends CommonController{
     	}
     	
     	$this->assign('title', "{$info['title']} | {$parent_arr[$type_id]}");
+    	$this->assign('alternate', $this->getAlternate($parent_arr[$type_id], $type_id));
     	$this->assign('keywords', $keywords);
     	$this->assign('description', $info['description']);
     	$this->assign('info', $info);

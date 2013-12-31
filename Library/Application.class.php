@@ -16,22 +16,26 @@ class Application
      */
     public static function init()
     {
+        if(__CLI__)
+        {
+            Router::cliParse();
+            return;
+        }
         switch (URL_MODEL)
         {
             case 1:
                  Router::ordinaryParse();
                  break;
             case 2:
+                 Behavior::checkRoute();
                  Router::pathinfoParse();
                  break;
             case 3:
+                 Behavior::checkRoute();
                  Router::htmlParse();
                  break;
-             default:
-                 Router::cliParse();
-                 break;
         }
-		Behavior::checkRefresh();
+	    Behavior::checkRefresh();
     }
      
     

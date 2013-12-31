@@ -75,6 +75,12 @@ class Log
      * @var array
      */
     static $log = array();
+    
+    /**
+     * 错误追溯信息
+     * @var array
+     */
+    static $trace = array();
 
     /**
      * 信息级别
@@ -102,12 +108,9 @@ class Log
      */
     public static function shutdonwHandler()
     {
-        if (!is_null($last_error = error_get_last()))
-        {
-            self::errorHandler($last_error['type'], $last_error['message'], $last_error['file'], $last_error['line'], '');
-        }
+        if (!is_null($last_error = error_get_last())) self::errorHandler($last_error['type'], $last_error['message'], $last_error['file'], $last_error['line'], '');
         self::writeAccessLog(); // 记录访问日志
-        self::writeDebugLog(); // 记录系统日志
+        //self::writeDebugLog(); // 记录系统日志
         Session::writeClose(); // 关闭session写入
     }
     
@@ -124,14 +127,27 @@ class Log
      */
     public static function errorHandler($error_no, $msg, $file, $line, $vars)
     {
+    	if(error_reporting() === 0) return;// 加了@符号的错误将不再输出，也不会记录。
+        self::$trace['error_no'] = $error_no;
+        self::$trace['message'] = $msg;
+        self::$trace['file'] = $file;
+        self::$trace['line'] = $line;
+        
         // 调试信息
+        /*
         if (isset ($vars['debug_backtrace']))
         {
-            $debug_backtrace = $vars['debug_backtrace'][0];
+            self::$trace['debug_backtrace'] = $vars['debug_backtrace'];
+            $debug_backtrace = self::$trace['debug_backtrace'][0];
             $request_array['DEBUG_BACKTRACE'] = $debug_backtrace;
             $file = $debug_backtrace['file'];
             $line = $debug_backtrace['line'];
         }
+        else
+        {
+            self::$trace['debug_backtrace'] = $vars;
+        }
+        */
 
         switch($error_no)
         {
@@ -174,6 +190,7 @@ class Log
         $msg = str_replace(chr(13).chr(10), '', $msg);
         $message = "[$error_no]{$separator}{$msg}{$separator}{$file}{$separator}{$line}";
         self::record($message, $level);
+        self::writeDebugLog(); // 记录系统日志
     }
 
 
@@ -207,6 +224,11 @@ class Log
             self::$log[] = $data;
         }
     }
+    
+    protected static function isDebug()
+    {
+    	return getCfgVar('cfg_debug_mode') == 1;
+    }
 
 
     /**
@@ -231,15 +253,20 @@ class Log
             {
                 sendMail(getCfgVar('cfg_adminemail'), language('SYSTEM:app.error', array(APP_NAME)), nl2br($message));
             }
-
+            
             // 如果开启调式，就输出信息
-            if(getCfgVar('cfg_debug_mode') == 1)
+            if(self::isDebug())
             {
-                halt(implode('<br/>', self::$log));
+                halt(self::$log);
             }
             else
             {
-                halt(language('SYSTEM:server.error', array(getCfgVar('cfg_adminemail'))));
+                // 线上环境错误提示信息
+                ob_end_clean();
+                self::$trace = array();
+                $msg = language('SYSTEM:server.error', array(getCfgVar('cfg_adminemail')));
+                self::$trace['message'] = $msg;
+                halt($msg);
             }
         }
     }
@@ -347,5 +374,71 @@ class Log
 		$debug_backtrace = debug_backtrace();
 		trigger_error($message, E_USER_NOTICE);
 	}
-
+	
+	
+	/**
+	 * 显示错误追溯信息
+	 */
+	public static function showDebugBackTrace()
+	{
+	    $text1 = $text2 = null;
+	    $traceArr = (isset(self::$trace['debug_backtrace']) && !empty(self::$trace['debug_backtrace'])) ? self::$trace['debug_backtrace'] : debug_backtrace();
+	    if(!empty(self::$trace['file']))
+	    {
+	        $text1 .= '<div class="info"><h1>('.self::$trace['error_no'].')'.self::$trace['message'].'</h1><div class="info2">FILE: '.self::$trace['file'].' &#12288;LINE:'.self::$trace['line'].'</div></div>';
+	    }
+	    else
+	    {
+	        $text1 .= '<div class="info"><h1>'.self::$trace['message'].'</h1></div>';
+	    }
+	    
+	    if(self::isDebug() && is_array($traceArr))
+	    {
+	        $text2 = '<div class="info"><p><strong>PHP Debug</strong></p><table cellpadding="5" cellspacing="1" width="100%" class="table"><tr class="bg2"><td>No.</td><td>File</td><td>Line</td><td>Code</td></tr>';
+            $dapArr = array('halt()', 'Log::errorHandler()', 'Log::writeDebugLog()', 'Log::showDebugBackTrace()');
+	        foreach ($traceArr as $k=>$v)
+    	    {
+    	        $file = isset($v['file']) ? $v['file'] : '';
+    	        $line = isset($v['line']) ? $v['line'] : '';
+    	        $function = isset($v['function']) ? $v['function'] : '';
+    	        $class = isset($v['class']) ? $v['class'] : '';
+    	        $type = isset($v['type']) ? $v['type'] : '';
+    	        $callText ="{$class}{$type}{$function}()";
+    	        if(in_array($callText, $dapArr)) continue;
+    	        $text2 .= "<tr class='bg1'><td>".($k+1)."</td><td>{$file}</td><td>{$line}</td><td>{$callText}</td></tr>";
+    	    }
+    	    $text2 .= '</table></div><div class="help"><a href="http://www.eaglephp.com">EaglePHP</a><sup>2.7</sup></div>';
+	    }
+	    
+	    $html = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                 <html>
+                 <head>
+                	<title>System Error - EaglePHP Framework</title>
+                	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                	<meta name="ROBOTS" content="NOINDEX,NOFOLLOW,NOARCHIVE" />
+                	<style type="text/css">
+                	<!--
+                	body { background-color: white; color: black; font: 9pt/11pt verdana, arial, sans-serif;}
+                	#container { width: 1024px; margin:0 auto}
+                	#message   { width: 1024px; color: black; }
+                	 .red  {color: red;}
+                	 a:link     { font: 9pt/11pt verdana, arial, sans-serif; color: red; }
+                	 a:visited  { font: 9pt/11pt verdana, arial, sans-serif; color: #4e4e4e; }
+                	 h1 { color: #FF0000; font: 18pt "Verdana"; margin-bottom: 0.5em;}
+                	.bg1{ background-color: #FFFFCC;}
+                	.bg2{ background-color: #EEEEEE;}
+                	.table {background: #AAAAAA; font: 11pt Menlo,Consolas,"Lucida Console"}
+                	.info {background: none repeat scroll 0 0 #F3F3F3;border: 0px solid #aaaaaa;border-radius: 10px 10px 10px 10px;color: #000000;font-size: 11pt;line-height: 160%;margin-bottom: 1em;padding: 1em;}
+                	.help {background: #F3F3F3;border-radius: 10px 10px 10px 10px;font: 12px verdana, arial, sans-serif;text-align: center;line-height: 160%;padding: 1em;}
+                	.info2 {background: none repeat scroll 0 0 #FFFFCC;border: 1px solid #aaaaaa;color: #000000;font: arial, sans-serif;font-size: 9pt;line-height: 160%;margin-top: 1em;padding: 4px;}
+                	-->
+                	</style>
+                </head>
+                <body>
+                <div id="container">'.$text1.$text2.'</div>
+                </body>
+                </html>';
+	    exit($html);
+	}
+	
 }

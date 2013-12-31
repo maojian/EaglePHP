@@ -69,7 +69,8 @@ class AutoLoader
         {
             $file = APP_DIR."Controller/{$class_name}.class.php";
         }
-        else{
+        else
+        {
             $file = ROOT_DIR.self::getAutoloadConfig($class_name);
         }
         $rc = false;
@@ -102,7 +103,7 @@ class AutoLoader
                 $autoloadConfigArr = self::setAutoloadConfig();
             }
         }
-        return isset($autoloadConfigArr[$key]) ? $autoloadConfigArr[$key] : $autoloadConfigArr;
+        return isset($autoloadConfigArr[$key]) ? $autoloadConfigArr[$key] : '';
     }
 
 

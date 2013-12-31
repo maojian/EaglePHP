@@ -13,7 +13,7 @@ class CaseController extends CommonController{
         $this->state_arr = array(0=>'开启', 1=>'关闭');
 		$this->cur_model = model('case');
 	}
-    
+	
 	public function indexAction(){
 		$page = $this->page($this->cur_model->where(true)->count());
 		$list = $this->cur_model->where(true)->order($page['orderFieldStr'])->limit("{$page['limit']},{$page['numPerPage']}")->select();

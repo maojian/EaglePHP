@@ -9,7 +9,7 @@ class TaoBaoController extends CommonController{
     private $taobaoClient = null;
     
     public function __construct(){
-        import('Sdk.taobao.ClientApi');
+        import('Sdk.Taobao.ClientApi');
         $this->taobaoClient = ClientApi::getInstance();
     }
     

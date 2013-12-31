@@ -77,7 +77,8 @@ class NewsController extends CommonController {
 	    $matchs = array();
 	    
 	    // 自动提取关键字
-	    if($cfg_arc_autokeyword == 1 && empty($keywords)){
+	    if($cfg_arc_autokeyword == 1 && empty($keywords))
+	    {
 	        try 
 	        {
 	            $sw = new SplitWord();
@@ -194,22 +195,27 @@ class NewsController extends CommonController {
 	       }
 	    }
 	    
+	    $is_remote_file = true;
 	    // 提取第一张图片为缩略图 
 	    if($autolitpic == 1){
 	        if(empty($one_img)){
 	            preg_match($regexp, $content, $matchs);
-      	        $img = $matchs[1];
-	            $path_info_arr = parse_url($img);
-	            
-	            // 提取用户上传的照片
-     	        if(isset($path_info_arr['host']) && in_array($path_info_arr['host'], array($host, ''))){
-     	            $one_img = $path_info_arr['path'];
-     	        }else{
-     	            $path_arr = pathinfo($path_info_arr['path']);
-         	        $file_name = time().rand(1000, 9999).'.'.$path_arr['extension'];
-         	        file_put_contents($upload_dir.$file_name, curlRequest($img));
-         	        $one_img = __UPLOAD__.$img_dir.$file_name;
-     	        }
+      	        $img = isset($matchs[1]) ? $matchs[1] : '';
+				if(!empty($img)){
+					$path_info_arr = parse_url($img);
+					
+					// 提取用户上传的照片
+					if(isset($path_info_arr['host']) && in_array($path_info_arr['host'], array($host, '')) || !isset($path_info_arr['host'])){
+						$one_img = $path_info_arr['path'];
+						$is_remote_file = false;
+					}else{
+						$path_arr = pathinfo($path_info_arr['path']);
+						$file_name = time().rand(1000, 9999).'.'.$path_arr['extension'];
+						file_put_contents($upload_dir.$file_name, curlRequest($img));
+						$one_img = __UPLOAD__.$img_dir.$file_name;
+						$is_remote_file = true;
+					}
+				}
 	        }
 	        
 	        // 此处对提取的第一张图片进行缩略图处理
@@ -222,7 +228,7 @@ class NewsController extends CommonController {
 	            if($r !== false){
 	               $_POST['img'] = __UPLOAD__.$img_dir.$file_name;
 	               // 如果不是远程图片本地化，就删除提取的第一张图片
-	               if($remote == 0){unlink($org_img);}
+	               if($remote == 0 && $is_remote_file){unlink($org_img);}
 	            }
 	        }
 	    }
@@ -249,7 +255,8 @@ class NewsController extends CommonController {
 	    if(empty($host)) $this->ajaxReturn(300, language('NEWS:url.error'));
 	    $content = curlRequest($url);
 	    if($content === false) $this->ajaxReturn(300, language('NEWS:url.not.open'));
-	       
+	    
+	    $sw = $ew = '';
 	    // 提取采集规则进行内容匹配
 	    $pick_info = model('pick')->field('lang,rule')->where("url LIKE '%{$host}%'")->find();
 	    if($pick_info){
@@ -257,7 +264,7 @@ class NewsController extends CommonController {
     	    $sw = $rule_arr[0];
     	    $ew = $rule_arr[1];
     	    if(($lang = $pick_info['lang']) == 'gb2312'){
-    	         $content = iconv($lang, 'utf-8', $content);
+    	         $content = iconv('GBK//IGNORE', 'utf-8', $content);
     	    }
 	    }
 	    
@@ -385,7 +392,7 @@ class NewsController extends CommonController {
 		    function delImg($file){
     		    static $i = 0;
     		    $img_file = realpath(getUploadAddr().str_replace(__UPLOAD__, '', $file));
-         	    if(file_exists($img_file)) if(unlink($img_file)) $i++;
+         	    if(is_file($img_file)) if(unlink($img_file)) $i++;
          	    return $i;
     		}
     		
@@ -444,8 +451,8 @@ class NewsController extends CommonController {
 	 */
 	public function uploadAction(){
 		if($this->isPost() && count($this->file()) > 0){
-			$immediate = (int)$this->post('immediate');
-			$target = $this->post('target');
+			$immediate = (int)$this->request('immediate');
+			$target = $this->request('target');
 			$dir_arr = $this->getUploadDir($target);
 			$fileName = $this->upload($dir_arr['uploadDir'], '*');
 			$url = (($immediate) ? '!' : '' ).__UPLOAD__.$dir_arr['imgDir'].$fileName;

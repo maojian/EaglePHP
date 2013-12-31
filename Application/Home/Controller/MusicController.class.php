@@ -22,7 +22,7 @@ class MusicController extends CommonController{
 		$this->assign('url', url(__PUB__.'api/index.php?c=xiami', false, 1));
 		$this->assign('music', trim($music, ','));
 		$this->assign('list', $list);
-		$this->assign('title', '音乐');
+		$this->assign('title', '酷狗音乐盒2013官方免费下载,qq音乐,音乐台');
 		$this->assign('hot_news', model('news')->getHot());
         $this->display();
     }

@@ -12,7 +12,7 @@ class TaobaoController extends CommonController{
     private $sorts = array();
     
     public function __construct(){
-        import('Sdk.taobao.ClientApi');
+        import('Sdk.Taobao.ClientApi');
         $this->taobaoClient = ClientApi::getInstance();
         $this->sorts = array(
             'price_desc' => '价格从高到低', 
@@ -33,11 +33,11 @@ class TaobaoController extends CommonController{
         if($start_price === 0) $start_price = '';
         if($end_price === 0) $end_price = '';
         if($keyword == '搜索你感兴趣的商品') $keyword = '';	
-        if(HttpRequest::isGet() && $keyword)
+        /*if(HttpRequest::isGet() && $keyword)
         {
             $keyword = mb_convert_encoding($keyword, 'utf-8', 'gbk');
             $this->request('keyword', $keyword);
-        }
+        }*/
         if(preg_match('#林志玲|范冰冰|充气|自慰|真人#', $keyword) || $cid==2813) redirect(__URL__ , 3, '禁止搜索');
         $perpage = 33;
         $data = $this->taobaoClient->getTaoBaoKeItems(array('cid'=>$cid, 'sort'=>$sort, 'start_price'=>$start_price, 'end_price'=>$end_price, 'keyword'=>$keyword, 'page'=>$pageNum, 'page_size'=>$perpage));
@@ -54,7 +54,7 @@ class TaobaoController extends CommonController{
     	$this->assign('cats', $this->taobaoClient->getItemCates());
         $this->assign('list', $data['list']);
         $this->assign('page', $page->show(4));
-        $this->assign('title', '淘宝');
+        $this->assign('title', '淘宝网,淘宝商城,淘宝网首页');
         $this->assign('sorts', $this->sorts);
         $this->display();
     }

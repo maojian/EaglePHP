@@ -8,7 +8,7 @@
  * @since 2012-11-28
  */
 
-//header('Content-Type:text/html; charset=utf-8');
+header('Content-Type:text/html; charset=utf-8');
 //error_reporting(E_ALL &~ E_STRICT &~ E_NOTICE);
 //ini_set('display_errors', 1);
 

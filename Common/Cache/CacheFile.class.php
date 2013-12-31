@@ -91,7 +91,7 @@ class CacheFile extends Cache{
       */
      public function rm($name){
           $filename = $this->getFileName($name);
-          if(file_exists($filename)){
+          if(is_file($filename)){
                return unlink($filename);
           }else{
                return false;

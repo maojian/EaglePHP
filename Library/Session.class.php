@@ -271,7 +271,7 @@ class Session {
      */
     public static function init(){
         $session_name = self::name();
-        $session_id = HttpRequest::getRequest($session_name);
+        //$session_id = HttpRequest::getRequest($session_name);
         
         switch (SESSION_SAVE_TYPE)
         {
@@ -296,14 +296,14 @@ class Session {
         }
 
         // 利用链接传递session_id
-        if($session_id) self::id($session_id);
+        //if($session_id) self::id($session_id);
         $expire = SESSION_LIFE_TIME;
 
         // 设置垃圾回收最大生存时间，超过设定时间，gc就认为是垃圾文件。
         if($expire != 0)
         {
             self::gcMaxLifeTime($expire);
-            self::cookieLifeTime($expire);
+            //self::cookieLifeTime($expire);
             //self::gcProbability(1);
             //ini_set('session.gc_divisor', 1); //  默认100。值越小，概率越大。
         }
@@ -312,13 +312,13 @@ class Session {
         $sid = Cookie::get($session_name);
         if(empty($sid))
         {
-            self::setCookieParams($expire);
+            //self::setCookieParams($expire);
             self::start();
         }
         else
         {
             self::start();
-            Cookie::set($session_name, $sid, false, time() + $expire);
+            //Cookie::set($session_name, $sid, false, time() + $expire);
         }
          
     }
@@ -327,7 +327,8 @@ class Session {
      * 验证客户端cookie是否有效，预防cookie id被劫持、非法利用。
      * 利用客户端信息和cookie相绑定
      */
-    public function checkClientCookie(){
+    public function checkClientCookie()
+	{
         $name = 'cookie_verification_key';
 
         $key = md5(//$_SERVER['HTTP_USER_AGENT'].

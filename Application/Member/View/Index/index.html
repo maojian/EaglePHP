@@ -1,0 +1,24 @@
+{{include file="../Include/manager_head.html"}}
+<div id="content">
+<div id="main">
+    <div class="user">
+    <div class="avatar"><img src="{{$userInfo['avatar']}}"></div>
+    <div class="info">
+    <h1>{{$tip}}, 欢迎{{$userInfo['nickname']|default:$userInfo['username']}}回来！</h1>
+	<div class="spaceinfo"><em>现在时间：</em>{{$now_time}}</div>
+    </div>
+    </div>
+</div>
+<div id="sidebar">
+<div class="smod">
+<h2>推荐的文章</h2>
+<ul>
+{{section name=loop loop=$list}}
+<li><a href="{{$list[loop].link}}" target="_blank">{{$list[loop].title}}</a></li>
+{{/section}}
+</ul>
+</div>
+
+</div>
+</div>
+{{include file="../Include/manager_foot.html"}}

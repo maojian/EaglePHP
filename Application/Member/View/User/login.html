@@ -1,0 +1,29 @@
+{{include file="../Include/user_head.html"}}
+<div id="outterWrapper">
+<div id="container">
+	<div id="header">
+    	<h1 class="bannerLogin">登录通行证</h1>
+    </div>
+    <div id="content">
+    	<div id="main">
+            <div id="sideMain">
+	<div id="loginFrame">
+			<form method="post" action="{{$smarty.const.__ACTION__|url}}">
+		<ul>
+			<li>
+				<div class="f1">用户名</div>
+				<div class="f2"><input type="text" class="text" name="username" maxlength="16" value="{{$member_name}}"/></div>
+			</li>
+			<li>
+				<div class="f1">密　码</div>
+				<div class="f2"><input type="password" class="text" name="password" maxlength="16" /></div>
+			</li>
+			<li class="remember">
+				<div class="f2"><span class=""><label><input name="remember" type="checkbox" value="1" class="checkbox" {{if $member_name}} checked="checked" {{/if}}/> 记住我</label></span> <a href="{{$smarty.const.__URL__&a=findPwd|url}}">找回密码</a> </div>
+			</li>
+	    </ul>
+	    <div class="login"><input type="image" src="{{$smarty.const.__APP_RESOURCE__}}imgs/btn_login.gif" width="88" height="39" /></div>
+		</form>
+    </div>    
+</div>
+{{include file="../Include/user_foot.html"}}

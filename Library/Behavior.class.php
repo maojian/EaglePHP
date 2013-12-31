@@ -4,7 +4,36 @@
  * @author maojianlw@139.com
  * @since 2012-08-06
  */
-class Behavior {
+class Behavior 
+{
+
+    
+    /**
+     * 正则匹配路由
+     * 
+     * @return bool
+     */
+    public static function checkRoute()
+    {
+        if(!__CLI__ && isset($GLOBALS['URL_RULES']))
+        {
+            $rules = $GLOBALS['URL_RULES'];
+            $pathinfo = HttpRequest::getServer('PATH_INFO');
+            if($pathinfo == null) return false;
+            foreach ($rules as $k=>$v)
+            {
+                $path = preg_replace($k, $v, $pathinfo, 1, $count);
+                if($count)
+                {
+                    $count && $_SERVER['PATH_INFO'] = $path;
+                    break;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+    
     
     /**
      * 防刷机制

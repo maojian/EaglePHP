@@ -67,7 +67,7 @@ class FileController extends CommonController{
                     'mp3|wma' => array('img'=>'mp3', 'edit'=>0),
                     'wmv|api' => array('img'=>'wmv', 'edit'=>0),
                     'rm|rmvb' => array('img'=>'rm', 'edit'=>0),
-                    'txt|inc|pl|cgi|asp|xml|xsl|aspx|cfm' => array('img'=>'txt', 'edit'=>1),
+                    'txt|inc|pl|cgi|asp|xml|xsl|aspx|cfm|log|bak' => array('img'=>'txt', 'edit'=>1),
                     'htm|html|tpl' => array('img'=>'htm', 'edit'=>1),
                     'php' => array('img'=>'php', 'edit'=>1),
                     'js' => array('img'=>'js', 'edit'=>1),

@@ -21,6 +21,8 @@ class Model
 	protected $data = array(); // 客户端提交数据
    	protected $options = array(); // SQL执行参数
    	
+   	protected $isExists = true; // 模型对象是否存在标记
+   	
    		
 	/**
 	 * 初始化数据连接
@@ -59,8 +61,9 @@ class Model
 
 		    $modelName = ucfirst($name) . 'Model';
 		    import("Model.{$modelName}", true, $appDir);
-			if(!class_exists($modelName, true)) $modelName = __CLASS__;
+			if(!($modelIsExists = class_exists($modelName, true))) $modelName = __CLASS__;
 			$modelObj = new $modelName();
+			$modelObj->isExists = $modelIsExists;
 	   		$modelObj->db = Db::getInstance($flag);
 	   		$modelObj->fieldPath = getCfgVar('cfg_orm_dir').__DS__.$modelObj->db->getDbName().__DS__;
 	   		$modelObj->name = ($name) ? $name : $this->_getModelName();
@@ -284,6 +287,8 @@ class Model
 					$val = (int)$val;
 				}elseif(in_array($type, array('float', 'double'))){
 					$val = (float)$val;
+				}elseif(is_bool($val)){
+					$val = (string)$val;
 				}
 			}
 		}
@@ -331,6 +336,12 @@ class Model
 		return $this->tableName;
 	}
 	
+	
+	public function tableName()
+	{
+	    return $this->_getTableName();
+	}
+	
 	/**
 	 * 获取数据库db对象
 	 */
@@ -373,6 +384,9 @@ class Model
 		$this->options = array(); // 置为空，防止下次重复冲突。
 		if(!isset($options['table'])){
 			$options['table'] = $this->_getModelName();
+		}
+		if(!isset($options['primary'])){
+			$options['primary'] = $this->_getPk();
 		}
 		return $options;
 	}
@@ -562,6 +576,24 @@ class Model
 	{
 		return $this->db->rollback();
 	}
-
+	
+	/**
+	 *	判断表名是否存在
+	 */
+	public function tableExists($tableName='')
+	{
+		static $tables;
+		$tableName = $tableName ? $tableName : $this->_getTableName();
+		$tables = $tables ? $tables : $this->getDb()->tables();
+		return in_array($tableName, $tables) ? true : false;
+	}
+	
+	/**
+	 * 判断当前模型是否存在
+	 */
+	public function isExists(){
+		return $this->isExists;
+	}
+	
 }
 

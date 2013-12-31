@@ -6,18 +6,21 @@
  * @author maojianlw@139.com
  */
 
-class ManagerController extends ApiCommonController{
+class ManagerController extends ApiCommonController
+{
 	
 	private $user_model = null;
 	
-	public function __construct(){
+	public function __construct()
+	{
 		$this->user_model = model('manager');
 	}
 	
 	/**
 	 * 登录接口
 	 */
-    public function loginAction(){
+    public function loginAction()
+    {
     	$username = $this->post('username');
     	$password = $this->post('password');
     	$verify = $this->post('verify');
@@ -53,54 +56,13 @@ class ManagerController extends ApiCommonController{
     		}
     	}
     }
-    
-    
-    /**
-     * 返回角色配置XML文档
-     */
-    public function roleConfigAction(){
-    	$role_id = (int)$this->get('role_id');
-    	if(empty($role_id)){
-    	    $userInfo = Session::get(SESSION_USER_NAME);
-    		$role_id = (int)$userInfo['role_id'];
-    	}
-    	
-    	if($role_id){
-    		// 读取角色配置文件
-	    	$role_info = model('role')->field('config')->where("id=$role_id")->find();
-	    	$config = trim($role_info['config']);
-	    	if($config){
-	    		header('Content-Type:text/xml;charset=utf-8');
-	    		exit($config);
-	    	}
-    	}
-    }
-  
-    
-    /**
-     * 根据用户会话key获取值
-     */
-    public function getSessionAction(){
-    	$key = $this->get('key');
-    	$manager_info = Session::get(SESSION_USER_NAME);
-    	if(!empty($key) && $manager_info){
-    		$keys = explode('|', $key);
-    		foreach($keys as $key){
-    			if(array_key_exists($key, $manager_info)){
-    				$data[$key] = $manager_info[$key];
-    			}
-    		}
-    		if($data)
-    			$this->formatReturn(200, $data);
-    	}
-    	$this->formatReturn(205);
-    }
-    
+
     
     /**
 	 * 用户退出
 	 */
-	public function logoutAction() {
+	public function logoutAction() 
+	{
 		Session::destory();
 		$this->formatReturn(200);
 	}

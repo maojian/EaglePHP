@@ -3,17 +3,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="{{'cfg_adminemail'|getCfgVar}}">
-<title>{{$title}} - {{'cfg_webname'|getCfgVar}}</title>
+<title>{{if $title neq ''}}{{$title}} - {{'cfg_webname'|getCfgVar}}{{else}}{{'cfg_webname'|getCfgVar}}{{/if}}</title>
 <meta name="alexaVerifyID" content="oBmfLO4PIAVGpWKiUmU_zPImx6g" />
 <meta name="keywords" content="{{if $keywords neq ''}}{{$keywords}}{{else}}{{'cfg_keywords'|getCfgVar}}{{/if}}"/>
 <meta name="description" content="{{if $description neq ''}}{{$description}}{{else}}{{'cfg_description'|getCfgVar}}{{/if}}" />
+<link rel="alternate" type="application/rss+xml" title="{{'cfg_webname'|getCfgVar}}" href="{{$host?c=rss&a=xml|url}}" />{{$alternate}}
 <link href="{{$smarty.const.__APP_RESOURCE__}}css/base.css" rel="stylesheet" type="text/css" media="screen" />
 <link href="{{$smarty.const.__APP_RESOURCE__}}css/index.css" rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/reflection.js"></script>
 <script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/jquery.cycle.all.min.js"></script>
 <script type="text/javascript" src="{{$smarty.const.__APP_RESOURCE__}}js/jquery.jamestudio.menu.js"></script>
-<meta property="qc:admins" content="44404230076517450006375" />
+<meta name="Copyright" content="eaglephp.com" />
 </head>
 
 <body>
@@ -37,7 +38,7 @@
 	<li class="{{$video}}"><a href="{{$smarty.const.__ROOT__?c=video|url}}">视频</a></li>
 	<li class="{{$album}}"><a href="{{$smarty.const.__ROOT__?c=album|url}}">相册</a></li>
 	<li class="{{$music}}"><a href="{{$smarty.const.__ROOT__?c=music|url}}">音乐</a></li>
-	<li class="{{$taobao}}"><a href="{{$smarty.const.__ROOT__?c=taobao|url}}">收藏</a></li>
+	<li class="{{$taobao}}"><a href="{{$smarty.const.__ROOT__?c=taobao|url}}">淘宝</a></li>
 </ul>
 </div>
 </div>

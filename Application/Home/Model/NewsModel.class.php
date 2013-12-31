@@ -87,7 +87,7 @@ class NewsModel extends Model{
       * 获得热点文章
       */
      public function getHot($count=5){
-          $type_list = model('news_type')->field('id,title')->where('parent=0')->limit(4)->order('id ASC')->select();
+          $type_list = model('news_type')->field('id,title')->where('parent=0 OR id=1')->limit(4)->order('id ASC')->select();
           if(is_array($type_list)){
               foreach ($type_list as $type){
                   $type_id = $type['id'];
@@ -139,7 +139,7 @@ class NewsModel extends Model{
           if($this->cfg_html_make == 1){
               $link = rtrim(__PUB__,'/').$this->cfg_html_dir.'/'.date('Ymd',strtotime($news_info['create_time'])).'/'.$news_info['id'].($page ? "_{$page}" : '').'.html';
           }else{
-              $link = __ROOT__.'?c=news&a=show&id='.$news_info['id'].($page ? "&page={$page}" : '');
+              $link = __PROJECT__.'index.php?c=news&a=show&id='.$news_info['id'].($page ? "&page={$page}" : '');
               $link = url($link);
           }
           return $link;

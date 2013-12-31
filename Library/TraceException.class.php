@@ -31,13 +31,11 @@ class TraceException extends Exception{
      */
     public function __toString(){
     	$trace = $this->getTrace();
-    	if($this->extra)
-    		array_shift($trace);
-    		
+    	if($this->extra) array_shift($trace);
   		$message = $this->type.' '.$this->message;
   		$file = isset($trace[0]['file']) ? $trace[0]['file'] : '';
   		$line = isset($trace[0]['line']) ? $trace[0]['line'] : '';
-  		Log :: errorHandler(Log::EXCEPTION, $message, $file, $line, '');
+  		Log :: errorHandler(Log::EXCEPTION, $message, $file, $line, $trace);
     }
     
     

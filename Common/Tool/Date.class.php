@@ -36,7 +36,7 @@ class Date
      */
     public static function getTimeStamp($dateTime = null)
     {
-        return $dateTime ? is_int($dateTime) ? $dateTime : strtotime($dateTime) : time();
+        return $dateTime ? is_numeric($dateTime) ? $dateTime : strtotime($dateTime) : time();
     }
     
     /**
@@ -431,3 +431,12 @@ class Date
     
 }
 
+
+if( !function_exists('bcdiv') )
+{
+    function bcdiv( $first, $second, $scale = 0 )
+    {
+        $res = $first / $second;
+        return round( $res, $scale );
+    }
+}

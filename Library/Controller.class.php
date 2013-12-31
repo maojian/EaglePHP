@@ -214,7 +214,8 @@ class Controller extends Delegate
 	 */
 	public function isPost()
 	{
-	    return HttpRequest::isPost();
+	    return HttpRequest::isPost();auto_charset();
+	    
 	}
 	
 	

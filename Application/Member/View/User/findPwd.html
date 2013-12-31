@@ -1,0 +1,32 @@
+{{include file="../Include/user_head.html"}}
+<div id="outterWrapper">
+<div id="container">
+	<div id="header">
+    	<h1 class="bannerFindPass">找回密码</h1>
+    </div>
+    <div id="content">
+    	<div id="main">
+            <div id="sideMain">
+            {{if $send_status eq "success"}}
+	        <div id="validMail">
+				<p style="font-weight:normal;">验证邮件已发送至 <span class="caution">{{$smarty.post.email}}</span></p>
+				<p class="loginMail" style="font-weight:normal;">请登录您的邮箱查收：<a href="{{$email_host}}" target="_blank" class="popup" style="font-weight:bold;">{{$email_host}}</a></p>
+				<p class="notice">点击邮件中的验证链接，即可验证你的电子邮件。</p>
+			</div>
+			{{else}}
+			<div id="pass">
+			<form method="post" action="{{$smarty.const.__ACTION__|url}}">
+				<p class="notice">填写信息并提交后，请检查您的电子邮件并根据提示找回密码</p>
+				<p class="findPass"><span class="f1">用户名</span><span class="f2">
+				<input type="text" class="text" name="username" maxlength="16" /></span></p>
+			    <p class="findPass"><span class="f1">电子邮件</span><span class="f2">
+			    <input type="text" class="text" name="email" maxlength="50" /></span></p>
+			    <p class="button"><input type="submit" value="提交" class="button" /></p>
+			</form>
+			</div>
+		{{/if}}
+	<div id="solution">
+		<p>如果需要帮助可发送邮件至 <a href="mailto:{{$help_email}}">{{$help_email}}</a></p>
+	</div>
+</div>
+{{include file="../Include/user_foot.html"}}

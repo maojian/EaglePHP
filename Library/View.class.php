@@ -9,7 +9,8 @@
  */
 
 
-class View extends SmartyBC {
+class View extends SmartyBC 
+{
 	
     /**
      * 模版文件后缀
@@ -36,6 +37,8 @@ class View extends SmartyBC {
 	 */
 	public function __construct() 
 	{
+	    // 对输出内容进行zlib压缩
+	    ob_start((!ini_get('zlib.output_compression') && OUTPUT_ENCODE) ? 'ob_gzhandler' : null);
 		$this->getSmartyInstance();
 		self :: $smartyBC->register_modifier('utf8Substr', 'utf8Substr');
 	    self :: $smartyBC->register_modifier('getCfgVar', 'getCfgVar');
@@ -85,6 +88,16 @@ class View extends SmartyBC {
 		self :: $smartyBC->assign($tpl_var, $value, $nocache);
 	}
 	
+	/**
+	 *
+	 * 获取已assign中的值
+	 */
+	public function getAssign($name)
+	{
+		if(isset(self :: $smartyBC->tpl_vars[$name])) return self :: $smartyBC->tpl_vars[$name]->value;
+		return null;
+	}
+	
 	
 	/**
 	 * 获取模板内容
@@ -126,7 +139,6 @@ class View extends SmartyBC {
 	{
 	    try 
 	    {
-	        if(!ini_get('zlib.output_compression') && OUTPUT_ENCODE) ob_start('ob_gzhandler');
 	        self :: $smartyBC->display($this->getTplPath($template), $cache_id, $compile_id, $parent);
 	    }
 	    catch (Exception $e)

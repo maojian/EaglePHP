@@ -35,10 +35,13 @@ class PickController extends CommonController{
 	 */
 	public function addAction(){
 		if($this->isPost()){
-			$_POST['create_time'] = Date::format();
-			$_POST['rule'] = $this->post('rule', self::_NO_CHANGE_VAL_, false);
-			if(!$this->post('lang')) $_POST['lang'] = 'utf-8';
-			if($this->cur_model->add()){
+			$data['title'] = $this->post('title');
+			$data['url'] = $this->post('url');
+			$data['lang'] = $this->post('lang');
+		    $data['rule'] = $this->post('rule', self::_NO_CHANGE_VAL_, false);
+			$data['create_time'] = Date::format();
+			if(!$this->post('lang')) $data['lang'] = 'utf-8';
+			if($this->cur_model->add($data)){
 				$this->ajaxReturn(200, '添加成功', '', 'closeCurrent');
 			}else{
 				$this->ajaxReturn(300, '添加失败');
@@ -54,8 +57,12 @@ class PickController extends CommonController{
 	 */
 	public function updateAction(){
 		if($this->isPost()){
-		    $_POST['rule'] = $this->post('rule');
-			if($this->cur_model->save()){
+			$id = (int)$this->post('id');
+			$data['title'] = $this->post('title');
+			$data['url'] = $this->post('url');
+			$data['lang'] = $this->post('lang');
+		    $data['rule'] = $this->post('rule', self::_NO_CHANGE_VAL_, false);
+			if($this->cur_model->where("id=$id")->save($data)){
 				$this->ajaxReturn(200, '修改成功', '', 'closeCurrent');
 			}else{
 				$this->ajaxReturn(300, '修改失败');

@@ -36,6 +36,7 @@ class RoleController extends CommonController{
 		$name = $this->post('name');
 		$create_time = $this->post('create_time');
 		
+		$sql = '';
 		if($name) 
 			$sql[] = " name LIKE '%{$name}%' ";
 		if($create_time)
@@ -132,12 +133,14 @@ class RoleController extends CommonController{
      * 获取模块树节点
      */
     protected function getTree($module_ids=''){
+        $role_modules = null;
     	if(!empty($module_ids))
     		$role_modules = explode(',', $module_ids);
 		
     	function getChildNode($modules, $role_modules){
     		if(is_array($modules)){
     		    $role_id = (int)HttpRequest::getGet('id');
+    		    $tree =  null;
 	    		foreach($modules as $module){
 	    			$module_id = $module['id'];
 	    			if($role_id == 1){

@@ -3,11 +3,9 @@
 	<input type="hidden" name="numPerPage" value="{{$page.numPerPage}}" />
 	<input type="hidden" name="orderField" value="{{$page.orderField}}" />
 	<input type="hidden" name="orderDirection" value="{{$page.orderDirection}}" />
-	<input type="hidden" name="nickname" value="{{$smarty.post.nickname}}">
-	<input type="hidden" name="account" value="{{$smarty.post.account}}" />
-	<input type="hidden" name="tag" value="{{$smarty.post.tag}}" />
-	<input type="hidden" name="city" value="{{$smarty.post.city}}" />
-	<input type="hidden" name="createtime" value="{{$smarty.post.createtime}}" />
+	<input type="hidden" name="uid" value="{{$smarty.post.uid}}">
+	<input type="hidden" name="username" value="{{$smarty.post.username}}" />
+	<input type="hidden" name="reg_time" value="{{$smarty.post.reg_time}}" />
 </form>
 
 <div class="pageHeader">
@@ -16,19 +14,13 @@
 		<table class="searchContent">
 			<tr>
 				<td>
-					昵称：<input type="text" name="nickname" value="{{$smarty.post.nickname}}" />
+					用户编号：<input type="text" name="uid" value="{{$smarty.post.uid}}" />
 				</td>
 				<td>
-					账号：<input type="text" name="account" value="{{$smarty.post.account}}" />
+					用户名称：<input type="text" name="username" value="{{$smarty.post.username}}" />
 				</td>
 				<td>
-					标签：<input type="text" name="tag" value="{{$smarty.post.tag}}" />
-				</td>
-				<td>
-					城市：<input type="text" name="city" value="{{$smarty.post.city}}" />
-				</td>
-				<td>
-					创建日期：<input type="text" class="date" readonly="true" name="createtime" value="{{$smarty.post.createtime}}"/>
+					注册日期：<input type="text" class="date" readonly="true" name="reg_time" value="{{$smarty.post.reg_time}}"/>
 				</td>
 			</tr>
 		</table>
@@ -55,33 +47,25 @@
 			<tr>
 				<th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th>
 				<th orderField="id" class="{{$page.orderDirection}}">用户编号</th>
-				<th>昵称</th>
-				<th>账号</th>
-				<th>头像</th>
-				<th>标签</th>
-				<th>省份</th>
-				<th>城市</th>
-				<th>粉丝</th>
-				<th>创建时间</th>
+				<th>用户名</th>
+				<th>邮箱</th>
+				<th>注册日期</th>
+				<th>注册IP</th>
 				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
 			{{section name=loop loop=$list}}
-			<tr target="id" rel="{{$list[loop].id}}">
-				<td><input name="ids" value="{{$list[loop].id}}" type="checkbox"></td>
-				<td>{{$list[loop].id}}</td>
-				<td width="20%">{{$list[loop].nickname}}</td>
-				<td><a style="text-decoration:underline;color:blue" href="http://weibo.com/{{$list[loop].account}}" target="_blank">{{$list[loop].account}}</a></td>
-				<td class="box"><img src="{{$list[loop].photo}}" width="50" height="50"/></td>
-				<td>{{$list[loop].tag}}</td>
-				<td>{{$list[loop].province}}</td>
-				<td>{{$list[loop].city}}</td>
-				<td>{{$list[loop].fans}}</td>
-				<td>{{$list[loop].createtime}}</td>
+			<tr target="uid" rel="{{$list[loop].uid}}">
+				<td><input name="ids" value="{{$list[loop].uid}}" type="checkbox"></td>
+				<td>{{$list[loop].uid}}</td>
+				<td>{{$list[loop].username}}</td>
+				<td>{{$list[loop].email}}</td>
+				<td>{{$list[loop].reg_time}}</td>
+				<td>{{$list[loop].reg_ip}}</td>
 				<td>
-					<a target="ajaxTodo" href="{{$smarty.const.__URL__&a=delete&ids=$list[loop].id|url}}" class="btnDel" title="确定要删除吗?">删除</a>
-					<!--<a target="navTab" href="{{$smarty.const.__URL__&a=update&id=$list[loop].id|url}}" class="btnEdit">编辑</a>-->
+					<a target="ajaxTodo" href="{{$smarty.const.__URL__&a=delete&ids=$list[loop].uid|url}}" class="btnDel" title="确定要删除吗?">删除</a>
+					<!--<a target="navTab" href="{{$smarty.const.__URL__&a=update&id=$list[loop].uid|url}}" class="btnEdit">编辑</a>-->
 				</td>
 			</tr>
 		    {{/section}}
